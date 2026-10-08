@@ -33,7 +33,7 @@ It will not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phase 0, discovery and scope freeze, is complete for this bootstrap checkpoint. Phase 1, repository foundation, is in progress. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
+Phases 0 through 3 are complete: discovery, repository foundation, domain contracts, and safe artifact acquisition. Phase 4, the npm verification path, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Security boundary
 

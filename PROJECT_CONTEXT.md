@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 2 complete; verification engine and registry adapters do not exist yet
+- Current state: Phase 3 complete; registry verification adapters and comparison engine do not exist yet
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -44,6 +44,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 - No package manager is invoked on untrusted input.
 - JSON schema and exit semantics are versioned before CLI polish.
 - Phase 2 domain model: one internal data-oriented package with small `RegistryAdapter` and `Cache` interfaces; standard `context.Context`; validation only for cross-ecosystem invariants.
+- Phase 3 acquisition: `internal/acquire` is HTTPS-only, bounded, SHA-256-aware, temporary-file based, and archive-inspection-only; it never extracts or executes package content.
 - License: Apache-2.0 for a permissive license with an explicit patent grant and familiar enterprise/open-source reuse terms; MIT remains a possible future reconsideration only through a documented project decision.
 - Untrusted bytes are downloaded over HTTPS with timeouts and bounded storage. Archive paths, links, expansion, file counts, and sizes are validated. Symlinks and special entries are observed safely and are never followed during comparison. Package code, install hooks, setup.py, build backends, and lifecycle scripts are never executed.
 
@@ -73,7 +74,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 0: COMPLETE for the bootstrap checkpoint. Evidence: this file, ROADMAP.md, docs/COMPETITIVE_LANDSCAPE.md, docs/DESIGN.md.
 - Phase 1: COMPLETE. Foundation files, CI skeleton, Git initialization, and local gofmt/test/vet/diff checks are evidenced in the repository.
 - Phase 2: COMPLETE. Evidence: internal/domain/model.go, internal/domain/model_test.go, docs/DESIGN.md, and passing test/race/vet/format checks.
-- Phases 3-14: NOT STARTED.
+- Phase 3: COMPLETE. Evidence: internal/acquire/acquire.go, internal/acquire/acquire_test.go, docs/DESIGN.md, and passing test/race/vet/format checks.
+- Phases 4-14: NOT STARTED.
 
 ## Definition of done
 
@@ -94,7 +96,7 @@ Commands may evolve with the implementation. Never run package managers or build
 
 ## Known limitations at bootstrap
 
-- No CLI, SDK implementation, registry adapter implementation, acquisition pipeline, comparison engine, or report renderer exists; Phase 2 contains only domain contracts.
+- No CLI, SDK implementation, registry adapter implementation, comparison engine, or report renderer exists. Acquisition is implemented as a standalone safe input boundary; it does not yet connect to registry metadata.
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote, GitHub repository metadata, and maintainer identity are not configured.
 - Research is a focused initial pass, not a complete literature or market survey.

@@ -63,7 +63,11 @@ Resolution is staged: identify repository URL, normalize only defined URL forms,
 
 ## Artifact acquisition and archive handling
 
-Use HTTPS, timeouts, redirect limits/policy, content-length checks, bounded streaming downloads, SHA-256, safe temporary files, and cleanup. Verify registry-provided hashes where available. Validate archive format and reject or report absolute paths, traversal, malformed headers, expansion beyond limits, excessive entries, special entries, and unsafe links. Inventory regular files without following links. Never extract blindly and never pipe downloads to shell commands or package managers.
+The Phase 3 `internal/acquire` package uses HTTPS-only requests, a 30-second default timeout, a five-redirect default limit, content-length checks where available, bounded streaming downloads, SHA-256, `os.CreateTemp` files, and explicit cleanup. Default limits are 100 MiB per download, 10,000 archive entries, 500 MiB expanded content, and 100 MiB per regular file. Callers may tighten them; invalid limits are rejected.
+
+The downloader validates the initial URL and every redirect, rejects userinfo-bearing URLs, requires successful HTTP status codes, and optionally verifies an expected SHA-256. A response body is read through a `max+1` limiter so an unknown or misleading content length cannot bypass the bound. Temporary files are not treated as executable and are removed on failure.
+
+Archive inspection identifies ZIP and gzip-compressed TAR by magic bytes rather than trusting filenames. It inventories members without extracting them, rejects absolute/traversal/ambiguous duplicate paths, bounds entry count and expansion, reports symlink/hard-link/special entries as types, and does not follow links. Malformed headers and unsupported formats are errors. Never extract blindly and never pipe downloads to shell commands or package managers.
 
 ## Deterministic comparison
 
