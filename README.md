@@ -2,7 +2,7 @@
 
 ReleaseCheck is planned as a deterministic Go CLI and SDK for examining whether a package published to a public registry corresponds to its claimed source repository and release reference.
 
-The repository is being built phase by phase. The current codebase contains the domain model, safe artifact acquisition, internal npm and PyPI verification paths, deterministic comparison and security observations, provenance evidence parsing, internal report renderers, and an offline fixture matrix. The user-facing CLI remains future roadmap work.
+The repository is being built phase by phase. The current codebase contains the domain model, safe artifact acquisition, internal npm and PyPI verification paths, deterministic comparison and security observations, provenance evidence parsing, internal report renderers, an offline fixture matrix, and the initial CLI. A public SDK remains future roadmap work.
 
 ## Problem
 
@@ -33,7 +33,24 @@ It will not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 10 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, fixture-backed npm and PyPI verification paths, deterministic comparison hardening, structural security analysis, provenance evidence parsing, stable report rendering, and offline fixture coverage. Phase 11, CLI and SDK polish, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
+Phases 0 through 11 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, fixture-backed npm and PyPI verification paths, deterministic comparison hardening, structural security analysis, provenance evidence parsing, stable report rendering, offline fixture coverage, and the initial CLI. Phase 12, CI and release engineering, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
+
+## Usage
+
+Build the command locally:
+
+```text
+go build ./cmd/releasecheck
+```
+
+Verify a selected release from npm or PyPI:
+
+```text
+releasecheck verify npm [flags] NAME [VERSION]
+releasecheck verify pypi [flags] NAME [VERSION]
+```
+
+Useful flags are `--json`, `--sarif`, `--output PATH`, `--artifact FILENAME` for PyPI, and `--timeout DURATION`. The command never installs packages, runs lifecycle scripts, executes Python build logic, or invokes package managers. Exit code `0` means `MATCH`; `1` means `REVIEW` or `INCOMPLETE`; `2` means usage error; and `3` means operational or rendering error.
 
 ## Security boundary
 

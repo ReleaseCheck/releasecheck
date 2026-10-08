@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 10 complete; Phase 11 CLI and SDK polish is next
+- Current state: Phase 11 complete; Phase 12 CI and release engineering is next
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -52,6 +52,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 - Phase 8 provenance: `internal/provenance` parses PyPI PEP 740 provenance objects and npm DSSE/bundle-shaped evidence, binds single in-toto subjects to filename and available digests, extracts supported predicate/source fields, and reports absent, unavailable, invalid, and insufficient states. It does not verify DSSE signatures, Sigstore roots, Rekor, Fulcio, TUF, or registry trust.
 - Phase 9 reporting: `internal/report` normalizes evidence and renders stable JSON schema 1.0, human output, and SARIF 2.1.0. Verdict precedence is `INCOMPLETE` for missing source/comparisons, `REVIEW` for differences, warnings, invalid/insufficient provenance, and `MATCH` only for complete identical comparison evidence without warnings. `INCOMPLETE` maps to exit code 1.
 - Phase 10 test suite: `tests/fixture_matrix_test.go` covers matching, artifact-only, source-only, modified, malformed, install metadata, missing repository, unavailable source, unsafe path, symlink, size boundary, and provenance variation cases. Checked-in metadata/provenance samples are inert; archive bytes are generated deterministically with Go's standard library. The default suite is offline and uses local test servers only.
+- Phase 11 CLI: `releasecheck verify npm [flags] NAME [VERSION]` and `releasecheck verify pypi [flags] NAME [VERSION]` wire the existing adapters to human, JSON, and SARIF output. `--artifact` selects a PyPI file, `--timeout` bounds operations, `--output` writes a report with restrictive permissions, and exit codes follow the report contract. No public SDK is exposed yet because the internal adapter/result lifecycle is not stable enough to promise compatibility.
 - License: Apache-2.0 for a permissive license with an explicit patent grant and familiar enterprise/open-source reuse terms; MIT remains a possible future reconsideration only through a documented project decision.
 - Untrusted bytes are downloaded over HTTPS with timeouts and bounded storage. Archive paths, links, expansion, file counts, and sizes are validated. Symlinks and special entries are observed safely and are never followed during comparison. Package code, install hooks, setup.py, build backends, and lifecycle scripts are never executed.
 
@@ -89,7 +90,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 8: COMPLETE. Evidence: internal/provenance/provenance.go, internal/provenance/provenance_test.go, docs/DESIGN.md, and passing serial test/race/vet/format/diff checks.
 - Phase 9: COMPLETE. Evidence: internal/report/report.go, internal/report/report_test.go, docs/DESIGN.md, and passing serial test/race/vet/format/diff checks.
 - Phase 10: COMPLETE. Evidence: fixtures/README.md, fixtures/metadata, fixtures/provenance, tests/fixture_matrix_test.go, and passing offline test/race/vet/format/diff checks.
-- Phases 11-14: NOT STARTED. Phase 11 CLI and SDK polish is next.
+- Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
+- Phases 12-14: NOT STARTED. Phase 12 CI and release engineering is next.
 
 ## Definition of done
 
@@ -108,15 +110,17 @@ git diff --check
 
 Commands may evolve with the implementation. Never run package managers or builds against untrusted artifacts as part of ReleaseCheck.
 
-## Known limitations at Phase 10 checkpoint
+## Known limitations at Phase 11 checkpoint
 
-- No CLI or SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are internal layers and are not yet exposed through a user-facing command.
+- No public SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are wired to the initial CLI; broader API compatibility remains deferred.
 - Manifest analysis currently accepts explicitly supplied safe bytes; registry adapters do not yet wire package.json, setup.py, or pyproject.toml contents into the analysis pipeline.
 - `pyproject.toml` is intentionally not parsed with a custom TOML implementation in this phase; empty metadata is detected, while detailed build-backend evidence remains future work.
 - Provenance parsing is not cryptographic verification. npm and PyPI adapters do not yet fetch and wire registry provenance URLs into `ReleaseMetadata`; the parser is ready for later integration. Current-source research on npm and PyPI provenance was checked 2026-10-08 and recorded in docs/DESIGN.md.
-- npm verification is implemented as an internal path only; no CLI/report wiring exists, and source retrieval is currently limited to GitHub.
-- PyPI verification is implemented as an internal path only; source references are unavailable for releases whose project metadata does not provide an explicit ref. Report renderers are internal; CLI command wiring and output flags remain Phase 11 work.
-- The fixture matrix does not contact live npm or PyPI services. Live-registry compatibility checks, if added later, must be separate, opt-in, and non-authoritative.
+- npm verification is implemented as an internal path behind the CLI, and source retrieval is currently limited to GitHub.
+- PyPI verification is implemented as an internal path behind the CLI; source references are unavailable for releases whose project metadata does not provide an explicit ref.
+- The fixture matrix does not contact live npm or PyPI services. Live-registry compatibility checks, if added later, must be separate, opt-in, and non-authoritative. CLI commands intentionally use the public registry defaults and currently have no mirror/base-URL flags.
+- No public SDK is promised in v0.1 yet; callers should not depend on `internal/` packages as a compatibility API.
+- Aggregate `go test -race -p 1 ./...` currently reaches all packages but can exit when Windows denies access to the temporary pre-existing `compare.test.exe`; the changed CLI and fixture-matrix packages pass focused race runs.
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote, GitHub repository metadata, and maintainer identity are not configured.
 - Research is a focused initial pass, not a complete literature or market survey.

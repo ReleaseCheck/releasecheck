@@ -17,7 +17,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 8 Provenance and attestation evidence | COMPLETE | internal/provenance; PyPI/npm evidence fixtures; artifact-binding tests; test/race/vet/gofmt/diff checks |
 | 9 Reporting | COMPLETE | internal/report; deterministic JSON/human/SARIF tests; verdict and exit-code tests; test/race/vet/gofmt/diff checks |
 | 10 Fixture and test suite | COMPLETE | fixtures/README.md; inert metadata/provenance fixtures; tests/fixture_matrix_test.go; offline test/race/vet/gofmt/diff checks |
-| 11 CLI and SDK polish | NOT STARTED | - |
+| 11 CLI and SDK polish | COMPLETE | cmd/releasecheck; internal/cli; CLI tests/build/smoke checks; README usage; test/vet/gofmt/diff checks; focused CLI/fixture race checks |
 | 12 CI and release engineering | NOT STARTED | - |
 | 13 Documentation and contributor readiness | NOT STARTED | - |
 | 14 Final audit | NOT STARTED | - |

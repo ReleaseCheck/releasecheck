@@ -41,6 +41,9 @@ func Evaluate(report domain.Report) domain.Verdict {
 	if len(report.Comparisons) == 0 || report.Source == nil || report.Git == nil {
 		return domain.VerdictIncomplete
 	}
+	if len(report.Limitations) > 0 {
+		return domain.VerdictIncomplete
+	}
 	for _, item := range report.Comparisons {
 		if item.Kind != domain.ComparisonIdentical {
 			return domain.VerdictReview

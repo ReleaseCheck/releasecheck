@@ -315,6 +315,7 @@ type Report struct {
 	Security      []SecurityObservation `json:"security_observations,omitempty"`
 	Evidence      []Evidence            `json:"evidence,omitempty"`
 	Provenance    []ProvenanceEvidence  `json:"provenance,omitempty"`
+	Limitations   []string              `json:"limitations,omitempty"`
 	Verdict       Verdict               `json:"verdict"`
 	GeneratedAt   time.Time             `json:"generated_at,omitempty"`
 }

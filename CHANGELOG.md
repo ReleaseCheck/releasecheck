@@ -15,3 +15,4 @@ All notable changes to ReleaseCheck will be documented here.
 - Added provenance evidence parsing for PyPI PEP 740 objects and npm DSSE/bundle-shaped evidence, with artifact binding and explicit absent, unavailable, invalid, and insufficient states. Cryptographic trust verification remains outside this phase.
 - Added deterministic human, JSON schema 1.0, and SARIF 2.1.0 report renderers with explicit verdict precedence and stable exit-code mapping.
 - Added the offline fixture matrix covering the twelve required source/artifact, archive-safety, metadata, and provenance scenarios. Default tests do not contact live registries.
+- Added the initial `releasecheck verify npm|pypi` CLI with human, JSON, and SARIF output, timeout/artifact/output flags, stable usage errors, and report-derived exit codes. A public SDK remains intentionally deferred.
