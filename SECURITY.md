@@ -1,6 +1,6 @@
 # Security Policy
 
-ReleaseCheck is security-sensitive infrastructure that processes untrusted package artifacts. The current implementation is internal and not yet a user-facing CLI; this policy describes the enforced and intended boundary for v0.1.
+ReleaseCheck is security-sensitive infrastructure that processes untrusted package artifacts. The v0.1 implementation includes a CLI, but this policy applies equally to the CLI, internal packages, tests, and future SDK surface.
 
 ## Non-execution boundary
 

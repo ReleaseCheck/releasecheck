@@ -24,6 +24,8 @@ git diff --check
 
 Use `go test -race ./...` when the change touches concurrency or shared state.
 
+The default test suite is offline. Do not add tests that contact npm, PyPI, GitHub, or another public service unless they are explicitly opt-in and supplemental. Use checked-in inert fixtures or local test servers for deterministic behavior.
+
 ## Documentation and checkpoints
 
 Important decisions must record what was chosen, why, alternatives considered, security implications, and future impact. At phase checkpoints update ROADMAP.md and PROJECT_CONTEXT.md, inspect the diff and tree, record limitations, and summarize verification. Do not commit or push automatically.
@@ -35,3 +37,7 @@ Antigravity with Claude Sonnet 4.6 is the default implementation agent. Gemini 3
 ## Pull requests
 
 Describe the phase, behavior, tests, security impact, documentation changes, and known limitations. Keep pull requests focused. A reviewer must be able to reproduce the result from the repository without chat history.
+
+## Registry adapter work
+
+Read [docs/REGISTRY_ADAPTERS.md](docs/REGISTRY_ADAPTERS.md) before proposing a new ecosystem. New registry support requires a scoped roadmap change, normalized evidence, offline fixtures, safe acquisition tests, documentation, and an explicit security review. Future ecosystems are not part of v0.1.

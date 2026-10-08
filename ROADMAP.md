@@ -19,7 +19,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 10 Fixture and test suite | COMPLETE | fixtures/README.md; inert metadata/provenance fixtures; tests/fixture_matrix_test.go; offline test/race/vet/gofmt/diff checks |
 | 11 CLI and SDK polish | COMPLETE | cmd/releasecheck; internal/cli; CLI tests/build/smoke checks; README usage; test/vet/gofmt/diff checks; focused CLI/fixture race checks |
 | 12 CI and release engineering | COMPLETE | .github/workflows/ci.yml; .github/workflows/release.yml; scripts/build-release.sh; docs/RELEASE.md; local verification checkpoint |
-| 13 Documentation and contributor readiness | NOT STARTED | - |
+| 13 Documentation and contributor readiness | COMPLETE | README.md; docs/USAGE.md; docs/REPORTS.md; docs/CI.md; docs/REGISTRY_ADAPTERS.md; docs/GOOD_FIRST_ISSUES.md; contributor templates; documentation checkpoint |
 | 14 Final audit | NOT STARTED | - |
 
 At every session start, read PROJECT_CONTEXT.md, this file, docs/DESIGN.md, git status, the tree, and relevant tests. Before advancing, verify the previous phase from its acceptance criteria. At every checkpoint run the commands, inspect git diff and tree, update this file and PROJECT_CONTEXT.md, record decisions and limitations, and summarize. Do not commit or push automatically.
@@ -442,7 +442,7 @@ Do not: add marketing claims or fabricated validation.
 
 Agent/model: Antigravity/Claude; Codex for final security wording.
 
-Checkpoint: record doc gaps and reader review.
+Checkpoint: COMPLETE on 2026-10-08. Updated the README with installation, verification scope, limitations, CI, and existing-tool boundaries; added usage, report, CI, registry-adapter, and scoped good-first-issue guidance; added a feature-request template; corrected stale security and CLI wording; and completed link, command, formatting, test, vet, and whitespace review. GitHub-hosted rendering and first-time contributor review remain external verification tasks, not invented as completed.
 
 ## Phase 14 - Final audit
 

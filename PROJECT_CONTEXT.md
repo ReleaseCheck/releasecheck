@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 12 complete; Phase 13 documentation and contributor readiness is next
+- Current state: Phase 13 complete; Phase 14 independent final audit is next
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -54,6 +54,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 - Phase 10 test suite: `tests/fixture_matrix_test.go` covers matching, artifact-only, source-only, modified, malformed, install metadata, missing repository, unavailable source, unsafe path, symlink, size boundary, and provenance variation cases. Checked-in metadata/provenance samples are inert; archive bytes are generated deterministically with Go's standard library. The default suite is offline and uses local test servers only.
 - Phase 11 CLI: `releasecheck verify npm [flags] NAME [VERSION]` and `releasecheck verify pypi [flags] NAME [VERSION]` wire the existing adapters to human, JSON, and SARIF output. `--artifact` selects a PyPI file, `--timeout` bounds operations, `--output` writes a report with restrictive permissions, and exit codes follow the report contract. No public SDK is exposed yet because the internal adapter/result lifecycle is not stable enough to promise compatibility.
 - Phase 12 release engineering: CI tests Ubuntu, Windows, and macOS with read-only permissions, runs an Ubuntu race job, pins third-party actions to immutable release commit SHAs, and builds the CLI for five target pairs from version tags. Release archives use `-trimpath`, `-buildvcs=false`, disabled CGO, normalized archive metadata, and SHA-256 checksums. Reproducibility is explicitly described as measured enough for v0.1 preparation, not a bit-for-bit guarantee.
+- Phase 13 documentation: README, usage, report-contract, CI, registry-adapter, and scoped good-first-issue guidance now describe the implemented CLI and its boundaries. Contributor and feature-request templates require deterministic tests, security impact, evidence, scope, and limitations. Documentation intentionally makes no adoption, novelty, safety, or hosted-CI claims.
 - License: Apache-2.0 for a permissive license with an explicit patent grant and familiar enterprise/open-source reuse terms; MIT remains a possible future reconsideration only through a documented project decision.
 - Untrusted bytes are downloaded over HTTPS with timeouts and bounded storage. Archive paths, links, expansion, file counts, and sizes are validated. Symlinks and special entries are observed safely and are never followed during comparison. Package code, install hooks, setup.py, build backends, and lifecycle scripts are never executed.
 
@@ -93,7 +94,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 10: COMPLETE. Evidence: fixtures/README.md, fixtures/metadata, fixtures/provenance, tests/fixture_matrix_test.go, and passing offline test/race/vet/format/diff checks.
 - Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
-- Phases 13-14: NOT STARTED. Phase 13 documentation and contributor readiness is next.
+- Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
+- Phase 14: NOT STARTED. Independent final audit is next.
 
 ## Definition of done
 
@@ -129,6 +131,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - GitHub-hosted workflows have not run locally because the repository has no configured remote. The workflows are checked structurally and the equivalent local commands passed, but hosted CI status is not claimed.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
+- Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 
 ## Future-agent operating rule
 
