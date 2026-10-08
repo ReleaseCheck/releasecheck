@@ -2,7 +2,7 @@
 
 ReleaseCheck is planned as a deterministic Go CLI and SDK for examining whether a package published to a public registry corresponds to its claimed source repository and release reference.
 
-This repository is in the bootstrap phase. The v0.1 verification engine is intentionally not implemented yet. The project currently contains the scope, research, architecture decisions, security boundaries, roadmap, and contributor guidance that will govern implementation.
+The repository is being built phase by phase. The current codebase contains the domain model, safe artifact acquisition, internal npm and PyPI verification paths, and a hardened deterministic comparison layer. The user-facing CLI and report renderers remain future roadmap work.
 
 ## Problem
 
@@ -33,7 +33,7 @@ It will not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 5 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, and fixture-backed npm and PyPI verification paths. Phase 6, comparison-engine hardening, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
+Phases 0 through 6 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, fixture-backed npm and PyPI verification paths, and deterministic comparison hardening. Phase 7, deterministic security analysis, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Security boundary
 

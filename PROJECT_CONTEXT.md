@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 3 complete; registry verification adapters and comparison engine do not exist yet
+- Current state: Phase 6 complete; Phase 7 security analysis is next
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -47,6 +47,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 - Phase 3 acquisition: `internal/acquire` is HTTPS-only, bounded, SHA-256-aware, temporary-file based, and archive-inspection-only; it never extracts or executes package content.
 - Phase 4 npm path: the adapter consumes packument `dist`, `repository`, and `gitHead` metadata, verifies npm SRI when present, supports GitHub source snapshots, and reports unsupported/missing source data as limitations.
 - Phase 5 PyPI path: the adapter uses project/release JSON, retains all release files, verifies PyPI SHA-256 digests, prefers sdists, reports wheel limitations, and retrieves source only from an explicit Git reference supplied in source metadata.
+- Phase 6 comparison engine: inventory paths are canonical slash-separated relative paths; only a declared archive root may be removed. Duplicate, unsafe, unsupported, or malformed entries are rejected. Regular-file identity requires two valid matching SHA-256 hashes; missing hashes are `unverifiable`. Symlink targets are compared as metadata without following links, and all comparison results are path-ordered.
 - License: Apache-2.0 for a permissive license with an explicit patent grant and familiar enterprise/open-source reuse terms; MIT remains a possible future reconsideration only through a documented project decision.
 - Untrusted bytes are downloaded over HTTPS with timeouts and bounded storage. Archive paths, links, expansion, file counts, and sizes are validated. Symlinks and special entries are observed safely and are never followed during comparison. Package code, install hooks, setup.py, build backends, and lifecycle scripts are never executed.
 
@@ -79,7 +80,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 3: COMPLETE. Evidence: internal/acquire/acquire.go, internal/acquire/acquire_test.go, docs/DESIGN.md, and passing test/race/vet/format checks.
 - Phase 4: COMPLETE. Evidence: internal/npm/npm.go, internal/npm/npm_test.go, internal/compare, docs/DESIGN.md, and passing deterministic test/vet/format checks. Race testing is environment-limited because the installed MSYS2 GCC cannot launch `collect2.exe`.
 - Phase 5: COMPLETE. Evidence: internal/pypi/pypi.go, internal/pypi/pypi_test.go, docs/DESIGN.md, and passing deterministic test/vet/format checks. Race testing remains environment-limited because the installed MSYS2 GCC cannot launch `collect2.exe`.
-- Phases 6-14: NOT STARTED. Phase 6 has a minimal comparison dependency from Phases 4-5 but has not begun its dedicated hardening phase.
+- Phase 6: COMPLETE. Evidence: internal/compare/compare.go, internal/compare/compare_test.go, updated archive symlink-target inventory handling, and passing serial test/vet/format/diff checks. Race testing remains environment-limited because the installed MSYS2 GCC cannot launch `collect2.exe`.
+- Phases 7-14: NOT STARTED. Phase 7 security analysis is next.
 
 ## Definition of done
 
@@ -98,9 +100,9 @@ git diff --check
 
 Commands may evolve with the implementation. Never run package managers or builds against untrusted artifacts as part of ReleaseCheck.
 
-## Known limitations at bootstrap
+## Known limitations at Phase 6 checkpoint
 
-- No CLI, SDK implementation, registry adapter implementation, comparison engine, or report renderer exists. Acquisition is implemented as a standalone safe input boundary; it does not yet connect to registry metadata.
+- No CLI, SDK implementation, security-analysis package, provenance consumer, or report renderer exists. Comparison is implemented as an internal deterministic layer and is not yet exposed through a user-facing command.
 - npm verification is implemented as an internal path only; no CLI/report wiring exists, and source retrieval is currently limited to GitHub.
 - PyPI verification is implemented as an internal path only; source references are unavailable for releases whose project metadata does not provide an explicit ref, and attestations are not yet consumed.
 - The module path is provisional until the hosting namespace is confirmed.

@@ -89,7 +89,16 @@ Archive inspection identifies ZIP and gzip-compressed TAR by magic bytes rather 
 
 ## Deterministic comparison
 
-Compare validated logical entries using normalized relative paths and SHA-256 hashes. Identify identical, source-only, artifact-only, modified, and type-mismatched files in stable lexical order. Normalization must be narrow and documented; generated files are not silently discarded. Archive hashes remain separate from extracted-file comparison.
+Compare validated logical entries using normalized relative paths and SHA-256 hashes. Identify identical, source-only, artifact-only, modified, type-mismatched, and unverifiable files in stable lexical order. Normalization must be narrow and documented; generated files are not silently discarded. Archive hashes remain separate from extracted-file comparison.
+
+Phase 6 comparison rules are explicit:
+
+- Inventory paths must be canonical, slash-separated, relative paths. Backslashes, NUL/control characters, absolute paths, drive-qualified paths, traversal, dot segments, unsupported kinds, negative sizes, and duplicate paths are rejected.
+- The only intentional path transformation is removal of a declared outer archive root such as `package/`. Entries outside that root or the root itself are not silently reinterpreted.
+- Regular files are `identical` only when both entries have valid SHA-256 hashes and the hashes match. A missing hash produces `unverifiable`, never equality.
+- Symlinks are compared by recorded target text when available. Targets are metadata; links are never followed. A missing target is `unverifiable`.
+- Directories and special entries retain their type. A kind mismatch is reported explicitly as `type_change`; no special entry is silently dropped.
+- The comparator returns path-ordered results and a category summary so repeated runs over the same inputs have stable evidence.
 
 Wheels and other built distributions are not presumed byte-for-byte source representations. Reports must state when comparison is structural or partial. A difference is evidence, not automatic proof of maliciousness.
 

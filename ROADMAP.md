@@ -12,7 +12,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 3 Safe artifact acquisition | COMPLETE | internal/acquire; adversarial HTTP/archive tests; test/race/vet/gofmt/diff checks |
 | 4 npm verification path | COMPLETE | internal/npm; internal/compare baseline; offline npm fixtures; test/vet/gofmt/diff checks |
 | 5 PyPI verification path | COMPLETE | internal/pypi; sdist/wheel fixtures; hash/source tests; test/vet/gofmt/diff checks |
-| 6 Comparison engine | NOT STARTED | - |
+| 6 Comparison engine | COMPLETE | internal/compare; hardened inventory/path/hash tests; test/vet/gofmt/diff checks |
 | 7 Security analysis | NOT STARTED | - |
 | 8 Provenance and attestation evidence | NOT STARTED | - |
 | 9 Reporting | NOT STARTED | - |

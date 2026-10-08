@@ -287,7 +287,11 @@ func (c *Client) Verify(ctx context.Context, request domain.ReleaseRequest, opti
 		_ = result.Cleanup()
 		return VerificationResult{}, domain.NewError(domain.ErrorComparison, "normalize PyPI artifact inventory", err)
 	}
-	result.Comparisons = compare.Compare(sourceEntries, artifactEntries)
+	result.Comparisons, err = compare.Compare(sourceEntries, artifactEntries)
+	if err != nil {
+		_ = result.Cleanup()
+		return VerificationResult{}, domain.NewError(domain.ErrorComparison, "compare PyPI inventories", err)
+	}
 	if selected.ContentType == "bdist_wheel" {
 		result.Limitations = append(result.Limitations, "wheel contents may include generated metadata or compiled distribution files and are not a byte-for-byte source equivalence claim")
 	}

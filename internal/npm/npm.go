@@ -269,7 +269,11 @@ func (c *Client) Verify(ctx context.Context, request domain.ReleaseRequest) (Ver
 		_ = result.Cleanup()
 		return VerificationResult{}, domain.NewError(domain.ErrorComparison, "normalize source inventory", err)
 	}
-	result.Comparisons = compare.Compare(sourceEntries, artifactEntries)
+	result.Comparisons, err = compare.Compare(sourceEntries, artifactEntries)
+	if err != nil {
+		_ = result.Cleanup()
+		return VerificationResult{}, domain.NewError(domain.ErrorComparison, "compare npm inventories", err)
+	}
 	return result, nil
 }
 

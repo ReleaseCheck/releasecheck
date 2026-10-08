@@ -378,6 +378,7 @@ func inspectZIP(file *os.File, compressed int64, limits Limits) (ArchiveInventor
 			return ArchiveInventory{}, err
 		}
 		var digest string
+		target := ""
 		if kind == domain.FileRegular {
 			opened, err := entry.Open()
 			if err != nil {
@@ -391,8 +392,21 @@ func inspectZIP(file *os.File, compressed int64, limits Limits) (ArchiveInventor
 			if closeErr != nil {
 				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "close ZIP entry", closeErr)
 			}
+		} else if kind == domain.FileSymlink {
+			opened, err := entry.Open()
+			if err != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "read ZIP link", err)
+			}
+			target, err = readArchiveTarget(opened, limits.MaxFileBytes)
+			closeErr := opened.Close()
+			if err != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "read ZIP link target", err)
+			}
+			if closeErr != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "close ZIP link", closeErr)
+			}
 		}
-		if err := addEntry(&inventory, entry.Name, kind, uint64(entry.UncompressedSize64), digest, limits); err != nil {
+		if err := addEntry(&inventory, entry.Name, kind, uint64(entry.UncompressedSize64), digest, target, limits); err != nil {
 			return ArchiveInventory{}, err
 		}
 	}
@@ -444,27 +458,44 @@ func inspectTarGzip(file *os.File, compressed int64, limits Limits) (ArchiveInve
 			return ArchiveInventory{}, err
 		}
 		digest := ""
+		target := ""
 		if kind == domain.FileRegular {
 			digest, err = hashArchiveEntry(tarReader, header.Size)
 			if err != nil {
 				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "hash TAR entry", err)
 			}
+		} else if kind == domain.FileSymlink {
+			target = header.Linkname
 		}
-		if err := addEntry(&inventory, header.Name, kind, uint64(maxInt64(header.Size)), digest, limits); err != nil {
+		if err := addEntry(&inventory, header.Name, kind, uint64(maxInt64(header.Size)), digest, target, limits); err != nil {
 			return ArchiveInventory{}, err
 		}
 	}
 	return inventory, nil
 }
 
-func addEntry(inventory *ArchiveInventory, rawName string, kind domain.FileKind, size uint64, digest string, limits Limits) error {
+func addEntry(inventory *ArchiveInventory, rawName string, kind domain.FileKind, size uint64, digest, target string, limits Limits) error {
 	if err := validateEntryBounds(inventory, rawName, size, limits); err != nil {
 		return err
 	}
 	cleanedPath := cleanArchivePath(rawName)
-	inventory.Entries = append(inventory.Entries, domain.FileEntry{Path: cleanedPath, Kind: kind, SHA256: digest, Size: int64(size)})
+	inventory.Entries = append(inventory.Entries, domain.FileEntry{Path: cleanedPath, Kind: kind, SHA256: digest, Size: int64(size), Target: target})
 	inventory.ExpandedBytes += int64(size)
 	return nil
+}
+
+func readArchiveTarget(reader io.Reader, maxBytes int64) (string, error) {
+	value, err := io.ReadAll(io.LimitReader(reader, maxBytes+1))
+	if err != nil {
+		return "", err
+	}
+	if int64(len(value)) > maxBytes {
+		return "", fmt.Errorf("link target exceeds limit %d", maxBytes)
+	}
+	if strings.ContainsRune(string(value), '\x00') {
+		return "", errors.New("link target contains NUL")
+	}
+	return string(value), nil
 }
 
 func validateEntryBounds(inventory *ArchiveInventory, rawName string, size uint64, limits Limits) error {

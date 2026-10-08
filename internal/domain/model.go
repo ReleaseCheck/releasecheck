@@ -170,6 +170,7 @@ type FileEntry struct {
 	Kind   FileKind `json:"kind"`
 	SHA256 string   `json:"sha256,omitempty"`
 	Size   int64    `json:"size,omitempty"`
+	Target string   `json:"target,omitempty"`
 }
 
 // ComparisonKind describes the relationship of one path between source and
@@ -182,6 +183,7 @@ const (
 	ComparisonArtifactOnly ComparisonKind = "artifact_only"
 	ComparisonModified     ComparisonKind = "modified"
 	ComparisonTypeChange   ComparisonKind = "type_change"
+	ComparisonUnverifiable ComparisonKind = "unverifiable"
 )
 
 // FileComparison contains one stable comparison result.
