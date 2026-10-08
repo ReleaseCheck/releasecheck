@@ -6,7 +6,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 
 - Name: ReleaseCheck
 - Planned language: Go
-- Module: `github.com/releasecheck/releasecheck` (hosting namespace remains to be confirmed before publishing)
+- Module: `github.com/releasecheck/releasecheck`
 - Current state: post-Phase-14 audit, `AUDIT REQUIRED`, pre-v0.1 release
 - Current release target: defensible `v0.1.0`, not yet released
 - Primary ecosystems: npm and PyPI
@@ -49,6 +49,18 @@ releasecheck verify pypi [flags] NAME [VERSION]
 ## Current milestone
 
 The project is **post-Phase-14 audit / audit-required / pre-v0.1 release**. Phase 14 found a credible non-execution foundation plus unresolved release and trust-boundary decisions. Phase 15 audit remediation is the next executable phase. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+
+## Organization and Repository Architecture
+
+Organization: `ReleaseCheck`
+
+| Repository | Purpose | Source-of-truth responsibility | Must not contain |
+| --- | --- | --- | --- |
+| `ReleaseCheck/releasecheck` | Core Go CLI and verification engine | Implementation, tests, fixtures, architecture, security model, roadmap, project context, changelog, and release engineering | A second copy of the core engine or ecosystem-specific split repositories |
+| `ReleaseCheck/releasecheck-action` | Official GitHub Actions integration | Action inputs, binary acquisition/checksum handling, CI invocation behavior, and Action-specific tests/docs | Verification logic, package parsing, or a replacement engine |
+| `ReleaseCheck/releasecheck-docs` | Public user documentation | Quickstart, installation, CLI usage, result interpretation, CI/Action usage, FAQ, and troubleshooting | The complete source tree, competing roadmap, or duplicated implementation docs |
+
+The dependency relationship is one-way: the core releases versioned binaries; the Action consumes an explicit core release; the docs link to both. Core contributors need only the core repository. Action contributors use the documented core release contract. Documentation contributors work primarily in the docs repository. The first three repositories are the initial architecture. The organization migration milestone is currently in progress until the three public repositories are created, pushed, and verified. Future repository slots are reserved for genuinely independent responsibilities and remain planned/discovery-gated; they are not created.
 
 ## Architecture and security decisions
 
@@ -113,6 +125,7 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
 - Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The conditional recommendation requires hosted CI execution and explicit maintainer decisions for the remaining source-binding, manifest-analysis, network-boundary, and tooling limitations.
+- Organization milestone M0: IN PROGRESS. The repository split is documented and local companion repositories are prepared; public repository creation, push, and local/remote branch verification remain checkpoint work.
 
 ## Definition of done
 

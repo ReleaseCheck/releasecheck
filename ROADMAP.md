@@ -34,6 +34,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 12 | COMPLETE | Pinned CI/release workflows, build script, local release checks | Hosted validation still required by v0.1 gate |
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
+| Organization | M0 | IN PROGRESS | Three-repository split documented; remote creation and push verification pending | Verify all three public `main` branches and local sync |
 | v0.1.0 candidate | 15 | NOT STARTED | Audit-remediation plan in Phase 15 section | Classify or resolve F-001 to F-005 |
 | v0.1.0 candidate | 16 | NOT STARTED | Independent re-audit plan in Phase 16 section | Phase 15 evidence |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
@@ -62,6 +63,41 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | v3.0 reserved | 40-49 | DEFERRED | Reserved discovery-gated planning band | v3 discovery |
 | v4.0 reserved | 50-59 | DEFERRED | Reserved discovery-gated planning band | v4 discovery |
 | v5.0+ reserved | Future | DEFERRED | No fixed feature promises; evidence-led discovery required | Future discovery |
+
+## Current Repository Architecture
+
+The initial organization architecture is being established as three repositories. The migration milestone is complete only after all three public repositories exist, contain the intended history/content, and local `main` matches remote `main`.
+
+```text
+CURRENT
+├── ReleaseCheck/releasecheck         core implementation and technical truth
+├── ReleaseCheck/releasecheck-action  GitHub Actions integration
+└── ReleaseCheck/releasecheck-docs    public user documentation
+
+FUTURE - NOT CREATED
+├── candidate repository 4            planned/discovery-gated
+├── candidate repository 5            planned/discovery-gated
+└── candidate repository 6            planned/discovery-gated
+```
+
+The rule is simple: create a repository only when it has a genuinely independent responsibility. The core is not split into npm and PyPI repositories. Future candidates may include RFC/design proposals, ecosystem integrations, or community/experimental tooling, but no names or commitments are assigned until discovery establishes a need.
+
+### Organization milestone M0 - initial three-repository architecture
+
+Status: IN PROGRESS.
+
+Objective: establish the initial `ReleaseCheck` organization layout without duplicating the verification engine or weakening the core repository as the technical source of truth.
+
+Acceptance criteria:
+
+- `ReleaseCheck/releasecheck` is the core repository and retains its existing history.
+- `ReleaseCheck/releasecheck-action` contains only the GitHub Actions integration and its tests/docs.
+- `ReleaseCheck/releasecheck-docs` contains only curated user documentation and its contribution/security metadata.
+- all three repositories are public, have accurate descriptions, and default to `main`.
+- each local repository has a clean working tree after commit and its local `main` is verified against remote `main`.
+- no future repository is created and no v0.1 implementation scope is expanded.
+
+Evidence required: repository URLs, `gh repo view` metadata, remote branch commit IDs, local `git status --short --branch`, and validation results recorded in the checkpoint.
 
 At every session start, read PROJECT_CONTEXT.md, this file, docs/DESIGN.md, git status, the tree, and relevant tests. Before advancing, verify the previous phase from its acceptance criteria. At every checkpoint run the commands, inspect git diff and tree, update this file and PROJECT_CONTEXT.md, record decisions and limitations, and summarize. Do not commit or push automatically.
 

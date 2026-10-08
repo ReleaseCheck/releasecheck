@@ -35,6 +35,18 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 Phases 0 through 13 are complete. Phase 14 audit remains required before v0.1 can be declared complete; Phase 15 audit remediation is next. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation and [ROADMAP.md](ROADMAP.md) for the complete versioned phase register.
 
+## Repository Map
+
+ReleaseCheck is organized under the [ReleaseCheck GitHub organization](https://github.com/ReleaseCheck):
+
+| Repository | Responsibility |
+| --- | --- |
+| [releasecheck](https://github.com/ReleaseCheck/releasecheck) | Core Go CLI, verification engine, tests, fixtures, technical source of truth, and release engineering |
+| [releasecheck-action](https://github.com/ReleaseCheck/releasecheck-action) | GitHub Actions integration that invokes released core binaries |
+| [releasecheck-docs](https://github.com/ReleaseCheck/releasecheck-docs) | Curated public user documentation and learning material |
+
+The core repository remains the authoritative home of implementation, architecture, security decisions, roadmap, and contributor engineering guidance. The Action does not reimplement verification, and the docs repository does not duplicate the core source tree. Additional repositories are discovery-gated; repository count is not a project success metric.
+
 ## Installation
 
 There is no package-manager distribution yet. Build from a checked-out release or commit with Go 1.25 or newer:
