@@ -1,0 +1,8 @@
+{
+  "name": "fixture-package",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "go test ./...",
+    "postinstall": "node setup.js"
+  }
+}
