@@ -146,7 +146,7 @@ func TestInspectZIPInventoryAndRejectsUnsafePath(t *testing.T) {
 	if err != nil {
 		t.Fatalf("inspect ZIP: %v", err)
 	}
-	if inventory.Kind != ArchiveZip || len(inventory.Entries) != 2 || inventory.ExpandedBytes == 0 {
+	if inventory.Kind != ArchiveZip || len(inventory.Entries) != 2 || inventory.ExpandedBytes == 0 || inventory.Entries[0].SHA256 == "" {
 		t.Fatalf("unexpected ZIP inventory: %+v", inventory)
 	}
 
@@ -170,7 +170,7 @@ func TestInspectTARGzipInventoryAndBounds(t *testing.T) {
 	if err != nil {
 		t.Fatalf("inspect TAR.GZ: %v", err)
 	}
-	if inventory.Kind != ArchiveTarGzip || len(inventory.Entries) != 1 {
+	if inventory.Kind != ArchiveTarGzip || len(inventory.Entries) != 1 || inventory.Entries[0].SHA256 == "" {
 		t.Fatalf("unexpected TAR.GZ inventory: %+v", inventory)
 	}
 

@@ -5,9 +5,12 @@ package acquire
 import (
 	"archive/tar"
 	"archive/zip"
+	"bytes"
 	"compress/gzip"
 	"context"
 	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -248,6 +251,52 @@ func normalizeSHA256(value string) (string, error) {
 	return strings.ToLower(value), nil
 }
 
+// VerifyIntegrity verifies a Subresource Integrity value such as
+// "sha512-<base64 digest>" against a downloaded file. The supported
+// algorithms are deliberately limited to SHA-256 and SHA-512.
+func VerifyIntegrity(filename, integrity string) error {
+	for _, token := range strings.Fields(integrity) {
+		parts := strings.SplitN(token, "-", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		var digest []byte
+		file, err := os.Open(filename)
+		if err != nil {
+			return domain.NewError(domain.ErrorIntegrity, "open file for integrity", err)
+		}
+		switch parts[0] {
+		case "sha256":
+			hasher := sha256.New()
+			_, err = io.Copy(hasher, file)
+			digest = hasher.Sum(nil)
+		case "sha512":
+			hasher := sha512.New()
+			_, err = io.Copy(hasher, file)
+			digest = hasher.Sum(nil)
+		default:
+			_ = file.Close()
+			continue
+		}
+		closeErr := file.Close()
+		if err != nil {
+			return domain.NewError(domain.ErrorIntegrity, "hash file for integrity", err)
+		}
+		if closeErr != nil {
+			return domain.NewError(domain.ErrorIntegrity, "close file for integrity", closeErr)
+		}
+		expected, err := base64.StdEncoding.DecodeString(parts[1])
+		if err != nil {
+			return domain.NewError(domain.ErrorIntegrity, "decode integrity", err)
+		}
+		if bytes.Equal(digest, expected) {
+			return nil
+		}
+		return domain.NewError(domain.ErrorIntegrity, "verify integrity", fmt.Errorf("digest mismatch for %s", parts[0]))
+	}
+	return domain.NewError(domain.ErrorIntegrity, "verify integrity", errors.New("no supported integrity value found"))
+}
+
 // ArchiveKind identifies the supported archive container.
 type ArchiveKind string
 
@@ -324,7 +373,26 @@ func inspectZIP(file *os.File, compressed int64, limits Limits) (ArchiveInventor
 	}
 	inventory := ArchiveInventory{Kind: ArchiveZip, CompressedBytes: compressed}
 	for _, entry := range reader.File {
-		if err := addEntry(&inventory, entry.Name, zipEntryKind(entry), uint64(entry.UncompressedSize64), limits); err != nil {
+		kind := zipEntryKind(entry)
+		if err := validateEntryBounds(&inventory, entry.Name, uint64(entry.UncompressedSize64), limits); err != nil {
+			return ArchiveInventory{}, err
+		}
+		var digest string
+		if kind == domain.FileRegular {
+			opened, err := entry.Open()
+			if err != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "read ZIP entry", err)
+			}
+			digest, err = hashArchiveEntry(opened, int64(entry.UncompressedSize64))
+			closeErr := opened.Close()
+			if err != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "hash ZIP entry", err)
+			}
+			if closeErr != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "close ZIP entry", closeErr)
+			}
+		}
+		if err := addEntry(&inventory, entry.Name, kind, uint64(entry.UncompressedSize64), digest, limits); err != nil {
 			return ArchiveInventory{}, err
 		}
 	}
@@ -372,19 +440,34 @@ func inspectTarGzip(file *os.File, compressed int64, limits Limits) (ArchiveInve
 		default:
 			kind = domain.FileSpecial
 		}
-		if err := addEntry(&inventory, header.Name, kind, uint64(maxInt64(header.Size)), limits); err != nil {
+		if err := validateEntryBounds(&inventory, header.Name, uint64(maxInt64(header.Size)), limits); err != nil {
 			return ArchiveInventory{}, err
 		}
+		digest := ""
 		if kind == domain.FileRegular {
-			if _, err := io.Copy(io.Discard, tarReader); err != nil {
-				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "read TAR entry", err)
+			digest, err = hashArchiveEntry(tarReader, header.Size)
+			if err != nil {
+				return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "hash TAR entry", err)
 			}
+		}
+		if err := addEntry(&inventory, header.Name, kind, uint64(maxInt64(header.Size)), digest, limits); err != nil {
+			return ArchiveInventory{}, err
 		}
 	}
 	return inventory, nil
 }
 
-func addEntry(inventory *ArchiveInventory, rawName string, kind domain.FileKind, size uint64, limits Limits) error {
+func addEntry(inventory *ArchiveInventory, rawName string, kind domain.FileKind, size uint64, digest string, limits Limits) error {
+	if err := validateEntryBounds(inventory, rawName, size, limits); err != nil {
+		return err
+	}
+	cleanedPath := cleanArchivePath(rawName)
+	inventory.Entries = append(inventory.Entries, domain.FileEntry{Path: cleanedPath, Kind: kind, SHA256: digest, Size: int64(size)})
+	inventory.ExpandedBytes += int64(size)
+	return nil
+}
+
+func validateEntryBounds(inventory *ArchiveInventory, rawName string, size uint64, limits Limits) error {
 	if err := validateArchivePath(rawName); err != nil {
 		return domain.NewError(domain.ErrorArchive, "validate archive path", err)
 	}
@@ -403,9 +486,22 @@ func addEntry(inventory *ArchiveInventory, rawName string, kind domain.FileKind,
 	if size > uint64(limits.MaxExpandedBytes-inventory.ExpandedBytes) {
 		return domain.NewError(domain.ErrorArchive, "bound archive expansion", fmt.Errorf("expanded bytes exceed limit %d", limits.MaxExpandedBytes))
 	}
-	inventory.Entries = append(inventory.Entries, domain.FileEntry{Path: cleanedPath, Kind: kind, Size: int64(size)})
-	inventory.ExpandedBytes += int64(size)
 	return nil
+}
+
+func hashArchiveEntry(reader io.Reader, expectedSize int64) (string, error) {
+	if expectedSize < 0 {
+		return "", errors.New("archive entry size is negative")
+	}
+	hasher := sha256.New()
+	count, err := io.CopyN(hasher, reader, expectedSize)
+	if err != nil && !errors.Is(err, io.EOF) {
+		return "", err
+	}
+	if count != expectedSize {
+		return "", fmt.Errorf("archive entry size mismatch: read %d, expected %d", count, expectedSize)
+	}
+	return hex.EncodeToString(hasher.Sum(nil)), nil
 }
 
 func validateArchivePath(rawName string) error {

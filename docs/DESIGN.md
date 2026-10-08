@@ -61,6 +61,14 @@ The model uses JSON tags as the first machine-readable shape, but the schema is 
 
 Resolution is staged: identify repository URL, normalize only defined URL forms, determine a claimed tag/commit from metadata or supported attestations, then retrieve a snapshot. A full commit is stronger than a movable branch/tag. A repository URL or URL verification is not proof that this artifact was built from that source.
 
+### npm path
+
+The Phase 4 npm adapter reads the full packument from the registry, selects an explicit version or the `latest` dist-tag, and uses the selected version's `dist.tarball`, `dist.integrity`, optional legacy `dist.shasum`, `repository`, and `gitHead` fields. `dist.integrity` is verified as supported Subresource Integrity evidence after download. Legacy SHA-1 `shasum` is recorded as metadata but is not treated as a strong integrity conclusion.
+
+Repository metadata may be a string or object. Supported normalization converts `git+https`, `git://`, and GitHub SCP-style URLs into HTTPS source claims. Phase 4 retrieves source snapshots only for GitHub repositories, through an injected HTTPS GitHub API base URL, using the claimed `gitHead` or repository fragment. Other hosts remain explicit limitations. npm's `package/` archive root and GitHub's generated source root are removed only for comparison; the original archive inventories and hashes remain available.
+
+The npm path does not run `npm`, install dependencies, run lifecycle scripts, invoke `npm pack`, execute package code, or recreate npm provenance/signature verification. Those are separate evidence mechanisms and later roadmap work.
+
 ## Artifact acquisition and archive handling
 
 The Phase 3 `internal/acquire` package uses HTTPS-only requests, a 30-second default timeout, a five-redirect default limit, content-length checks where available, bounded streaming downloads, SHA-256, `os.CreateTemp` files, and explicit cleanup. Default limits are 100 MiB per download, 10,000 archive entries, 500 MiB expanded content, and 100 MiB per regular file. Callers may tighten them; invalid limits are rejected.

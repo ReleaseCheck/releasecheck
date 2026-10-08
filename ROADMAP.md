@@ -10,7 +10,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 1 Repository foundation | COMPLETE | governance files; go.mod; internal/project; CI skeleton; gofmt/test/vet/diff checks |
 | 2 Architecture and domain model | COMPLETE | internal/domain; docs/DESIGN.md; test/race/vet/gofmt checks |
 | 3 Safe artifact acquisition | COMPLETE | internal/acquire; adversarial HTTP/archive tests; test/race/vet/gofmt/diff checks |
-| 4 npm verification path | NOT STARTED | - |
+| 4 npm verification path | COMPLETE | internal/npm; internal/compare baseline; offline npm fixtures; test/vet/gofmt/diff checks |
 | 5 PyPI verification path | NOT STARTED | - |
 | 6 Comparison engine | NOT STARTED | - |
 | 7 Security analysis | NOT STARTED | - |
