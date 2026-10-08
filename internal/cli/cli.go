@@ -17,7 +17,10 @@ import (
 	"github.com/releasecheck/releasecheck/internal/security"
 )
 
-const version = "0.1.0-dev"
+var (
+	version = "0.1.0-dev"
+	commit  = "unknown"
+)
 
 // Run executes ReleaseCheck CLI arguments and returns a stable process code.
 // It never invokes a package manager or executes package content.
@@ -27,7 +30,7 @@ func Run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		return 0
 	}
 	if args[0] == "--version" || args[0] == "-v" {
-		fmt.Fprintln(stdout, version)
+		fmt.Fprintf(stdout, "%s (commit %s)\n", version, commit)
 		return 0
 	}
 	if args[0] != "verify" || len(args) < 2 {

@@ -1,6 +1,7 @@
 # Local build and test output
 /bin/
 /dist/
+releasecheck.exe
 *.test
 *.out
 coverage.out

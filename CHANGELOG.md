@@ -16,3 +16,4 @@ All notable changes to ReleaseCheck will be documented here.
 - Added deterministic human, JSON schema 1.0, and SARIF 2.1.0 report renderers with explicit verdict precedence and stable exit-code mapping.
 - Added the offline fixture matrix covering the twelve required source/artifact, archive-safety, metadata, and provenance scenarios. Default tests do not contact live registries.
 - Added the initial `releasecheck verify npm|pypi` CLI with human, JSON, and SARIF output, timeout/artifact/output flags, stable usage errors, and report-derived exit codes. A public SDK remains intentionally deferred.
+- Added pinned cross-platform CI, Ubuntu race testing, tag-driven release automation, version metadata, reproducible-enough multi-platform archives, and SHA-256 release checksums. Hosted CI and release signing remain unclaimed until a remote is configured and a release is audited.
