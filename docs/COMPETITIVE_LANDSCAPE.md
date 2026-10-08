@@ -1,0 +1,23 @@
+# Competitive Landscape
+
+Focused research checked on 2026-10-08 (WAT). Sources link to current primary documentation or project repositories. This is a technical comparison, not a market-size or adoption claim.
+
+| Project/tool | Ecosystem | Primary purpose | Overlap | Important difference | ReleaseCheck relationship | Sources |
+| --- | --- | --- | --- | --- | --- | --- |
+| npm registry metadata and `npm audit signatures` | npm | Publish metadata, integrity, registry signatures, and provenance verification | Artifact identity and provenance | Registry-native trust and attestation checks; not a cross-ecosystem comparison report | Consume as evidence; do not replace npm infrastructure | [metadata](https://github.com/npm/registry/blob/main/docs/responses/package-metadata.md), [provenance](https://docs.npmjs.com/viewing-package-provenance/), [security docs](https://docs.npmjs.com/packages-and-modules/securing-your-code/) |
+| vltpkg/reproduce | npm | Reproduce a package from repository metadata and compare produced package integrity | Closest overlap: source reference, checkout, artifact comparison | May install dependencies and run pack strategies; currently npm-focused | Adjacent project; ReleaseCheck v0.1 stays non-executing and evidence/report focused | [repository](https://github.com/vltpkg/reproduce) |
+| PyPI JSON and Index APIs | PyPI | Release metadata, files, URLs, hashes, and core metadata | Artifact acquisition and integrity evidence | APIs do not themselves compare a distribution to a source snapshot | Primary PyPI inputs | [JSON API](https://docs.pypi.org/api/json/), [Index API](https://docs.pypi.org/api/index-api/) |
+| PyPI attestations / PEP 740 | PyPI | Signed attestations for release files, including publish and SLSA provenance predicates | Provenance bound to artifacts and source identity | Attestation verification is not source/artifact file equality or benignness | Consume and report evidence; do not recreate it | [attestations](https://docs.pypi.org/attestations/), [consuming](https://docs.pypi.org/attestations/consuming-attestations/), [security model](https://docs.pypi.org/attestations/security-model/) |
+| GitHub source archives | Git hosting | Source snapshots at refs or commits | Source retrieval | A commit archive is a source snapshot, not a reproducibility result; tags/branches can move | Use immutable commit references where possible | [archive API](https://docs.github.com/en/rest/repos/contents), [archive behavior](https://docs.github.com/en/enterprise-cloud@latest/repositories/working-with-files/using-files/downloading-source-code-archives) |
+| SLSA | Cross-ecosystem standard | Supply-chain security levels, provenance, and verification concepts | Provenance vocabulary | Specification/framework, not a package comparison CLI | Consume relevant provenance; do not implement SLSA | [SLSA v1.2](https://slsa.dev/spec/v1.2/) |
+| Sigstore / Cosign | Cross-ecosystem | Keyless signing, identity binding, transparency logging, artifact verification | Signature and provenance evidence | Signing/verification infrastructure, not source-vs-distribution comparison | Integrate only through ecosystem evidence | [Sigstore](https://docs.sigstore.dev/) |
+| GUAC | Cross-ecosystem | Ingest metadata and map software relationships in a graph | Evidence relationships | Graph/metadata platform, not a focused release comparator | Complementary; ReleaseCheck emits evidence | [GUAC](https://guac.sh/) |
+| OpenSSF Scorecard | Open source repositories | Automated repository security health metrics | Security context around a claimed repository | Measures practices, not published-artifact/source correspondence | Out of v0.1 scope | [Scorecard](https://github.com/ossf/scorecard) |
+
+## Conclusions
+
+Registry APIs, signatures, attestations, SLSA, Sigstore, and specialized reproducibility tools already cover meaningful parts of this problem. The defensible v0.1 position is a small, cross-ecosystem, non-executing evidence chain that makes the relationship between a selected release file, claimed source identity/reference, source snapshot, inventories, hashes, observations, provenance evidence, limitations, and verdict explicit.
+
+ReleaseCheck will not replace registry signature or attestation verification, reproduce arbitrary builds, score repository health, map an entire dependency graph, scan vulnerabilities, detect malware, generate SBOMs, or claim that any difference is malicious.
+
+Claims we must not make without new evidence: “first,” “unique,” “complete,” adoption, users, stars, funding, ecosystem demand, competitor weakness, or that matching files prove software is safe.

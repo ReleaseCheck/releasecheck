@@ -1,0 +1,17 @@
+# Local build and test output
+/bin/
+/dist/
+*.test
+*.out
+coverage.out
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Local caches and temporary files
+.releasecheck-cache/
+tmp/
