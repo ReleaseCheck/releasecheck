@@ -34,7 +34,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 12 | COMPLETE | Pinned CI/release workflows, build script, local release checks | Hosted validation still required by v0.1 gate |
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
-| Organization | M0 | IN PROGRESS | Three-repository split documented; remote creation and push verification pending | Verify all three public `main` branches and local sync |
+| Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | NOT STARTED | Audit-remediation plan in Phase 15 section | Classify or resolve F-001 to F-005 |
 | v0.1.0 candidate | 16 | NOT STARTED | Independent re-audit plan in Phase 16 section | Phase 15 evidence |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
@@ -66,7 +66,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 
 ## Current Repository Architecture
 
-The initial organization architecture is being established as three repositories. The migration milestone is complete only after all three public repositories exist, contain the intended history/content, and local `main` matches remote `main`.
+The initial organization architecture is established as three repositories. The migration milestone was completed on 2026-10-08 after all three public repositories existed, contained the intended history/content, and local `main` matched remote `main`.
 
 ```text
 CURRENT
@@ -84,7 +84,7 @@ The rule is simple: create a repository only when it has a genuinely independent
 
 ### Organization milestone M0 - initial three-repository architecture
 
-Status: IN PROGRESS.
+Status: COMPLETE.
 
 Objective: establish the initial `ReleaseCheck` organization layout without duplicating the verification engine or weakening the core repository as the technical source of truth.
 
@@ -97,7 +97,7 @@ Acceptance criteria:
 - each local repository has a clean working tree after commit and its local `main` is verified against remote `main`.
 - no future repository is created and no v0.1 implementation scope is expanded.
 
-Evidence required: repository URLs, `gh repo view` metadata, remote branch commit IDs, local `git status --short --branch`, and validation results recorded in the checkpoint.
+Evidence: `https://github.com/ReleaseCheck/releasecheck` at `1ff03f92cb394103e793e84b0fa7d90faf2a2830`, `https://github.com/ReleaseCheck/releasecheck-action` at `2fcc5ec21b4b180af4583273f9535e2c835b94b5`, and `https://github.com/ReleaseCheck/releasecheck-docs` at `5bf6e08195e1904e9a214f9dc3c38078a7c8bc53`. All are public with default branch `main`; local and remote commit IDs matched at checkpoint.
 
 At every session start, read PROJECT_CONTEXT.md, this file, docs/DESIGN.md, git status, the tree, and relevant tests. Before advancing, verify the previous phase from its acceptance criteria. At every checkpoint run the commands, inspect git diff and tree, update this file and PROJECT_CONTEXT.md, record decisions and limitations, and summarize. Do not commit or push automatically.
 

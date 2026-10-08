@@ -60,7 +60,7 @@ Organization: `ReleaseCheck`
 | `ReleaseCheck/releasecheck-action` | Official GitHub Actions integration | Action inputs, binary acquisition/checksum handling, CI invocation behavior, and Action-specific tests/docs | Verification logic, package parsing, or a replacement engine |
 | `ReleaseCheck/releasecheck-docs` | Public user documentation | Quickstart, installation, CLI usage, result interpretation, CI/Action usage, FAQ, and troubleshooting | The complete source tree, competing roadmap, or duplicated implementation docs |
 
-The dependency relationship is one-way: the core releases versioned binaries; the Action consumes an explicit core release; the docs link to both. Core contributors need only the core repository. Action contributors use the documented core release contract. Documentation contributors work primarily in the docs repository. The first three repositories are the initial architecture. The organization migration milestone is currently in progress until the three public repositories are created, pushed, and verified. Future repository slots are reserved for genuinely independent responsibilities and remain planned/discovery-gated; they are not created.
+The dependency relationship is one-way: the core releases versioned binaries; the Action consumes an explicit core release; the docs link to both. Core contributors need only the core repository. Action contributors use the documented core release contract. Documentation contributors work primarily in the docs repository. The first three repositories are the initial architecture. The organization migration milestone is COMPLETE as of 2026-10-08: all three public repositories were created, pushed, and verified with matching local/remote `main` commit IDs. Future repository slots are reserved for genuinely independent responsibilities and remain planned/discovery-gated; they are not created.
 
 ## Architecture and security decisions
 
@@ -125,7 +125,7 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
 - Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The conditional recommendation requires hosted CI execution and explicit maintainer decisions for the remaining source-binding, manifest-analysis, network-boundary, and tooling limitations.
-- Organization milestone M0: IN PROGRESS. The repository split is documented and local companion repositories are prepared; public repository creation, push, and local/remote branch verification remain checkpoint work.
+- Organization milestone M0: COMPLETE. Evidence: public repositories `ReleaseCheck/releasecheck`, `ReleaseCheck/releasecheck-action`, and `ReleaseCheck/releasecheck-docs`; matching checkpoint commit IDs are recorded in ROADMAP.md. The core repository retains its existing history; the Action and docs repositories have bounded root commits.
 
 ## Definition of done
 
@@ -156,9 +156,9 @@ Commands may evolve with the implementation. Never run package managers or build
 - No public SDK is promised in v0.1 yet; callers should not depend on `internal/` packages as a compatibility API.
 - Aggregate `go test -race -p 1 ./...` currently reaches all packages but can exit when Windows denies access to the temporary pre-existing `compare.test.exe`; the changed CLI and fixture-matrix packages pass focused race runs.
 - The module path is provisional until the hosting namespace is confirmed.
-- Remote, GitHub repository metadata, and maintainer identity are not configured.
+- Remote and GitHub repository metadata are configured for the three-repository organization layout. Maintainer identity remains the authenticated organization account, not a product capability claim.
 - Research is a focused initial pass, not a complete literature or market survey.
-- GitHub-hosted workflows have not run locally because the repository has no configured remote. The workflows are checked structurally and the equivalent local commands passed, but hosted CI status is not claimed.
+- GitHub-hosted workflows have not yet been observed completing on the new public repositories. The workflows are checked structurally and equivalent local commands passed, but hosted CI status is not claimed until GitHub reports a run.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
