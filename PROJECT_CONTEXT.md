@@ -125,7 +125,7 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
 - Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The current audit update records manifest and artifact-network remediation, while hosted CI, independent re-audit, source-archive proof, and tooling evidence remain release gates.
-- Phase 15: IN PROGRESS. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, and the updated FINAL_AUDIT.md. Hosted validation and independent re-audit remain outstanding.
+- Phase 15: COMPLETE. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, updated FINAL_AUDIT.md, and hosted CI run `37852987328` passing Ubuntu, Windows, macOS, and race jobs. Phase 16 independent re-audit remains required.
 - Organization milestone M0: COMPLETE. Evidence: public repositories `ReleaseCheck/releasecheck`, `ReleaseCheck/releasecheck-action`, and `ReleaseCheck/releasecheck-docs`; matching checkpoint commit IDs are recorded in ROADMAP.md. The core repository retains its existing history; the Action and docs repositories have bounded root commits.
 
 ## Definition of done
@@ -159,7 +159,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote and GitHub repository metadata are configured for the three-repository organization layout. Maintainer identity remains the authenticated organization account, not a product capability claim.
 - Research is a focused initial pass, not a complete literature or market survey.
-- GitHub-hosted validation is now observed on the public repositories. The Action CI passed at its initial commit. Core CI at the migration checkpoint passed Linux, macOS, and race jobs but failed the Windows formatting job; this remains an open CI/release-engineering issue and does not make the organization migration itself incomplete.
+- GitHub-hosted validation is observed on the public repositories. The Action CI passed at its initial commit. Core remediation CI run `37852987328` passed Linux, Windows, macOS, and race jobs. A reviewed release workflow remains outstanding.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.

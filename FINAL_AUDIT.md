@@ -8,7 +8,7 @@ Audit scope: current `main` after the Phase 15 remediation changes. This documen
 
 **Recommendation: CONDITIONAL. Do not declare v0.1 complete yet.**
 
-The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI must still complete successfully on all declared runners, and an independent re-audit must review these changes.
+The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI run `37852987328` passed all declared jobs for commit `8e0d05c`; an independent re-audit and release-workflow validation must still review these changes.
 
 ## Verified strengths
 
@@ -25,9 +25,9 @@ The non-execution boundary remains credible, and the remediation adds bounded ma
 
 ### F-001: Hosted CI and release workflow evidence
 
-Status: **OPEN until the current remediation commit passes hosted CI.**
+Status: **RESOLVED for the remediation commit.**
 
-The previous hosted run passed Linux, macOS, and race tests but failed the Windows formatting check because checkout line endings were not declared. `.gitattributes` now declares LF for Go and workflow source files. The new workflow run must be inspected before this finding can close. A first release workflow must also be reviewed before claiming release publication works.
+The previous hosted run failed the Windows formatting check because checkout line endings were not declared. `.gitattributes` now declares LF for Go and workflow source files. GitHub Actions run `37852987328` passed Ubuntu, macOS, Windows, and race jobs for commit `8e0d05c`. A first release workflow must still be reviewed before claiming release publication works.
 
 ### F-002: Source archive binding
 
@@ -49,9 +49,9 @@ The default artifact downloader rejects restricted destinations and rechecks red
 
 ### F-005: Static-analysis and environment evidence
 
-Status: **OPEN environment limitation.**
+Status: **ACCEPTED ENVIRONMENT LIMITATION; independent review still required.**
 
-The workstation does not provide every security analysis tool. `go vet` and the offline test suite pass locally. Hosted race/static-analysis results must be recorded when available; unavailable tools must not be described as passed.
+The workstation does not provide every security analysis tool. `go vet` and the offline test suite pass locally, and the hosted race job passed in run `37852987328`. `golangci-lint`, `gosec`, and `govulncheck` are not claimed as passed; adding them remains a separate reviewed CI decision.
 
 ## Verification performed locally
 
@@ -69,7 +69,7 @@ The workstation does not provide every security analysis tool. `go vet` and the 
 - No malware, vulnerability, SBOM, or arbitrary-build analysis.
 - No stable public SDK compatibility promise.
 - Local/private mirror use requires explicit controlled configuration and is not a hosted isolation boundary.
-- Hosted CI for the remediation commit and a reviewed release workflow remain required.
+- A reviewed release workflow and independent re-audit remain required.
 
 ## Release gate
 

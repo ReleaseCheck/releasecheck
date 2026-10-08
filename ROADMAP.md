@@ -8,8 +8,8 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | --- | --- |
 | Product version | Pre-v0.1.0; no public release has been made |
 | Current milestone | Foundation complete; post-Phase-14 audit; v0.1 release gate not passed |
-| Current active phase | Phase 15 - Audit remediation (`IN PROGRESS`) |
-| Next executable phase | Phase 16 - Independent re-audit (`NOT STARTED`) |
+| Current active phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
+| Next executable phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
 | Release decision | Conditional; see FINAL_AUDIT.md |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
@@ -35,8 +35,8 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
-| v0.1.0 candidate | 15 | IN PROGRESS | Manifest, artifact-network, commit-classification, formatting, and audit-report remediation implemented | Hosted CI, release validation, and independent re-audit |
-| v0.1.0 candidate | 16 | NOT STARTED | Independent re-audit plan in Phase 16 section | Phase 15 evidence |
+| v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI run `37852987328` passed all declared jobs; residual limitations recorded | Independent re-audit |
+| v0.1.0 candidate | 16 | AUDIT REQUIRED | Independent review of Phase 15 changes and residual limitations | Independent Codex review and release recommendation |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
 | v0.1.0 | 19 | NOT STARTED | Release/stabilization plan in Phase 19 section | Actual release and stabilization evidence |
@@ -602,7 +602,7 @@ Do not: waive findings because the deadline is near; never cut core verification
 
 Agent/model: strongest available Codex; Antigravity/Claude implements fixes.
 
-Checkpoint: IN PROGRESS on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI, release workflow validation, and independent re-audit remain required.
+Checkpoint: COMPLETE on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI run `37852987328` passed Ubuntu, Windows, macOS, and race jobs. Independent re-audit and release-workflow validation remain required.
 
 ## v0.1.0 Release Candidate - Phases 15-19
 
@@ -612,7 +612,7 @@ These phases are the executable path from the current audited repository to a de
 
 Milestone: v0.1.0 release candidate preparation
 
-Status: IN PROGRESS
+Status: COMPLETE
 
 Objective: close, mitigate, or explicitly accept every finding in FINAL_AUDIT.md.
 
