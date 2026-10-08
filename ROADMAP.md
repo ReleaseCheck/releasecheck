@@ -7,7 +7,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | Item | Current truth |
 | --- | --- |
 | Product version | Pre-v0.1.0; no public release has been made |
-| Current milestone | Foundation complete; post-Phase-14 audit; v0.1 release gate not passed |
+| Current milestone | v0.1.0 release candidate; remediation complete; independent re-audit required |
 | Current active phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
 | Next executable phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
 | Release decision | Conditional; see FINAL_AUDIT.md |
@@ -31,7 +31,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 9 | COMPLETE | `internal/report`, JSON/human/SARIF and verdict tests | Historical |
 | Foundation | 10 | COMPLETE | Offline fixture matrix and twelve required scenarios | Historical |
 | Foundation | 11 | COMPLETE | CLI, CLI tests, build/smoke checks, documented SDK deferral | Historical |
-| Foundation | 12 | COMPLETE | Pinned CI/release workflows, build script, local release checks | Hosted validation still required by v0.1 gate |
+| Foundation | 12 | COMPLETE | Pinned CI/release workflows, build script, local release checks | Phase 15 hosted matrix passed; release workflow validation is Phase 17 |
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
@@ -132,7 +132,7 @@ The relationship is: `phase -> capability -> acceptance criteria -> evidence -> 
 | Source/artifact comparison | Implemented deterministic inventory/hash comparison | Harden known limitations | Explain legitimate transformations better | Broader analysis |
 | Provenance | Evidence parsing and artifact binding | Honest limitations | Stronger verification where justified | Broader interoperability |
 | SDK | Internal packages only | Deferred unless API is mature | Stable public Go SDK | Integrations |
-| CI | Workflows exist; hosted proof pending | Validate hosted workflows | First-class CI integration | Scale usage |
+| CI | Hosted core test matrix passes; release workflow not yet validated | Complete release-workflow validation | First-class CI integration | Scale usage |
 | Source hosts | Limited supported GitHub path | Document limits | Expand behind clean abstraction | Evaluate further hosts |
 | Web/GUI | Not implemented and not core | No | Evaluate only with evidence | Only if justified |
 
@@ -542,7 +542,7 @@ Do not: claim bit-for-bit reproducibility without measuring it.
 
 Agent/model: Antigravity/Claude; Codex for workflow/release audit.
 
-Checkpoint: COMPLETE on 2026-10-08. Added a pinned cross-platform CI matrix, Ubuntu race job, tag-driven release workflow, reproducible-enough build script, version metadata, and release documentation. Local tests, vet, formatting, whitespace, CLI build, cross-target build, and repeated-build hash checks passed. After the repository migration, hosted CI ran: Linux, macOS, and race passed; the Windows formatting job failed and remains an open release-engineering issue.
+Checkpoint: COMPLETE on 2026-10-08. Added a pinned cross-platform CI matrix, Ubuntu race job, tag-driven release workflow, reproducible-enough build script, version metadata, and release documentation. Local checks passed. The initial hosted run exposed a Windows formatting issue; Phase 15 added `.gitattributes`, and hosted runs `37852987328` and `37853277292` passed Linux, Windows, macOS, and race jobs. Actual release-workflow validation remains Phase 17.
 
 ## Phase 13 - Documentation and contributor readiness
 
@@ -606,7 +606,7 @@ Checkpoint: COMPLETE on 2026-10-08. Added `.gitattributes` for cross-platform fo
 
 ## v0.1.0 Release Candidate - Phases 15-19
 
-These phases are the executable path from the current audited repository to a defensible first public release. They are not started by this documentation pass.
+These phases are the executable path from the current audited repository to a defensible first public release. Phase 15 is complete; Phase 16 is the current audit gate.
 
 ### Phase 15 - Audit remediation
 

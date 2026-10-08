@@ -2,7 +2,7 @@
 
 ReleaseCheck is being built phase by phase. Start with [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [ROADMAP.md](ROADMAP.md), and [docs/DESIGN.md](docs/DESIGN.md). Repository state is authoritative over stale chat context.
 
-The current milestone is post-Phase-14 audit, `AUDIT REQUIRED`, pre-v0.1 release. Phase 15 is the next executable implementation phase; this documentation pass does not begin it. Read [FINAL_AUDIT.md](FINAL_AUDIT.md) before proposing remediation.
+The current milestone is pre-v0.1. Phase 15 audit remediation is complete; Phase 16 independent re-audit is required before hosted release validation. Read [FINAL_AUDIT.md](FINAL_AUDIT.md) and [ROADMAP.md](ROADMAP.md) before proposing release-related changes.
 
 The project organization has three repositories: [core](https://github.com/ReleaseCheck/releasecheck), [Action](https://github.com/ReleaseCheck/releasecheck-action), and [docs](https://github.com/ReleaseCheck/releasecheck-docs). Route core verifier bugs to the core repository, Action behavior bugs to the Action repository, and user-documentation issues to the docs repository.
 

@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Module: `github.com/releasecheck/releasecheck`
-- Current state: post-Phase-14 audit, `AUDIT REQUIRED`, pre-v0.1 release
+- Current state: Phase 16 independent re-audit required, pre-v0.1 release
 - Current release target: defensible `v0.1.0`, not yet released
 - Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
@@ -48,7 +48,7 @@ releasecheck verify pypi [flags] NAME [VERSION]
 
 ## Current milestone
 
-The project is **post-Phase-14 audit / audit-required / pre-v0.1 release**. Phase 14 found a credible non-execution foundation plus unresolved release and trust-boundary decisions. Phase 15 audit remediation is the next executable phase. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+The project is **pre-v0.1 with Phase 15 remediation complete and Phase 16 independent re-audit required**. The current hosted core test matrix passes; source binding and provenance limits remain documented, and Phase 17 release-workflow validation is pending. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Organization and Repository Architecture
 
@@ -124,7 +124,7 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
-- Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The current audit update records manifest and artifact-network remediation, while hosted CI, independent re-audit, source-archive proof, and tooling evidence remain release gates.
+- Phase 14: AUDIT REQUIRED as the historical audit checkpoint. Phase 15 records the remediation evidence; Phase 16 independent review remains required.
 - Phase 15: COMPLETE. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, updated FINAL_AUDIT.md, and hosted CI runs `37852987328` and `37853277292` passing Ubuntu, Windows, macOS, and race jobs. Phase 16 independent re-audit remains required.
 - Organization milestone M0: COMPLETE. Evidence: public repositories `ReleaseCheck/releasecheck`, `ReleaseCheck/releasecheck-action`, and `ReleaseCheck/releasecheck-docs`; matching checkpoint commit IDs are recorded in ROADMAP.md. The core repository retains its existing history; the Action and docs repositories have bounded root commits.
 
@@ -159,13 +159,13 @@ Commands may evolve with the implementation. Never run package managers or build
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote and GitHub repository metadata are configured for the three-repository organization layout. Maintainer identity remains the authenticated organization account, not a product capability claim.
 - Research is a focused initial pass, not a complete literature or market survey.
-- GitHub-hosted validation is observed on the public repositories. The Action CI passed at its initial commit. Core remediation CI run `37852987328` passed Linux, Windows, macOS, and race jobs. A reviewed release workflow remains outstanding.
+- GitHub-hosted validation is observed on the public repositories. The Action CI passed at its initial commit. Core remediation CI runs `37852987328` and `37853277292` passed Linux, Windows, macOS, and race jobs. A reviewed release workflow remains outstanding.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 - Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
 
-The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. The current state is: hosted remediation CI is still required; source-to-commit binding remains a documented limitation; manifest observations are wired for supported files; artifact-download network policy is hardened but this is not a network-isolated service; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
+Phase 15 resolved the supported manifest-analysis and artifact-download network findings and the hosted cross-platform matrix now passes. Phase 16 must independently review the changes. Source archive-to-commit proof and cryptographic provenance verification remain limitations; ReleaseCheck is not a network-isolated service, has no stable public SDK, and has no adoption or ecosystem proof.
 
 ## Future-agent operating rule
 

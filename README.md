@@ -1,8 +1,16 @@
 # ReleaseCheck
 
-ReleaseCheck is a deterministic release-integrity analysis tool for npm and PyPI. It examines published package artifacts alongside their claimed source releases and produces evidence about hashes, file relationships, differences, security-relevant structures, provenance signals, and limitations. A stable public Go SDK is future work.
+![CI](https://github.com/ReleaseCheck/releasecheck/actions/workflows/ci.yml/badge.svg?branch=main) ![Go 1.25](https://img.shields.io/badge/Go-1.25-00ADD8?logo=go) ![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
 
-The repository is being built phase by phase. The current codebase contains the domain model, safe artifact acquisition, internal npm and PyPI verification paths, deterministic comparison and security observations, provenance evidence parsing, internal report renderers, an offline fixture matrix, the initial CLI, and cross-platform release engineering. A public SDK remains future roadmap work.
+ReleaseCheck checks how a published npm or PyPI package relates to its claimed source release, then reports deterministic evidence and limitations.
+
+[Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md)
+
+**Project status:** pre-v0.1.0 · Phase 15 complete · Phase 16 independent re-audit required.
+
+## Contents
+
+[How it works](#problem) · [Quick start](#installation) · [Usage](#usage) · [Reports](#what-releasecheck-verifies) · [Security boundaries](#security-boundary) · [Limitations](#current-limitations) · [Contributing](#contributing)
 
 ## Problem
 
@@ -23,7 +31,7 @@ flowchart TD
     P --> O
 ```
 
-Differences are evidence, not automatic proof of maliciousness. Build systems may legitimately transform source into distributable files. Reports will distinguish facts, inferences, warnings, limitations, and verdicts.
+Differences are evidence, not automatic proof of maliciousness. Build systems may legitimately transform source into distributable files. Reports distinguish facts, inferences, warnings, limitations, and verdicts.
 
 ## v0.1 scope
 
@@ -33,7 +41,7 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 13 are complete. Phase 14 remains `AUDIT REQUIRED`, and Phase 15 audit remediation is in progress. v0.1 has not been declared complete. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation and [ROADMAP.md](ROADMAP.md) for the complete versioned phase register.
+The initial build and Phase 15 audit remediation are complete. The hosted cross-platform test matrix passes. Phase 16 independent re-audit is required before Phase 17 release-workflow validation and the v0.1 release decision. No public v0.1.0 release exists. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for findings and [ROADMAP.md](ROADMAP.md) for the current phase register.
 
 ## Repository Map
 
