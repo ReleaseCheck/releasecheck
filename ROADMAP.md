@@ -542,7 +542,7 @@ Do not: claim bit-for-bit reproducibility without measuring it.
 
 Agent/model: Antigravity/Claude; Codex for workflow/release audit.
 
-Checkpoint: COMPLETE on 2026-10-08. Added a pinned cross-platform CI matrix, Ubuntu race job, tag-driven release workflow, reproducible-enough build script, version metadata, and release documentation. Local tests, vet, formatting, whitespace, CLI build, cross-target build, and repeated-build hash checks passed. GitHub-hosted CI has not run because no remote is configured; that is recorded as an environment limitation, not guessed as a pass.
+Checkpoint: COMPLETE on 2026-10-08. Added a pinned cross-platform CI matrix, Ubuntu race job, tag-driven release workflow, reproducible-enough build script, version metadata, and release documentation. Local tests, vet, formatting, whitespace, CLI build, cross-target build, and repeated-build hash checks passed. After the repository migration, hosted CI ran: Linux, macOS, and race passed; the Windows formatting job failed and remains an open release-engineering issue.
 
 ## Phase 13 - Documentation and contributor readiness
 

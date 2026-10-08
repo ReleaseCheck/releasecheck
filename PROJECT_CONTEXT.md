@@ -164,7 +164,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 - Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
 
-The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. In particular: hosted CI has not run because no remote exists; source-to-commit binding is incomplete; manifest analysis is not fully wired into live verification; the SSRF/network policy needs a deliberate decision; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
+The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. In particular: hosted core CI has now run but the Windows formatting job still fails; source-to-commit binding is incomplete; manifest analysis is not fully wired into live verification; the SSRF/network policy needs a deliberate decision; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
 
 ## Future-agent operating rule
 
