@@ -35,7 +35,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
-| v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI run `37852987328` passed all declared jobs; residual limitations recorded | Independent re-audit |
+| v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
 | v0.1.0 candidate | 16 | AUDIT REQUIRED | Independent review of Phase 15 changes and residual limitations | Independent Codex review and release recommendation |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
@@ -602,7 +602,7 @@ Do not: waive findings because the deadline is near; never cut core verification
 
 Agent/model: strongest available Codex; Antigravity/Claude implements fixes.
 
-Checkpoint: COMPLETE on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI run `37852987328` passed Ubuntu, Windows, macOS, and race jobs. Independent re-audit and release-workflow validation remain required.
+Checkpoint: COMPLETE on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI runs `37852987328` and `37853277292` passed Ubuntu, Windows, macOS, and race jobs. Independent re-audit and release-workflow validation remain required.
 
 ## v0.1.0 Release Candidate - Phases 15-19
 

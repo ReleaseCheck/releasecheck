@@ -8,7 +8,7 @@ Audit scope: current `main` after the Phase 15 remediation changes. This documen
 
 **Recommendation: CONDITIONAL. Do not declare v0.1 complete yet.**
 
-The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI run `37852987328` passed all declared jobs for commit `8e0d05c`; an independent re-audit and release-workflow validation must still review these changes.
+The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI runs `37852987328` and `37853277292` passed all declared jobs; an independent re-audit and release-workflow validation must still review these changes.
 
 ## Verified strengths
 
@@ -27,7 +27,7 @@ The non-execution boundary remains credible, and the remediation adds bounded ma
 
 Status: **RESOLVED for the remediation commit.**
 
-The previous hosted run failed the Windows formatting check because checkout line endings were not declared. `.gitattributes` now declares LF for Go and workflow source files. GitHub Actions run `37852987328` passed Ubuntu, macOS, Windows, and race jobs for commit `8e0d05c`. A first release workflow must still be reviewed before claiming release publication works.
+The previous hosted run failed the Windows formatting check because checkout line endings were not declared. `.gitattributes` now declares LF for Go and workflow source files. GitHub Actions runs `37852987328` and `37853277292` passed Ubuntu, macOS, Windows, and race jobs. A first release workflow must still be reviewed before claiming release publication works.
 
 ### F-002: Source archive binding
 
