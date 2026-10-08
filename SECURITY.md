@@ -14,6 +14,8 @@ Artifacts, registry metadata, repository URLs, git references, archive names, ar
 
 The security-analysis package reports structural facts such as lifecycle-script declarations, `setup.py` presence, symlinks, special entries, unsafe symlink targets, malformed metadata, and configured size thresholds. These are review signals, not malware detection, exploit detection, or proof of malicious intent. A lifecycle script is recorded as metadata and is never executed. Invalid metadata remains an invalid observation instead of being treated as absent.
 
+Provenance handling is also evidence-only. A structurally valid attestation may be reported as `insufficient` until its signature, certificate chain, transparency log, and registry trust root have been verified by an explicitly supported verifier. ReleaseCheck does not treat a provenance object as proof of source equivalence, benignness, or maliciousness.
+
 ## Reporting boundary
 
 Evidence of a difference is not proof of maliciousness. Provenance is not proof that code is benign. ReleaseCheck is not a malware detector, vulnerability scanner, SBOM generator, Sigstore implementation, or SLSA implementation. Reports must distinguish known facts, inferences, warnings, limitations, and unavailable evidence.

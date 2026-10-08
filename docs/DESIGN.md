@@ -77,7 +77,7 @@ Source claims are selected from project URL keys containing `source`, `repositor
 
 An sdist is compared after removing its distribution root. A wheel is compared structurally with its distribution metadata retained, but the result includes a limitation because wheels may contain generated metadata, platform-specific files, or compiled content that does not map one-to-one to source. ReleaseCheck does not claim byte-for-byte source equivalence for wheels.
 
-The PyPI path does not run pip, setup.py, build backends, or package code, and it does not yet consume PyPI attestations. Attestation handling belongs to Phase 8.
+The PyPI path does not run pip, setup.py, build backends, or package code. Registry adapter wiring for provenance retrieval remains future integration work; the Phase 8 parser consumes supplied PEP 740 objects without executing package tooling.
 
 ## Artifact acquisition and archive handling
 
@@ -119,7 +119,17 @@ The analyzer deliberately does not claim malware detection, vulnerability detect
 
 ## Provenance and attestations
 
-Consume supported npm and PyPI evidence and record present, absent, unavailable, invalid, or insufficient states. Where verified, record artifact digest, identity, workflow, source URI, or commit. Do not recreate Sigstore, Rekor, Fulcio, SLSA, npm, or PyPI infrastructure. Provenance may establish an identity/build claim while not proving benign code or source/artifact equality.
+Phase 8 uses `internal/provenance` to consume registry-provided evidence without recreating Sigstore, Rekor, Fulcio, TUF, SLSA, npm, or PyPI infrastructure. The parser accepts PEP 740/PyPI provenance objects and npm DSSE/bundle-shaped evidence supplied by a registry adapter or an external verifier. It validates JSON shape, in-toto single-subject structure, artifact filename, and any available artifact digest. It may extract predicate type, publisher identity, source URI, and an explicitly named `gitCommit`.
+
+Provenance states are intentionally distinct:
+
+- `present`: reserved for evidence that a future trusted verification boundary has established as valid;
+- `absent`: the registry explicitly reports no provenance for the selected file;
+- `unavailable`: the evidence endpoint or payload was not available to inspect;
+- `invalid`: the object is malformed or its subject does not bind to the selected artifact; and
+- `insufficient`: the object is structurally parseable and may bind to the artifact, but ReleaseCheck has not verified the DSSE signature, certificate chain, transparency log, or registry trust root.
+
+The current parser therefore reports structurally bound evidence as `insufficient`, not `present`. A matching attestation does not prove source/artifact equality, benignness, or absence of malicious code. npm's current documentation says provenance formats may change and directs signature/provenance verification through npm tooling; ReleaseCheck does not invoke npm or package installation. PyPI's PEP 740 model similarly leaves cryptographic trust-root verification to a verifier and permits provenance objects to change over time. Sources checked 2026-10-08: [npm provenance](https://docs.npmjs.com/generating-provenance-statements/), [npm signature verification](https://docs.npmjs.com/verifying-registry-signatures), [PyPI attestations](https://docs.pypi.org/attestations/), [PyPI Integrity API](https://docs.pypi.org/api/integrity/), and [PEP 740](https://peps.python.org/pep-0740/).
 
 ## Reports, verdicts, exit codes, caching, and errors
 

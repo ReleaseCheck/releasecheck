@@ -14,7 +14,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 5 PyPI verification path | COMPLETE | internal/pypi; sdist/wheel fixtures; hash/source tests; test/vet/gofmt/diff checks |
 | 6 Comparison engine | COMPLETE | internal/compare; hardened inventory/path/hash tests; test/vet/gofmt/diff checks |
 | 7 Security analysis | COMPLETE | internal/security; deterministic structural and metadata observations; adversarial tests; test/race/vet/gofmt/diff checks |
-| 8 Provenance and attestation evidence | NOT STARTED | - |
+| 8 Provenance and attestation evidence | COMPLETE | internal/provenance; PyPI/npm evidence fixtures; artifact-binding tests; test/race/vet/gofmt/diff checks |
 | 9 Reporting | NOT STARTED | - |
 | 10 Fixture and test suite | NOT STARTED | - |
 | 11 CLI and SDK polish | NOT STARTED | - |
