@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 13 complete; Phase 14 independent final audit is next
+- Current state: Phase 14 audit required; v0.1 is not yet declared complete
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -95,7 +95,7 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
-- Phase 14: NOT STARTED. Independent final audit is next.
+- Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The conditional recommendation requires hosted CI execution and explicit maintainer decisions for the remaining source-binding, manifest-analysis, network-boundary, and tooling limitations.
 
 ## Definition of done
 
@@ -114,7 +114,7 @@ git diff --check
 
 Commands may evolve with the implementation. Never run package managers or builds against untrusted artifacts as part of ReleaseCheck.
 
-## Known limitations at Phase 12 checkpoint
+## Known limitations at Phase 14 audit checkpoint
 
 - No public SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are wired to the initial CLI; broader API compatibility remains deferred.
 - Manifest analysis currently accepts explicitly supplied safe bytes; registry adapters do not yet wire package.json, setup.py, or pyproject.toml contents into the analysis pipeline.
@@ -132,6 +132,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
+- Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
 
 ## Future-agent operating rule
 

@@ -3,6 +3,9 @@ package cli
 import (
 	"bytes"
 	"context"
+	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -38,5 +41,31 @@ func TestRunRequiresPackageName(t *testing.T) {
 	var stderr bytes.Buffer
 	if code := Run(context.Background(), []string{"verify", "npm"}, &bytes.Buffer{}, &stderr); code != 2 {
 		t.Fatalf("got code %d stderr %q", code, stderr.String())
+	}
+}
+
+func TestWriteOutputReplacesExistingFileWithRestrictedMode(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "report.json")
+	if err := os.WriteFile(path, []byte("old"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeOutput(path, []byte("new\n"), &bytes.Buffer{}); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != "new\n" {
+		t.Fatalf("output: %q", data)
+	}
+	if runtime.GOOS != "windows" {
+		info, err := os.Stat(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if info.Mode().Perm() != 0600 {
+			t.Fatalf("file mode: got %o want 600", info.Mode().Perm())
+		}
 	}
 }

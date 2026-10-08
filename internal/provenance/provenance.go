@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/releasecheck/releasecheck/internal/domain"
@@ -199,7 +200,13 @@ func collectBundleObjects(value any) []any {
 }
 
 func matchDigest(subject, expected map[string]string) (string, string, bool) {
-	for algorithm, digest := range subject {
+	algorithms := make([]string, 0, len(subject))
+	for algorithm := range subject {
+		algorithms = append(algorithms, algorithm)
+	}
+	sort.Strings(algorithms)
+	for _, algorithm := range algorithms {
+		digest := subject[algorithm]
 		want, ok := expected[strings.ToLower(algorithm)]
 		if ok && strings.EqualFold(strings.TrimSpace(digest), strings.TrimSpace(want)) {
 			return strings.ToLower(algorithm), digest, true

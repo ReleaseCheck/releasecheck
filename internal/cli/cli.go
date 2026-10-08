@@ -192,7 +192,19 @@ func writeOutput(path string, data []byte, stdout io.Writer) error {
 		_, err := stdout.Write(data)
 		return err
 	}
-	return os.WriteFile(path, data, 0600)
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if err := file.Chmod(0600); err != nil {
+		return err
+	}
+	if err := file.Truncate(0); err != nil {
+		return err
+	}
+	_, err = file.Write(data)
+	return err
 }
 
 func writeUsage(writer io.Writer) {

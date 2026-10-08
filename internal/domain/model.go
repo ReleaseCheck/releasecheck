@@ -199,11 +199,25 @@ func SortComparisons(items []FileComparison) []FileComparison {
 	result := append([]FileComparison(nil), items...)
 	sort.SliceStable(result, func(i, j int) bool {
 		if result[i].Path == result[j].Path {
-			return result[i].Kind < result[j].Kind
+			if result[i].Kind != result[j].Kind {
+				return result[i].Kind < result[j].Kind
+			}
+			return comparisonEntriesKey(result[i]) < comparisonEntriesKey(result[j])
 		}
 		return result[i].Path < result[j].Path
 	})
 	return result
+}
+
+func comparisonEntriesKey(item FileComparison) string {
+	var source, artifact string
+	if item.Source != nil {
+		source = fmt.Sprintf("%s\x00%s\x00%d\x00%s\x00%s", item.Source.Path, item.Source.Kind, item.Source.Size, item.Source.SHA256, item.Source.Target)
+	}
+	if item.Artifact != nil {
+		artifact = fmt.Sprintf("%s\x00%s\x00%d\x00%s\x00%s", item.Artifact.Path, item.Artifact.Kind, item.Artifact.Size, item.Artifact.SHA256, item.Artifact.Target)
+	}
+	return source + "\x00" + artifact
 }
 
 // EvidenceState describes how a fact was established.
@@ -251,7 +265,9 @@ func SortSecurityObservations(items []SecurityObservation) []SecurityObservation
 	result := append([]SecurityObservation(nil), items...)
 	sort.SliceStable(result, func(i, j int) bool {
 		if result[i].ID == result[j].ID {
-			return result[i].Subject < result[j].Subject
+			left := result[i].Subject + "\x00" + string(result[i].State) + "\x00" + string(result[i].Severity) + "\x00" + result[i].Value + "\x00" + result[i].Description
+			right := result[j].Subject + "\x00" + string(result[j].State) + "\x00" + string(result[j].Severity) + "\x00" + result[j].Value + "\x00" + result[j].Description
+			return left < right
 		}
 		return result[i].ID < result[j].ID
 	})

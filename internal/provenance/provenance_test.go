@@ -93,6 +93,25 @@ func TestParseNPMReportsUnavailableAndAbsentSeparately(t *testing.T) {
 	}
 }
 
+func TestParseNPMSelectsDigestDeterministically(t *testing.T) {
+	statement := statementJSON("expected.tgz", "sha512", "good512", PredicateSLSAProvenance)
+	statement["subject"] = []any{map[string]any{
+		"name":   "expected.tgz",
+		"digest": map[string]string{"sha512": "good512", "sha256": "good256"},
+	}}
+	document := map[string]any{"bundles": []any{map[string]any{
+		"dsseEnvelope": map[string]any{"payload": payload(statement)},
+	}}}
+	data, _ := json.Marshal(document)
+	binding := Binding{Filename: "expected.tgz", Digests: map[string]string{"sha512": "good512", "sha256": "good256"}}
+	for range 20 {
+		got := ParseNPM(data, binding)
+		if len(got) != 1 || got[0].Digest != "sha256:good256" {
+			t.Fatalf("digest selection was not deterministic: %#v", got)
+		}
+	}
+}
+
 func statementJSON(name, algorithm, digest, predicate string) map[string]any {
 	return map[string]any{
 		"_type": "https://in-toto.io/Statement/v1",

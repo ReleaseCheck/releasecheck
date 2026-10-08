@@ -33,7 +33,7 @@ It will not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 13 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, fixture-backed npm and PyPI verification paths, deterministic comparison hardening, structural security analysis, provenance evidence parsing, stable report rendering, offline fixture coverage, the initial CLI, release engineering, and contributor readiness. Phase 14, the independent final audit, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [docs/DESIGN.md](docs/DESIGN.md), and [docs/RELEASE.md](docs/RELEASE.md).
+Phases 0 through 13 are complete. Phase 14 audit is required before v0.1 can be declared complete; see [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [docs/DESIGN.md](docs/DESIGN.md), and [docs/RELEASE.md](docs/RELEASE.md).
 
 ## Installation
 

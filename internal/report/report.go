@@ -278,7 +278,9 @@ func sortEvidence(items []domain.Evidence) []domain.Evidence {
 	result := append([]domain.Evidence(nil), items...)
 	sort.SliceStable(result, func(i, j int) bool {
 		if result[i].ID == result[j].ID {
-			return result[i].Subject < result[j].Subject
+			left := result[i].Subject + "\x00" + string(result[i].State) + "\x00" + result[i].Value + "\x00" + result[i].Description
+			right := result[j].Subject + "\x00" + string(result[j].State) + "\x00" + result[j].Value + "\x00" + result[j].Description
+			return left < right
 		}
 		return result[i].ID < result[j].ID
 	})
@@ -288,8 +290,8 @@ func sortEvidence(items []domain.Evidence) []domain.Evidence {
 func sortProvenance(items []domain.ProvenanceEvidence) []domain.ProvenanceEvidence {
 	result := append([]domain.ProvenanceEvidence(nil), items...)
 	sort.SliceStable(result, func(i, j int) bool {
-		left := string(result[i].Status) + "\x00" + result[i].Predicate + "\x00" + result[i].Subject
-		right := string(result[j].Status) + "\x00" + result[j].Predicate + "\x00" + result[j].Subject
+		left := string(result[i].Status) + "\x00" + result[i].Predicate + "\x00" + result[i].Subject + "\x00" + result[i].Digest + "\x00" + result[i].Identity + "\x00" + result[i].SourceURI + "\x00" + result[i].Commit + "\x00" + result[i].Explanation
+		right := string(result[j].Status) + "\x00" + result[j].Predicate + "\x00" + result[j].Subject + "\x00" + result[j].Digest + "\x00" + result[j].Identity + "\x00" + result[j].SourceURI + "\x00" + result[j].Commit + "\x00" + result[j].Explanation
 		return left < right
 	})
 	return result

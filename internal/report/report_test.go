@@ -116,6 +116,25 @@ func TestSARIFIncludesNonIdenticalEvidence(t *testing.T) {
 	}
 }
 
+func TestNormalizeOrdersTiedEvidenceAndProvenance(t *testing.T) {
+	report := completeReport()
+	report.Evidence = []domain.Evidence{
+		{ID: "same", State: domain.EvidenceKnown, Subject: "subject", Value: "b"},
+		{ID: "same", State: domain.EvidenceKnown, Subject: "subject", Value: "a"},
+	}
+	report.Provenance = []domain.ProvenanceEvidence{
+		{Status: domain.ProvenanceInsufficient, Predicate: "predicate", Subject: "subject", Digest: "b"},
+		{Status: domain.ProvenanceInsufficient, Predicate: "predicate", Subject: "subject", Digest: "a"},
+	}
+	normalized, err := Normalize(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if normalized.Evidence[0].Value != "a" || normalized.Provenance[0].Digest != "a" {
+		t.Fatalf("tied evidence was not ordered deterministically: %#v", normalized)
+	}
+}
+
 func completeReport() domain.Report {
 	identity := domain.PackageIdentity{Registry: domain.RegistryNPM, Name: "demo", Version: "1.0.0"}
 	hash := strings.Repeat("a", 64)

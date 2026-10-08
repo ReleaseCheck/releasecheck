@@ -20,7 +20,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 11 CLI and SDK polish | COMPLETE | cmd/releasecheck; internal/cli; CLI tests/build/smoke checks; README usage; test/vet/gofmt/diff checks; focused CLI/fixture race checks |
 | 12 CI and release engineering | COMPLETE | .github/workflows/ci.yml; .github/workflows/release.yml; scripts/build-release.sh; docs/RELEASE.md; local verification checkpoint |
 | 13 Documentation and contributor readiness | COMPLETE | README.md; docs/USAGE.md; docs/REPORTS.md; docs/CI.md; docs/REGISTRY_ADAPTERS.md; docs/GOOD_FIRST_ISSUES.md; contributor templates; documentation checkpoint |
-| 14 Final audit | NOT STARTED | - |
+| 14 Final audit | AUDIT REQUIRED | FINAL_AUDIT.md; audit fixes and regression tests; hosted CI and residual-risk decisions still required |
 
 At every session start, read PROJECT_CONTEXT.md, this file, docs/DESIGN.md, git status, the tree, and relevant tests. Before advancing, verify the previous phase from its acceptance criteria. At every checkpoint run the commands, inspect git diff and tree, update this file and PROJECT_CONTEXT.md, record decisions and limitations, and summarize. Do not commit or push automatically.
 
@@ -472,4 +472,4 @@ Do not: waive findings because the deadline is near; never cut core verification
 
 Agent/model: strongest available Codex; Antigravity/Claude implements fixes.
 
-Checkpoint: update roadmap/context and create FINAL_AUDIT.md.
+Checkpoint: AUDIT REQUIRED on 2026-10-08. FINAL_AUDIT.md records verified strengths, four material residual findings, one environment limitation, fixes made during review, regression coverage, and a conditional release recommendation. v0.1 is not declared complete until hosted CI runs and the remaining findings are explicitly accepted or remediated.
