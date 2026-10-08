@@ -4,6 +4,7 @@ package domain
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"net/url"
@@ -44,13 +45,14 @@ func (p PackageIdentity) Validate() error {
 
 // Artifact describes one published release file.
 type Artifact struct {
-	Identity      PackageIdentity `json:"identity"`
-	Filename      string          `json:"filename"`
-	URL           string          `json:"url"`
-	SHA256        string          `json:"sha256,omitempty"`
-	Size          int64           `json:"size,omitempty"`
-	ContentType   string          `json:"content_type,omitempty"`
-	ExpectedFiles int             `json:"expected_files,omitempty"`
+	Identity       PackageIdentity `json:"identity"`
+	Filename       string          `json:"filename"`
+	URL            string          `json:"url"`
+	ExpectedSHA256 string          `json:"expected_sha256,omitempty"`
+	SHA256         string          `json:"sha256,omitempty"`
+	Size           int64           `json:"size,omitempty"`
+	ContentType    string          `json:"content_type,omitempty"`
+	ExpectedFiles  int             `json:"expected_files,omitempty"`
 }
 
 // ReleaseRequest identifies the release an adapter should resolve. An empty
@@ -93,11 +95,21 @@ func (a Artifact) Validate() error {
 	if a.Size < 0 {
 		return errors.New("artifact size cannot be negative")
 	}
+	if a.ExpectedSHA256 != "" {
+		if len(a.ExpectedSHA256) != sha256HexLength {
+			return errors.New("expected SHA-256 must contain 64 hexadecimal characters")
+		}
+		if _, err := hex.DecodeString(a.ExpectedSHA256); err != nil {
+			return errors.New("expected SHA-256 must be hexadecimal")
+		}
+	}
 	if a.ExpectedFiles < 0 {
 		return errors.New("expected file count cannot be negative")
 	}
 	return nil
 }
+
+const sha256HexLength = 64
 
 // SourceReference identifies the claimed source repository and optional
 // subdirectory. It records the claim, not proof that the claim is correct.

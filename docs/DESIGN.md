@@ -69,6 +69,16 @@ Repository metadata may be a string or object. Supported normalization converts 
 
 The npm path does not run `npm`, install dependencies, run lifecycle scripts, invoke `npm pack`, execute package code, or recreate npm provenance/signature verification. Those are separate evidence mechanisms and later roadmap work.
 
+### PyPI path
+
+The Phase 5 PyPI adapter uses the project JSON endpoint to select the current version when no version is supplied, then uses the version-specific JSON endpoint. It retains every release file and records filename, URL, package type, size, yanked state, and PyPI's SHA-256 digest. A caller may select a filename explicitly; otherwise an `sdist` is preferred, followed by deterministic filename order.
+
+Source claims are selected from project URL keys containing `source`, `repository`, `github`, or `code`, with a GitHub homepage fallback. A source URL is not treated as a Git reference. Source retrieval occurs only when a URL fragment supplies the claimed reference; ReleaseCheck deliberately does not infer that a PyPI version string is a Git tag. This prevents a convenient but unsupported source claim.
+
+An sdist is compared after removing its distribution root. A wheel is compared structurally with its distribution metadata retained, but the result includes a limitation because wheels may contain generated metadata, platform-specific files, or compiled content that does not map one-to-one to source. ReleaseCheck does not claim byte-for-byte source equivalence for wheels.
+
+The PyPI path does not run pip, setup.py, build backends, or package code, and it does not yet consume PyPI attestations. Attestation handling belongs to Phase 8.
+
 ## Artifact acquisition and archive handling
 
 The Phase 3 `internal/acquire` package uses HTTPS-only requests, a 30-second default timeout, a five-redirect default limit, content-length checks where available, bounded streaming downloads, SHA-256, `os.CreateTemp` files, and explicit cleanup. Default limits are 100 MiB per download, 10,000 archive entries, 500 MiB expanded content, and 100 MiB per regular file. Callers may tighten them; invalid limits are rejected.

@@ -13,9 +13,6 @@ import (
 // removed. The prefix is a logical path component such as npm's "package".
 func Inventory(source acquire.ArchiveInventory, rootPrefix string) ([]domain.FileEntry, error) {
 	rootPrefix = strings.Trim(strings.ReplaceAll(rootPrefix, "\\", "/"), "/")
-	if rootPrefix == "" {
-		return nil, fmt.Errorf("archive root prefix is required")
-	}
 	result := make([]domain.FileEntry, 0, len(source.Entries))
 	seen := make(map[string]struct{}, len(source.Entries))
 	for _, entry := range source.Entries {
@@ -24,10 +21,14 @@ func Inventory(source acquire.ArchiveInventory, rootPrefix string) ([]domain.Fil
 			continue
 		}
 		prefix := rootPrefix + "/"
-		if !strings.HasPrefix(path, prefix) {
+		if rootPrefix != "" && !strings.HasPrefix(path, prefix) {
 			return nil, fmt.Errorf("archive entry %q is outside root prefix %q", entry.Path, rootPrefix)
 		}
-		entry.Path = strings.TrimPrefix(path, prefix)
+		if rootPrefix == "" {
+			entry.Path = path
+		} else {
+			entry.Path = strings.TrimPrefix(path, prefix)
+		}
 		if entry.Path == "" {
 			continue
 		}

@@ -33,7 +33,7 @@ It will not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 4 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, and the fixture-backed npm verification path. Phase 5, the PyPI verification path, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
+Phases 0 through 5 are complete: discovery, repository foundation, domain contracts, safe artifact acquisition, and fixture-backed npm and PyPI verification paths. Phase 6, comparison-engine hardening, is next. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), and [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Security boundary
 
