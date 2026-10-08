@@ -6,15 +6,17 @@ This file is the durable memory of the project. Repository state is authoritativ
 
 - Name: ReleaseCheck
 - Planned language: Go
-- Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 14 audit required; v0.1 is not yet declared complete
+- Module: `github.com/releasecheck/releasecheck` (hosting namespace remains to be confirmed before publishing)
+- Current state: post-Phase-14 audit, `AUDIT REQUIRED`, pre-v0.1 release
+- Current release target: defensible `v0.1.0`, not yet released
+- Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
 
-ReleaseCheck will be a deterministic CLI and SDK that collects evidence about whether a package published to npm or PyPI corresponds to its claimed source repository and release. It compares downloaded distribution contents with a source snapshot when the source identity and reference can be resolved. It reports what is known, inferred, unavailable, or different.
+ReleaseCheck is a deterministic release-integrity analysis CLI for npm and PyPI. It collects evidence about whether a package published to a public registry corresponds to its claimed source repository and release. It compares downloaded distribution contents with a source snapshot when the source identity and reference can be resolved. It reports what is known, inferred, unavailable, different, or limited. A stable public SDK is future work, not a current product promise.
 
-The product is not a SaaS dashboard, chatbot, AI product, generic package scanner, SBOM generator, vulnerability scanner, repository health checker, Sigstore replacement, or SLSA replacement.
+The product is not a SaaS dashboard, chatbot, AI product, generic package scanner, SBOM generator, vulnerability scanner, package installer, build-reproduction engine, generic GitHub bot, AI verdict engine, SLSA implementation, Sigstore replacement, repository health checker, or dashboard-first SaaS.
 
 ## Engineering principles
 
@@ -32,6 +34,21 @@ The product is not a SaaS dashboard, chatbot, AI product, generic package scanne
 In scope: npm and PyPI metadata and artifact acquisition; SHA-256 and registry-provided hash evidence; source repository and git reference resolution where possible; safe archive inspection; deterministic file-set and hash comparison; security-relevant structural observations; supported provenance/attestation evidence extraction; human, JSON, and SARIF reports; stable exit statuses; offline fixtures and CI.
 
 Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM generation, arbitrary builds, package installation, package execution, malware detection, a hosted service, GitHub App, AI decisions, implementation of Sigstore/SLSA, and a large adapter framework.
+
+## Current implementation
+
+The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and an independent final-audit report. The code is real and tested, but the public release gate is not complete.
+
+The current CLI is:
+
+```text
+releasecheck verify npm [flags] NAME [VERSION]
+releasecheck verify pypi [flags] NAME [VERSION]
+```
+
+## Current milestone
+
+The project is **post-Phase-14 audit / audit-required / pre-v0.1 release**. Phase 14 found a credible non-execution foundation plus unresolved release and trust-boundary decisions. Phase 15 audit remediation is the next executable phase. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Architecture and security decisions
 
@@ -133,6 +150,8 @@ Commands may evolve with the implementation. Never run package managers or build
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 - Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
+
+The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. In particular: hosted CI has not run because no remote exists; source-to-commit binding is incomplete; manifest analysis is not fully wired into live verification; the SSRF/network policy needs a deliberate decision; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
 
 ## Future-agent operating rule
 

@@ -2,6 +2,21 @@
 
 ReleaseCheck is being built phase by phase. Start with [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [ROADMAP.md](ROADMAP.md), and [docs/DESIGN.md](docs/DESIGN.md). Repository state is authoritative over stale chat context.
 
+The current milestone is post-Phase-14 audit, `AUDIT REQUIRED`, pre-v0.1 release. Phase 15 is the next executable implementation phase; this documentation pass does not begin it. Read [FINAL_AUDIT.md](FINAL_AUDIT.md) before proposing remediation.
+
+## Repository map
+
+- `cmd/releasecheck`: executable entry point.
+- `internal/domain`: normalized evidence, comparison, report, verdict, and error contracts.
+- `internal/acquire`: bounded HTTPS download and non-extracting archive inventory.
+- `internal/npm` and `internal/pypi`: registry-specific resolution and verification paths.
+- `internal/compare`: canonical inventory and source/artifact comparison.
+- `internal/security`: deterministic structural observations.
+- `internal/provenance`: provenance-shaped evidence parsing and artifact binding.
+- `internal/report`: human, JSON, and SARIF renderers.
+- `fixtures` and `tests`: deterministic offline evidence and fixture-matrix coverage.
+- `docs`: architecture, usage, reports, release, adapter, and contribution guidance.
+
 ## Before changing code
 
 1. Inspect the current phase and its acceptance criteria.
@@ -41,3 +56,7 @@ Describe the phase, behavior, tests, security impact, documentation changes, and
 ## Registry adapter work
 
 Read [docs/REGISTRY_ADAPTERS.md](docs/REGISTRY_ADAPTERS.md) before proposing a new ecosystem. New registry support requires a scoped roadmap change, normalized evidence, offline fixtures, safe acquisition tests, documentation, and an explicit security review. Future ecosystems are not part of v0.1.
+
+## Phase completion
+
+To determine whether a phase is complete, inspect its status and acceptance criteria in `ROADMAP.md`, verify the evidence paths listed there, run the required checks, inspect `git diff` and the repository tree, and confirm that `PROJECT_CONTEXT.md` records the checkpoint. Never infer completion from a file existing or from a conversational claim.

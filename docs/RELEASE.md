@@ -1,6 +1,6 @@
 # Release Process
 
-This document describes the v0.1 release path. A release is made only from a tag matching `vMAJOR.MINOR.PATCH`.
+This document describes the v0.1 release path. The repository is currently pre-v0.1 with Phase 14 marked `AUDIT REQUIRED`; do not create or push a release tag until the roadmap release gates and FINAL_AUDIT.md recommendation allow it. A release is made only from a tag matching `vMAJOR.MINOR.PATCH`.
 
 ## Local preparation
 

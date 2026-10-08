@@ -1,6 +1,6 @@
 # ReleaseCheck
 
-ReleaseCheck is a deterministic Go CLI for examining whether a package published to a public registry corresponds to its claimed source repository and release reference. A stable public SDK is future work.
+ReleaseCheck is a deterministic release-integrity analysis tool for npm and PyPI. It examines published package artifacts alongside their claimed source releases and produces evidence about hashes, file relationships, differences, security-relevant structures, provenance signals, and limitations. A stable public Go SDK is future work.
 
 The repository is being built phase by phase. The current codebase contains the domain model, safe artifact acquisition, internal npm and PyPI verification paths, deterministic comparison and security observations, provenance evidence parsing, internal report renderers, an offline fixture matrix, the initial CLI, and cross-platform release engineering. A public SDK remains future roadmap work.
 
@@ -27,13 +27,13 @@ Differences are evidence, not automatic proof of maliciousness. Build systems ma
 
 ## v0.1 scope
 
-The initial release is limited to npm and PyPI. It will retrieve registry metadata and artifacts, resolve source references where possible, compare archive contents deterministically, record security-relevant archive and metadata observations, consume supported provenance evidence, and emit human-readable, JSON, and SARIF reports with meaningful exit statuses.
+The current release candidate scope is limited to npm and PyPI. ReleaseCheck retrieves registry metadata and artifacts, resolves source references where possible, compares archive contents deterministically, records security-relevant archive and metadata observations, consumes supported provenance evidence, and emits human-readable, JSON, and SARIF reports with meaningful exit statuses.
 
-It will not install packages, run package code, run lifecycle scripts, run Python build backends, execute arbitrary builds, scan for vulnerabilities, generate SBOMs, or implement Sigstore or SLSA.
+It does not install packages, run package code, run lifecycle scripts, run Python build backends, execute arbitrary builds, scan for vulnerabilities, generate SBOMs, or implement Sigstore or SLSA.
 
 ## Project status
 
-Phases 0 through 13 are complete. Phase 14 audit is required before v0.1 can be declared complete; see [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation. See [ROADMAP.md](ROADMAP.md), [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [docs/DESIGN.md](docs/DESIGN.md), and [docs/RELEASE.md](docs/RELEASE.md).
+Phases 0 through 13 are complete. Phase 14 audit remains required before v0.1 can be declared complete; Phase 15 audit remediation is next. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation and [ROADMAP.md](ROADMAP.md) for the complete versioned phase register.
 
 ## Installation
 
@@ -51,6 +51,14 @@ Build the command locally:
 
 ```text
 go build ./cmd/releasecheck
+```
+
+Run the offline test suite and static checks:
+
+```text
+go test ./...
+go vet ./...
+gofmt -l .
 ```
 
 Verify a selected release from npm or PyPI:
