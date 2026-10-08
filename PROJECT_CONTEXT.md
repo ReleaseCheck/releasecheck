@@ -158,7 +158,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote and GitHub repository metadata are configured for the three-repository organization layout. Maintainer identity remains the authenticated organization account, not a product capability claim.
 - Research is a focused initial pass, not a complete literature or market survey.
-- GitHub-hosted workflows have not yet been observed completing on the new public repositories. The workflows are checked structurally and equivalent local commands passed, but hosted CI status is not claimed until GitHub reports a run.
+- GitHub-hosted validation is now observed on the public repositories. The Action CI passed at its initial commit. Core CI at the migration checkpoint passed Linux, macOS, and race jobs but failed the Windows formatting job; this remains an open CI/release-engineering issue and does not make the organization migration itself incomplete.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
