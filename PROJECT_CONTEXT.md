@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Planned module: `github.com/releasecheck/releasecheck` (confirm before publishing)
-- Current state: Phase 8 complete; Phase 9 reporting is next
+- Current state: Phase 9 complete; Phase 10 fixture and test suite is next
 - Deadline: 12:00 PM WAT, October 9, 2026
 
 ## Problem and product definition
@@ -50,6 +50,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 - Phase 6 comparison engine: inventory paths are canonical slash-separated relative paths; only a declared archive root may be removed. Duplicate, unsafe, unsupported, or malformed entries are rejected. Regular-file identity requires two valid matching SHA-256 hashes; missing hashes are `unverifiable`. Symlink targets are compared as metadata without following links, and all comparison results are path-ordered.
 - Phase 7 security analysis: `internal/security` emits stable observations for symlinks, unsafe link targets, special entries, configured archive/file size thresholds, npm lifecycle scripts, `setup.py`, and malformed or oversized metadata. Findings are typed as known or invalid with info/warning severity; the analyzer never executes content and never labels malware or intent.
 - Phase 8 provenance: `internal/provenance` parses PyPI PEP 740 provenance objects and npm DSSE/bundle-shaped evidence, binds single in-toto subjects to filename and available digests, extracts supported predicate/source fields, and reports absent, unavailable, invalid, and insufficient states. It does not verify DSSE signatures, Sigstore roots, Rekor, Fulcio, TUF, or registry trust.
+- Phase 9 reporting: `internal/report` normalizes evidence and renders stable JSON schema 1.0, human output, and SARIF 2.1.0. Verdict precedence is `INCOMPLETE` for missing source/comparisons, `REVIEW` for differences, warnings, invalid/insufficient provenance, and `MATCH` only for complete identical comparison evidence without warnings. `INCOMPLETE` maps to exit code 1.
 - License: Apache-2.0 for a permissive license with an explicit patent grant and familiar enterprise/open-source reuse terms; MIT remains a possible future reconsideration only through a documented project decision.
 - Untrusted bytes are downloaded over HTTPS with timeouts and bounded storage. Archive paths, links, expansion, file counts, and sizes are validated. Symlinks and special entries are observed safely and are never followed during comparison. Package code, install hooks, setup.py, build backends, and lifecycle scripts are never executed.
 
@@ -85,7 +86,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 6: COMPLETE. Evidence: internal/compare/compare.go, internal/compare/compare_test.go, updated archive symlink-target inventory handling, and passing serial test/race/vet/format/diff checks.
 - Phase 7: COMPLETE. Evidence: internal/security/security.go, internal/security/security_test.go, the domain security-observation model, and passing serial test/race/vet/format/diff checks.
 - Phase 8: COMPLETE. Evidence: internal/provenance/provenance.go, internal/provenance/provenance_test.go, docs/DESIGN.md, and passing serial test/race/vet/format/diff checks.
-- Phases 9-14: NOT STARTED. Phase 9 reporting is next.
+- Phase 9: COMPLETE. Evidence: internal/report/report.go, internal/report/report_test.go, docs/DESIGN.md, and passing serial test/race/vet/format/diff checks.
+- Phases 10-14: NOT STARTED. Phase 10 fixture and test suite is next.
 
 ## Definition of done
 
@@ -104,14 +106,14 @@ git diff --check
 
 Commands may evolve with the implementation. Never run package managers or builds against untrusted artifacts as part of ReleaseCheck.
 
-## Known limitations at Phase 7 checkpoint
+## Known limitations at Phase 9 checkpoint
 
-- No CLI, SDK implementation, provenance consumer, or report renderer exists. Comparison and security analysis are internal deterministic layers and are not yet exposed through a user-facing command.
+- No CLI or SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are internal layers and are not yet exposed through a user-facing command.
 - Manifest analysis currently accepts explicitly supplied safe bytes; registry adapters do not yet wire package.json, setup.py, or pyproject.toml contents into the analysis pipeline.
 - `pyproject.toml` is intentionally not parsed with a custom TOML implementation in this phase; empty metadata is detected, while detailed build-backend evidence remains future work.
-- Provenance parsing is not cryptographic verification. npm and PyPI adapters do not yet fetch and wire registry provenance URLs into `ReleaseMetadata`; the parser is ready for the reporting/integration phase. Current-source research on npm and PyPI provenance was checked 2026-10-08 and recorded in docs/DESIGN.md.
+- Provenance parsing is not cryptographic verification. npm and PyPI adapters do not yet fetch and wire registry provenance URLs into `ReleaseMetadata`; the parser is ready for later integration. Current-source research on npm and PyPI provenance was checked 2026-10-08 and recorded in docs/DESIGN.md.
 - npm verification is implemented as an internal path only; no CLI/report wiring exists, and source retrieval is currently limited to GitHub.
-- PyPI verification is implemented as an internal path only; source references are unavailable for releases whose project metadata does not provide an explicit ref, and attestations are not yet consumed.
+- PyPI verification is implemented as an internal path only; source references are unavailable for releases whose project metadata does not provide an explicit ref. Report renderers are internal; CLI command wiring and output flags remain Phase 11 work.
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote, GitHub repository metadata, and maintainer identity are not configured.
 - Research is a focused initial pass, not a complete literature or market survey.

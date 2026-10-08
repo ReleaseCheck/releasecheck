@@ -57,7 +57,7 @@ The initial Go domain package is `internal/domain`. Its contracts are deliberate
 - `DomainError` and `ErrorKind` classify failures without losing the wrapped cause.
 - `Cache` accepts standard cancellation/deadline context and uses opaque keys; implementations must use immutable digests or resolved commits rather than mutable refs.
 
-The model uses JSON tags as the first machine-readable shape, but the schema is not considered stable until Phase 9. Validation is limited to cross-ecosystem invariants; registry-specific grammar remains in adapters. A larger plugin system, callback-heavy pipeline, or generic metadata map was rejected because it would hide semantics and expand the attack surface before two adapters exist.
+The model uses JSON tags as the first machine-readable shape. Report JSON schema `1.0` and SARIF `2.1.0` are frozen by the Phase 9 renderer; future incompatible changes require a schema version change. Validation is limited to cross-ecosystem invariants; registry-specific grammar remains in adapters. A larger plugin system, callback-heavy pipeline, or generic metadata map was rejected because it would hide semantics and expand the attack surface before two adapters exist.
 
 Resolution is staged: identify repository URL, normalize only defined URL forms, determine a claimed tag/commit from metadata or supported attestations, then retrieve a snapshot. A full commit is stronger than a movable branch/tag. A repository URL or URL verification is not proof that this artifact was built from that source.
 
@@ -133,7 +133,11 @@ The current parser therefore reports structurally bound evidence as `insufficien
 
 ## Reports, verdicts, exit codes, caching, and errors
 
-Reports keep facts/observations separate from policy. Planned stable verdicts are `MATCH`, `REVIEW`, `INCOMPLETE`, and `ERROR`; exact semantics and versioned JSON schema are frozen during implementation. Exit codes distinguish successful analysis with review findings from operational failure. `MATCH` never means safe and `REVIEW` never means malicious.
+`internal/report` normalizes evidence before rendering. It copies and sorts comparisons, security observations, evidence, and provenance so input map/slice order cannot change output. JSON schema version `1.0` is rendered with stable indentation and no generated timestamp by default. A caller may explicitly request a timestamp for a human workflow, but deterministic fixtures use the default. Human output uses `OK`, `WARN`, and `INFO` markers and repeats the same evidence categories; it does not create a second verdict system.
+
+SARIF output is version `2.1.0`. Comparison differences, security warnings, invalid metadata, and non-present provenance become stable SARIF results with rule IDs and artifact locations where a path exists. SARIF is an interoperability format, not a replacement for the JSON evidence contract.
+
+Verdict precedence is deterministic: missing source/git or comparisons produces `INCOMPLETE`; any non-identical/unverifiable comparison, security warning/invalid observation, or invalid/insufficient provenance produces `REVIEW`; otherwise complete identical comparison evidence produces `MATCH`. `MATCH` never means safe, and `REVIEW` never means malicious. `INCOMPLETE` maps to the review exit code because absence of evidence must not silently pass CI. `ERROR` is reserved for operational/reporting failure and maps to the error exit code. Exit codes are `0` for `MATCH`, `1` for `REVIEW` or `INCOMPLETE`, `2` for future usage errors, and `3` for errors.
 
 Cache keys use immutable URLs/digests and resolved commit IDs where possible. Mutable refs are not immutable cache keys. Cache hits preserve retrieval metadata. Errors are classified as input/metadata, network, integrity, archive safety, source resolution, provenance, comparison, reporting, or internal errors. Partial evidence is allowed only when a stronger verdict is prevented, and output must not leak secrets or terminal control sequences.
 
