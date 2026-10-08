@@ -1,141 +1,82 @@
-# ReleaseCheck Final Audit
+# ReleaseCheck Security and Release Audit
 
 Audit date: 2026-10-08
 
-Auditor: independent Codex review of the repository state at the Phase 14 checkpoint
+Audit scope: current `main` after the Phase 15 remediation changes. This document supersedes the stale Phase 14 checkpoint wording; it is an audit update, not a claim that v0.1 is released.
 
-Audited commit before fixes: `db1344a Complete phase 13 contributor readiness`
+## Executive result
 
-Audit fixes are recorded in the follow-up Phase 14 checkpoint commit.
+**Recommendation: CONDITIONAL. Do not declare v0.1 complete yet.**
 
-## Scope
-
-This audit covered:
-
-- architecture and domain contracts;
-- artifact acquisition, redirects, limits, temporary files, and archive handling;
-- npm and PyPI metadata, artifact, and source resolution;
-- deterministic comparison and report ordering;
-- security observations and non-execution boundaries;
-- provenance parsing and artifact binding;
-- CLI behavior, output files, exit codes, and report schemas;
-- fixtures, tests, vet, formatting, CI, release workflows, documentation, claims, license, and dead-code/TODO searches.
-
-Repository state, tests, and documented decisions were treated as authoritative.
+The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI must still complete successfully on all declared runners, and an independent re-audit must review these changes.
 
 ## Verified strengths
 
-1. Package code is not executed. There is no package-manager invocation, shell execution, `eval`, `setup.py` execution, build-backend execution, or metadata-derived command path in the inspected implementation.
-2. Artifact downloads require HTTPS, use request timeouts, enforce response-size bounds, hash while streaming, use restrictive temporary files, and clean up on failure.
-3. ZIP and gzip/TAR inspection is non-extracting. Archive paths, duplicate normalized paths, entry counts, file sizes, expanded size, symlink metadata, and special entries are handled explicitly.
-4. Comparison is path-based and hash-based. Missing hashes are `unverifiable`; differences are not labelled malicious; output is normalized before reporting.
-5. npm and PyPI flows verify registry-provided integrity where supported and preserve missing or ambiguous source evidence as limitations.
-6. Provenance parsing validates structure and artifact subject binding without pretending that DSSE, Sigstore, transparency logs, or registry trust roots were verified.
-7. Human, JSON schema `1.0`, and SARIF `2.1.0` renderers share the same evidence and verdict logic. `MATCH` is not presented as a safety guarantee.
-8. The default fixture suite is offline and includes malformed, unsafe-path, symlink, size-boundary, metadata, comparison, and provenance cases.
-9. CI is least-privilege and action references are pinned to full commit SHAs. Release automation is tag-gated and documents its reproducibility boundary.
-10. README, security policy, contributor guidance, report semantics, adapter guidance, and limitations avoid fabricated adoption, novelty, or security-certification claims.
+1. Package code is not executed. ReleaseCheck does not invoke package managers, lifecycle scripts, setup.py, build backends, shell commands, or metadata-derived commands.
+2. Downloads use HTTPS, timeouts, bounded response sizes, streaming SHA-256, restrictive temporary files, cleanup, and bounded archive inspection.
+3. Artifact download redirects are revalidated and restricted destination addresses are rejected by default. Loopback, private, link-local, multicast, and unspecified IP results are denied unless a controlled test/private-mirror opt-in is explicitly supplied.
+4. ZIP and gzip/TAR inspection is non-extracting. Paths, duplicates, entry counts, file sizes, expanded size, symlinks, and special entries are handled explicitly.
+5. npm and PyPI paths now read bounded `package.json`, `setup.py`, and `pyproject.toml` members in memory and include supported observations in the CLI report. No metadata is executed.
+6. Seven- or otherwise abbreviated hexadecimal references are no longer treated as immutable commits; only full 40-character Git object IDs receive immutable classification.
+7. Comparison, provenance parsing, reports, exit codes, fixtures, and deterministic ordering remain covered by offline tests.
+8. CI action references are pinned to full commit SHAs and workflows use least privilege.
 
-## Findings
+## Finding status
 
-### F-001: Hosted CI has not executed
+### F-001: Hosted CI and release workflow evidence
 
-Severity: Release blocker
+Status: **OPEN until the current remediation commit passes hosted CI.**
 
-Status: Unresolved environmental prerequisite
+The previous hosted run passed Linux, macOS, and race tests but failed the Windows formatting check because checkout line endings were not declared. `.gitattributes` now declares LF for Go and workflow source files. The new workflow run must be inspected before this finding can close. A first release workflow must also be reviewed before claiming release publication works.
 
-Evidence: `.github/workflows/ci.yml`, `.github/workflows/release.yml`, and repository state show no configured remote. The local equivalent normal suite, vet, formatting, build, cross-target compilation, and repeated-build hash checks have been run, but GitHub-hosted Windows/Linux/macOS CI and the Ubuntu race job have not executed.
+### F-002: Source archive binding
 
-Impact: The project cannot honestly claim that the committed workflows pass on all target runners or that release publication works in GitHub's environment.
+Status: **PARTIALLY MITIGATED; ACCEPTED LIMITATION for this candidate.**
 
-Required action: Configure the intended remote, push the checkpoint, run CI, inspect every matrix job, and perform a dry-run or reviewed first release workflow before declaring v0.1 complete.
+Only full 40-character references are classified as immutable. Mutable tags and abbreviated references remain explicitly represented as mutable or limited evidence. The GitHub archive response is still not independently verified against a Git object/tree proof. ReleaseCheck must not describe this as cryptographic source-to-artifact proof.
 
-### F-002: Source archive is not cryptographically bound to the claimed commit
+### F-003: Manifest security analysis
 
-Severity: Medium
+Status: **RESOLVED for the supported v0.1 observations.**
 
-Status: Unresolved documented limitation
+Manifest bytes are read from accepted archive members with bounded in-memory reads. npm lifecycle scripts and Python setup metadata are included in the result path. Detailed TOML build-backend interpretation, malware detection, and package execution remain out of scope.
 
-Evidence: `internal/npm/npm.go:239-245` and `internal/pypi/pypi.go:250-256` construct a GitHub API tarball URL from the claimed reference and compare its contents. The implementation does not independently verify a returned archive's tree against the claimed commit or record a trusted source-archive binding.
+### F-004: Registry-controlled network destinations
 
-Impact: A successful comparison establishes what the retrieved GitHub response contained, not cryptographic proof that those bytes came from the intended commit. Movable tags and API/archive regeneration remain relevant limitations.
+Status: **RESOLVED for artifact downloads; limited for local-service isolation.**
 
-Required action: Keep the limitation prominent. A future stronger mode should resolve the commit through a trusted Git object/tree API or equivalent evidence and record the binding; it must not silently upgrade the current result.
+The default artifact downloader rejects restricted destinations and rechecks redirect targets. ReleaseCheck remains a local developer tool, not a sandbox or network-isolated service. Metadata/API endpoints are configured HTTPS services and must not be replaced with arbitrary untrusted endpoints in a hosted deployment.
 
-### F-003: Manifest security analysis is not wired into live verification
+### F-005: Static-analysis and environment evidence
 
-Severity: Medium
+Status: **OPEN environment limitation.**
 
-Status: Unresolved scope limitation
+The workstation does not provide every security analysis tool. `go vet` and the offline test suite pass locally. Hosted race/static-analysis results must be recorded when available; unavailable tools must not be described as passed.
 
-Evidence: `internal/security/security.go` provides `AnalyzeNPMManifest` and `AnalyzePythonMetadata`, but `internal/cli/cli.go:130-175` only analyzes the archive inventory. `docs/DESIGN.md` and `PROJECT_CONTEXT.md` correctly disclose that registry adapters do not yet provide manifest bytes.
+## Verification performed locally
 
-Impact: The CLI currently cannot report package.json lifecycle scripts or setup.py presence for every live artifact, even though those are important release-integrity signals.
+- `go test -p 1 ./...`: passed
+- `go vet ./...`: passed
+- `gofmt -l .`: no output
+- `git diff --check`: passed
+- restricted-network rejection test: passed
+- archive manifest wiring tests and existing security fixtures: passed
 
-Required action: Either wire safe, bounded manifest-byte extraction into the adapter/report pipeline with fixtures, or keep these signals explicitly described as library-level capabilities rather than complete CLI coverage. Do not claim comprehensive install-metadata detection in v0.1.
+## Remaining limitations
 
-### F-004: Arbitrary HTTPS artifact URLs remain a network trust boundary
-
-Severity: Medium
-
-Status: Unresolved residual risk
-
-Evidence: `internal/acquire/acquire.go:165-188` requires HTTPS and validates redirects, but does not restrict DNS resolution or reject loopback, private, link-local, or other internal address ranges. Registry metadata controls the artifact URL consumed by the downloader.
-
-Impact: A compromised or untrusted registry response could cause a local invocation to request an internal HTTPS endpoint. HTTPS alone authenticates the endpoint only if its certificate is trusted; it is not an SSRF defense.
-
-Required action: Decide and document the network policy before a hosted or server-side use case. A future hardened mode should use a reviewed transport/DNS policy and preserve explicit opt-in support for private mirrors. The current CLI should be treated as a local developer tool, not a network-isolated service.
-
-### F-005: Hosted security/static-analysis tooling is not locally available
-
-Severity: Low
-
-Status: Unresolved environment limitation
-
-Evidence: `golangci-lint`, `gosec`, and `govulncheck` are unavailable locally. Windows race runs also fail in the installed MSYS2 GCC linker or temporary test-binary cleanup, although normal tests and vet pass.
-
-Impact: This workstation cannot independently reproduce all static-analysis and race evidence expected by the roadmap.
-
-Required action: Run the configured Ubuntu race job and add any deliberately selected static-analysis tool only after reviewing its dependency and action-pinning implications. Do not report local race/static-analysis success from this machine.
-
-## Fixes made during this audit
-
-- Provenance digest selection now sorts subject algorithms before choosing a matching digest, removing map-iteration nondeterminism.
-- Domain, evidence, security, comparison, and provenance sorting now includes tie-breaker fields, making duplicate-key report output deterministic.
-- CLI report-file writes now apply mode `0600` to existing files as well as newly created files, matching the documented permission boundary.
-- Regression tests cover deterministic digest selection, tied report ordering, and report-file replacement behavior.
-
-## Verification evidence
-
-Passed locally after the fixes:
-
-- `go vet ./...`
-- `go build ./cmd/releasecheck`
-- `gofmt -l .`
-- `git diff --check`
-- Markdown relative-link check
-- Focused changed-package tests and the previously established offline fixture tests reached passing test results. Aggregate Windows runs remain environment-limited: the host can deny launching or removing a temporary `*.test.exe` even after individual package tests report `ok`.
-
-Environment-limited:
-
-- `go test -race ./...`: local MSYS2 GCC cannot launch `collect2.exe` for race linking.
-- Some normal aggregate runs: Windows temporary test-binary cleanup can return `Access is denied` after package tests pass.
-- GitHub-hosted CI and release workflow: no configured remote.
-
-## Unresolved limitations
-
-- No cryptographic verification of DSSE/Sigstore/PyPI/npm provenance trust chains.
-- No cryptographic source-archive-to-commit binding beyond the requested GitHub API reference.
-- No comprehensive live CLI manifest analysis for package.json, setup.py, or pyproject.toml.
-- GitHub-only source retrieval in the initial verification paths.
-- No public compatibility SDK.
-- No private-mirror configuration in the CLI.
+- No cryptographic verification of DSSE, Sigstore, transparency logs, or registry trust roots.
+- No cryptographic proof that a GitHub archive response is the exact tree of the claimed commit.
 - No malware, vulnerability, SBOM, or arbitrary-build analysis.
-- Local SSRF defenses are not complete for registry-controlled HTTPS artifact URLs.
-- Hosted matrix and release execution remain unverified.
+- No stable public SDK compatibility promise.
+- Local/private mirror use requires explicit controlled configuration and is not a hosted isolation boundary.
+- Hosted CI for the remediation commit and a reviewed release workflow remain required.
 
-## Release recommendation
+## Release gate
 
-**CONDITIONAL / DO NOT DECLARE V0.1 COMPLETE YET.**
+Do not publish or describe `v0.1.0` as complete until:
 
-The implementation has a credible secure non-execution foundation and the core deterministic evidence/reporting paths are well tested. The remaining findings are material to a security-sensitive release: hosted CI has not run, source identity is not cryptographically bound, live manifest analysis is incomplete, and the network trust boundary needs a deliberate SSRF policy. Phase 14 should remain `AUDIT REQUIRED` until hosted CI is executed and the maintainer explicitly accepts or remediates F-002 through F-005.
+1. the current hosted CI matrix passes or each failure has an explicit accepted owner and rationale;
+2. the independent Codex re-audit reviews the remediation commit;
+3. the release workflow produces and validates intended artifacts;
+4. README, docs, roadmap, project context, and this audit agree on the same status;
+5. the final recommendation is changed by evidence rather than deadline pressure.

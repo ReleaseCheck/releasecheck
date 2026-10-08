@@ -8,8 +8,8 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | --- | --- |
 | Product version | Pre-v0.1.0; no public release has been made |
 | Current milestone | Foundation complete; post-Phase-14 audit; v0.1 release gate not passed |
-| Current active phase | Phase 14 - Final audit (`AUDIT REQUIRED`) |
-| Next executable phase | Phase 15 - Audit remediation (`NOT STARTED`) |
+| Current active phase | Phase 15 - Audit remediation (`IN PROGRESS`) |
+| Next executable phase | Phase 16 - Independent re-audit (`NOT STARTED`) |
 | Release decision | Conditional; see FINAL_AUDIT.md |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
@@ -35,7 +35,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 13 | COMPLETE | README, contributor docs, report/CI/adapter guides, templates | Historical |
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
-| v0.1.0 candidate | 15 | NOT STARTED | Audit-remediation plan in Phase 15 section | Classify or resolve F-001 to F-005 |
+| v0.1.0 candidate | 15 | IN PROGRESS | Manifest, artifact-network, commit-classification, formatting, and audit-report remediation implemented | Hosted CI, release validation, and independent re-audit |
 | v0.1.0 candidate | 16 | NOT STARTED | Independent re-audit plan in Phase 16 section | Phase 15 evidence |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
@@ -602,7 +602,7 @@ Do not: waive findings because the deadline is near; never cut core verification
 
 Agent/model: strongest available Codex; Antigravity/Claude implements fixes.
 
-Checkpoint: AUDIT REQUIRED on 2026-10-08. FINAL_AUDIT.md records verified strengths, four material residual findings, one environment limitation, fixes made during review, regression coverage, and a conditional release recommendation. v0.1 is not declared complete until hosted CI runs and the remaining findings are explicitly accepted or remediated.
+Checkpoint: IN PROGRESS on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI, release workflow validation, and independent re-audit remain required.
 
 ## v0.1.0 Release Candidate - Phases 15-19
 
@@ -612,7 +612,7 @@ These phases are the executable path from the current audited repository to a de
 
 Milestone: v0.1.0 release candidate preparation
 
-Status: NOT STARTED
+Status: IN PROGRESS
 
 Objective: close, mitigate, or explicitly accept every finding in FINAL_AUDIT.md.
 

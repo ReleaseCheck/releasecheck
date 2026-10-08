@@ -33,7 +33,7 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-Phases 0 through 13 are complete. Phase 14 audit remains required before v0.1 can be declared complete; Phase 15 audit remediation is next. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation and [ROADMAP.md](ROADMAP.md) for the complete versioned phase register.
+Phases 0 through 13 are complete. Phase 14 remains `AUDIT REQUIRED`, and Phase 15 audit remediation is in progress. v0.1 has not been declared complete. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for the current recommendation and [ROADMAP.md](ROADMAP.md) for the complete versioned phase register.
 
 ## Repository Map
 
@@ -108,7 +108,7 @@ Use `--sarif` for systems that ingest SARIF. Keep reports and package inputs tre
 
 ## Current limitations
 
-The v0.1 implementation supports npm and PyPI. Source retrieval is currently limited to supported GitHub source URLs, registry adapters do not yet wire every package manifest into structural analysis, and provenance evidence is parsed but not cryptographically verified. The CLI uses public registry defaults and has no mirror configuration yet. The internal packages are not a compatibility SDK. See [docs/DESIGN.md](docs/DESIGN.md) for the complete limitation record.
+The v0.1 implementation supports npm and PyPI. Source retrieval is currently limited to supported GitHub source URLs, bounded manifest observations cover supported `package.json`, `setup.py`, and `pyproject.toml` members, and provenance evidence is parsed but not cryptographically verified. Artifact downloads reject restricted network destinations by default. The internal packages are not a compatibility SDK. See [docs/DESIGN.md](docs/DESIGN.md) for the complete limitation record.
 
 ## Relationship to existing tools
 

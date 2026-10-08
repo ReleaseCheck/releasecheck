@@ -17,6 +17,7 @@ import (
 	"github.com/releasecheck/releasecheck/internal/acquire"
 	"github.com/releasecheck/releasecheck/internal/compare"
 	"github.com/releasecheck/releasecheck/internal/domain"
+	"github.com/releasecheck/releasecheck/internal/security"
 )
 
 const (
@@ -25,7 +26,7 @@ const (
 	metadataLimit      = 16 << 20
 )
 
-var commitPattern = regexp.MustCompile(`^[0-9a-fA-F]{7,64}$`)
+var commitPattern = regexp.MustCompile(`^[0-9a-fA-F]{40}$`)
 
 // Options configures an npm client. Base URLs remain HTTPS-only; test clients
 // may use an HTTPS httptest server with its certificate supplied in HTTPClient.
@@ -201,6 +202,7 @@ type VerificationResult struct {
 	SourceInventory   acquire.ArchiveInventory
 	Comparisons       []domain.FileComparison
 	Limitations       []string
+	Security          []domain.SecurityObservation
 }
 
 // Verify resolves metadata, downloads and inventories the npm artifact, then
@@ -232,6 +234,11 @@ func (c *Client) Verify(ctx context.Context, request domain.ReleaseRequest) (Ver
 		return VerificationResult{}, err
 	}
 	result.ArtifactInventory = artifactInventory
+	if manifest, readErr := acquire.ReadArchiveFile(downloaded.Path, "package.json", limits); readErr == nil {
+		result.Security = append(result.Security, security.AnalyzeNPMManifest(manifest)...)
+	} else {
+		result.Limitations = append(result.Limitations, "package.json was not available for manifest security analysis")
+	}
 	if metadata.Source == nil || metadata.Git == nil {
 		result.Limitations = append(result.Limitations, "source comparison is unavailable because repository or git reference metadata is missing")
 		return result, nil

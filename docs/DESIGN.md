@@ -104,7 +104,7 @@ Wheels and other built distributions are not presumed byte-for-byte source repre
 
 ## Deterministic security analysis
 
-`internal/security` consumes an already acquired inventory and explicitly supplied manifest bytes. It produces typed `SecurityObservation` values ordered by stable identifier and subject. An observation is a structural fact or metadata condition, not a verdict about intent.
+`internal/security` consumes an already acquired inventory and bounded manifest bytes read directly from the archive. It produces typed `SecurityObservation` values ordered by stable identifier and subject. An observation is a structural fact or metadata condition, not a verdict about intent. The npm and PyPI verification paths wire these observations into CLI reports when `package.json`, `setup.py`, or `pyproject.toml` is present.
 
 Current observations include:
 
@@ -115,7 +115,7 @@ Current observations include:
 - `setup.py` presence and empty or oversized Python metadata; and
 - malformed or oversized npm metadata as `invalid`, rather than silently treating it as absent.
 
-The analyzer deliberately does not claim malware detection, vulnerability detection, exploitability, malicious intent, or package safety. Acquisition rejects unsafe archive paths before analysis; analysis reports supported signals from accepted structure. Registry adapters do not yet provide manifest bytes to this package, so later pipeline wiring remains explicit future work. A custom TOML parser was rejected for this phase because it would add complexity without a required report contract; detailed `pyproject.toml` backend evidence remains future work.
+The analyzer deliberately does not claim malware detection, vulnerability detection, exploitability, malicious intent, or package safety. Acquisition rejects unsafe archive paths before analysis; analysis reports supported signals from accepted structure. Manifest extraction is bounded, in-memory, and non-executing. A custom TOML parser was rejected for this phase because it would add complexity without a required report contract; detailed `pyproject.toml` backend evidence remains future work.
 
 ## Provenance and attestations
 
@@ -139,7 +139,7 @@ SARIF output is version `2.1.0`. Comparison differences, security warnings, inva
 
 Verdict precedence is deterministic: missing source/git or comparisons produces `INCOMPLETE`; any non-identical/unverifiable comparison, security warning/invalid observation, or invalid/insufficient provenance produces `REVIEW`; otherwise complete identical comparison evidence produces `MATCH`. `MATCH` never means safe, and `REVIEW` never means malicious. `INCOMPLETE` maps to the review exit code because absence of evidence must not silently pass CI. `ERROR` is reserved for operational/reporting failure and maps to the error exit code. Exit codes are `0` for `MATCH`, `1` for `REVIEW` or `INCOMPLETE`, `2` for future usage errors, and `3` for errors.
 
-Cache keys use immutable URLs/digests and resolved commit IDs where possible. Mutable refs are not immutable cache keys. Cache hits preserve retrieval metadata. Errors are classified as input/metadata, network, integrity, archive safety, source resolution, provenance, comparison, reporting, or internal errors. Partial evidence is allowed only when a stronger verdict is prevented, and output must not leak secrets or terminal control sequences.
+Cache keys use immutable URLs/digests and resolved commit IDs where possible. Mutable refs are not immutable cache keys. Cache hits preserve retrieval metadata. Artifact downloads enforce HTTPS, bounded redirects, and a default-deny network policy for loopback, private, link-local, multicast, and unspecified addresses; controlled fixture/private-mirror tests must opt in explicitly. Errors are classified as input/metadata, network, integrity, archive safety, source resolution, provenance, comparison, reporting, or internal errors. Partial evidence is allowed only when a stronger verdict is prevented, and output must not leak secrets or terminal control sequences.
 
 ## Fixture and test policy
 

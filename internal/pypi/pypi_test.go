@@ -120,7 +120,7 @@ func TestVerifyReportsMissingSourceReference(t *testing.T) {
 func newFixtureClient(t *testing.T, server *httptest.Server) *Client {
 	t.Helper()
 	limits := acquire.Limits{MaxDownloadBytes: 1 << 20, MaxExpandedBytes: 1 << 20, MaxFileBytes: 1 << 20, MaxEntries: 100, MaxRedirects: 3, HTTPTimeout: time.Second}
-	downloader, err := acquire.NewDownloader(acquire.DownloadOptions{HTTPClient: server.Client(), Limits: limits})
+	downloader, err := acquire.NewDownloader(acquire.DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true, Limits: limits})
 	if err != nil {
 		t.Fatal(err)
 	}

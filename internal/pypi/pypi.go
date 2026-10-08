@@ -16,6 +16,7 @@ import (
 	"github.com/releasecheck/releasecheck/internal/acquire"
 	"github.com/releasecheck/releasecheck/internal/compare"
 	"github.com/releasecheck/releasecheck/internal/domain"
+	"github.com/releasecheck/releasecheck/internal/security"
 )
 
 const (
@@ -210,6 +211,7 @@ type VerificationResult struct {
 	SourceInventory   acquire.ArchiveInventory
 	Comparisons       []domain.FileComparison
 	Limitations       []string
+	Security          []domain.SecurityObservation
 }
 
 // Verify selects one release file, verifies its PyPI SHA-256, and compares it
@@ -242,6 +244,11 @@ func (c *Client) Verify(ctx context.Context, request domain.ReleaseRequest, opti
 	if err != nil {
 		_ = result.Cleanup()
 		return VerificationResult{}, err
+	}
+	for _, filename := range []string{"setup.py", "pyproject.toml"} {
+		if data, readErr := acquire.ReadArchiveFile(downloaded.Path, filename, acquire.DefaultLimits()); readErr == nil {
+			result.Security = append(result.Security, security.AnalyzePythonMetadata(filename, data)...)
+		}
 	}
 	if result.Metadata.Source == nil || result.Metadata.Git == nil {
 		result.Limitations = append(result.Limitations, "source comparison is unavailable because PyPI project metadata has no usable source URL and git reference")
@@ -433,7 +440,7 @@ func archiveRoot(inventory acquire.ArchiveInventory) (string, error) {
 }
 
 func isCommit(value string) bool {
-	if len(value) < 7 || len(value) > 64 {
+	if len(value) != 40 {
 		return false
 	}
 	for _, char := range value {

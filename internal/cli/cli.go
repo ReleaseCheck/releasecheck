@@ -137,6 +137,7 @@ func reportFromNPM(result npm.VerificationResult) (domain.Report, error) {
 	if err != nil {
 		return domain.Report{}, err
 	}
+	securityFindings = append(securityFindings, result.Security...)
 	artifact := result.Metadata.Artifacts[0]
 	return domain.Report{
 		Identity:    result.Metadata.Identity,
@@ -156,6 +157,7 @@ func reportFromPyPI(result pypi.VerificationResult) (domain.Report, error) {
 	if err != nil {
 		return domain.Report{}, err
 	}
+	securityFindings = append(securityFindings, result.Security...)
 	artifact := result.Selected
 	for _, candidate := range result.Metadata.Artifacts {
 		if candidate.Filename == result.Selected.Filename {

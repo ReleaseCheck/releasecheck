@@ -8,7 +8,7 @@ ReleaseCheck must never execute package code or invoke package managers while in
 
 ## Untrusted input
 
-Artifacts, registry metadata, repository URLs, git references, archive names, archive contents, and attestations are untrusted input. Implementations must use HTTPS, timeouts, bounded downloads, bounded archive expansion, bounded file counts and sizes, safe temporary storage, strict path validation, and cleanup. Path traversal, absolute paths, symlinks, special entries, malformed archives, and suspicious metadata must be handled explicitly and never blindly followed or extracted.
+Artifacts, registry metadata, repository URLs, git references, archive names, archive contents, and attestations are untrusted input. Implementations must use HTTPS, timeouts, bounded downloads, bounded archive expansion, bounded file counts and sizes, safe temporary storage, strict path validation, and cleanup. Artifact downloads reject loopback, private, link-local, multicast, and unspecified destinations by default and recheck redirect targets. Path traversal, absolute paths, symlinks, special entries, malformed archives, and suspicious metadata must be handled explicitly and never blindly followed or extracted.
 
 ## Deterministic observations
 
@@ -27,3 +27,5 @@ Until a security contact is configured, report suspected vulnerabilities private
 ## Secure development
 
 Security-sensitive changes require focused tests and an independent review when they affect archive parsing, source resolution, provenance verification, trust decisions, or process execution boundaries. CI must use least privilege and must not process live untrusted packages as part of ordinary tests.
+
+ReleaseCheck is a local evidence tool, not a network-isolated service. Private mirrors require explicit controlled configuration and security review; they are not silently trusted by the default artifact downloader.

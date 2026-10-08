@@ -15,6 +15,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -97,15 +98,19 @@ type DownloadOptions struct {
 	HTTPClient *http.Client
 	TempDir    string
 	Limits     Limits
+	// AllowPrivateNetworks is intended only for controlled local fixtures or
+	// explicitly configured private mirrors. The default is false.
+	AllowPrivateNetworks bool
 }
 
 // Downloader retrieves bytes into a private temporary file and calculates a
 // SHA-256 digest while streaming. It never interprets downloaded bytes as
 // executable input.
 type Downloader struct {
-	client  *http.Client
-	tempDir string
-	limits  Limits
+	client               *http.Client
+	tempDir              string
+	limits               Limits
+	allowPrivateNetworks bool
 }
 
 // NewDownloader creates a bounded HTTPS-only downloader.
@@ -131,10 +136,13 @@ func NewDownloader(options DownloadOptions) (*Downloader, error) {
 		if err := ValidateHTTPSURL(req.URL.String()); err != nil {
 			return fmt.Errorf("redirect target: %w", err)
 		}
+		if err := validateNetworkURL(req.Context(), req.URL, options.AllowPrivateNetworks); err != nil {
+			return fmt.Errorf("redirect target network policy: %w", err)
+		}
 		return nil
 	}
 
-	return &Downloader{client: client, tempDir: options.TempDir, limits: limits}, nil
+	return &Downloader{client: client, tempDir: options.TempDir, limits: limits, allowPrivateNetworks: options.AllowPrivateNetworks}, nil
 }
 
 // DownloadedArtifact is a downloaded temporary file. Call Cleanup when the
@@ -166,6 +174,10 @@ func (d *Downloader) Download(ctx context.Context, rawURL, expectedSHA256 string
 	var result DownloadedArtifact
 	if err := ValidateHTTPSURL(rawURL); err != nil {
 		return result, domain.NewError(domain.ErrorInput, "validate download URL", err)
+	}
+	parsedURL, _ := url.Parse(rawURL)
+	if err := validateNetworkURL(ctx, parsedURL, d.allowPrivateNetworks); err != nil {
+		return result, domain.NewError(domain.ErrorNetwork, "validate download network", err)
 	}
 	expected, err := normalizeSHA256(expectedSHA256)
 	if err != nil {
@@ -235,6 +247,39 @@ func ValidateHTTPSURL(rawURL string) error {
 		return errors.New("must be an absolute HTTPS URL without userinfo")
 	}
 	return nil
+}
+
+func validateNetworkURL(ctx context.Context, parsed *url.URL, allowPrivate bool) error {
+	if allowPrivate {
+		return nil
+	}
+	host := parsed.Hostname()
+	if host == "" {
+		return errors.New("URL has no hostname")
+	}
+	if ip := net.ParseIP(host); ip != nil {
+		if restrictedAddress(ip) {
+			return fmt.Errorf("private, loopback, link-local, multicast, or unspecified address is not allowed: %s", host)
+		}
+		return nil
+	}
+	addresses, err := net.DefaultResolver.LookupIP(ctx, "ip", host)
+	if err != nil {
+		return fmt.Errorf("resolve hostname %q: %w", host, err)
+	}
+	if len(addresses) == 0 {
+		return fmt.Errorf("hostname %q has no addresses", host)
+	}
+	for _, address := range addresses {
+		if restrictedAddress(address) {
+			return fmt.Errorf("hostname %q resolves to a restricted address", host)
+		}
+	}
+	return nil
+}
+
+func restrictedAddress(ip net.IP) bool {
+	return ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() || ip.IsUnspecified() || ip.IsMulticast()
 }
 
 func normalizeSHA256(value string) (string, error) {
@@ -344,6 +389,106 @@ func InspectArchive(filename string, limits Limits) (ArchiveInventory, error) {
 		return inspectTarGzip(file, info.Size(), limits)
 	}
 	return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "identify archive format", errors.New("unsupported archive format; expected ZIP or gzip-compressed TAR"))
+}
+
+// ReadArchiveFile returns one bounded regular-file member from a validated
+// archive. It never writes the member to disk and never interprets it as code.
+// The target may be an exact archive path or a basename path such as
+// "package.json"; duplicate archive paths are rejected by InspectArchive.
+func ReadArchiveFile(filename, target string, limits Limits) ([]byte, error) {
+	limits = limits.withDefaults()
+	if err := limits.validate(); err != nil {
+		return nil, domain.NewError(domain.ErrorInput, "validate archive limits", err)
+	}
+	if strings.TrimSpace(target) == "" {
+		return nil, domain.NewError(domain.ErrorInput, "read archive file", errors.New("archive target is required"))
+	}
+	if err := validateArchivePath(target); err != nil {
+		return nil, domain.NewError(domain.ErrorInput, "validate archive target", err)
+	}
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, domain.NewError(domain.ErrorArchive, "open archive", err)
+	}
+	defer file.Close()
+	info, err := file.Stat()
+	if err != nil {
+		return nil, domain.NewError(domain.ErrorArchive, "stat archive", err)
+	}
+	kind, err := detectArchiveKind(file)
+	if err != nil {
+		return nil, err
+	}
+	match := func(name string) bool {
+		cleaned := cleanArchivePath(name)
+		wanted := cleanArchivePath(target)
+		return cleaned == wanted || strings.HasSuffix(cleaned, "/"+wanted)
+	}
+	if kind == ArchiveZip {
+		reader, err := zip.NewReader(file, info.Size())
+		if err != nil {
+			return nil, domain.NewError(domain.ErrorArchive, "read ZIP archive", err)
+		}
+		for _, entry := range reader.File {
+			if !match(entry.Name) || zipEntryKind(entry) != domain.FileRegular {
+				continue
+			}
+			if entry.UncompressedSize64 > uint64(limits.MaxFileBytes) {
+				return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds metadata limit"))
+			}
+			opened, err := entry.Open()
+			if err != nil {
+				return nil, domain.NewError(domain.ErrorArchive, "read ZIP metadata", err)
+			}
+			data, readErr := io.ReadAll(io.LimitReader(opened, int64(entry.UncompressedSize64)+1))
+			closeErr := opened.Close()
+			if readErr != nil || closeErr != nil {
+				if readErr != nil {
+					return nil, domain.NewError(domain.ErrorArchive, "read ZIP metadata", readErr)
+				}
+				return nil, domain.NewError(domain.ErrorArchive, "close ZIP metadata", closeErr)
+			}
+			if int64(len(data)) > limits.MaxFileBytes {
+				return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds metadata limit"))
+			}
+			return data, nil
+		}
+		return nil, domain.NewError(domain.ErrorArchive, "read archive file", os.ErrNotExist)
+	}
+
+	if _, err := file.Seek(0, io.SeekStart); err != nil {
+		return nil, domain.NewError(domain.ErrorArchive, "rewind archive", err)
+	}
+	gzipReader, err := gzip.NewReader(file)
+	if err != nil {
+		return nil, domain.NewError(domain.ErrorArchive, "read gzip archive", err)
+	}
+	defer gzipReader.Close()
+	tarReader := tar.NewReader(gzipReader)
+	for {
+		header, err := tarReader.Next()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			return nil, domain.NewError(domain.ErrorArchive, "read TAR archive", err)
+		}
+		if !match(header.Name) || (header.Typeflag != tar.TypeReg && header.Typeflag != tar.TypeRegA) {
+			continue
+		}
+		if header.Size < 0 || header.Size > limits.MaxFileBytes {
+			return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds metadata limit"))
+		}
+		data, err := io.ReadAll(io.LimitReader(tarReader, header.Size+1))
+		if err != nil {
+			return nil, domain.NewError(domain.ErrorArchive, "read TAR metadata", err)
+		}
+		if int64(len(data)) > header.Size {
+			return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds declared size"))
+		}
+		return data, nil
+	}
+	return nil, domain.NewError(domain.ErrorArchive, "read archive file", os.ErrNotExist)
 }
 
 func detectArchiveKind(file *os.File) (ArchiveKind, error) {

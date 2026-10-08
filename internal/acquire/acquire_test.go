@@ -28,7 +28,7 @@ func TestDownloadVerifiesHashAndCleansUp(t *testing.T) {
 	defer server.Close()
 
 	digest := sha256.Sum256(body)
-	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client()})
+	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestDownloadFollowsHTTPSRedirect(t *testing.T) {
 	}))
 	defer server.Close()
 
-	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client()})
+	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -95,7 +95,7 @@ func TestDownloadRejectsTooManyRedirects(t *testing.T) {
 	}))
 	defer server.Close()
 
-	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), Limits: Limits{MaxRedirects: 2}})
+	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true, Limits: Limits{MaxRedirects: 2}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -106,13 +106,24 @@ func TestDownloadRejectsTooManyRedirects(t *testing.T) {
 }
 
 func TestDownloadRejectsNetworkFailure(t *testing.T) {
-	d, err := NewDownloader(DownloadOptions{Limits: Limits{HTTPTimeout: time.Second}})
+	d, err := NewDownloader(DownloadOptions{AllowPrivateNetworks: true, Limits: Limits{HTTPTimeout: time.Second}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	_, err = d.Download(context.Background(), "https://127.0.0.1:1/unavailable", "")
 	if err == nil || !strings.Contains(err.Error(), "network") {
 		t.Fatalf("expected network error, got %v", err)
+	}
+}
+
+func TestDownloadRejectsPrivateAddressByDefault(t *testing.T) {
+	d, err := NewDownloader(DownloadOptions{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = d.Download(context.Background(), "https://127.0.0.1/resource", "")
+	if err == nil || !strings.Contains(err.Error(), "private") {
+		t.Fatalf("expected private-address rejection, got %v", err)
 	}
 }
 
@@ -129,7 +140,7 @@ func TestDownloadRejectsInvalidMetadataAndOversizedInput(t *testing.T) {
 		_, _ = io.WriteString(w, "12345")
 	}))
 	defer server.Close()
-	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), Limits: Limits{MaxDownloadBytes: 4}})
+	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true, Limits: Limits{MaxDownloadBytes: 4}})
 	if err != nil {
 		t.Fatal(err)
 	}

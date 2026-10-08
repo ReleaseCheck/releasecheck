@@ -124,7 +124,8 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
-- Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The conditional recommendation requires hosted CI execution and explicit maintainer decisions for the remaining source-binding, manifest-analysis, network-boundary, and tooling limitations.
+- Phase 14: AUDIT REQUIRED. Evidence: FINAL_AUDIT.md and audit regression fixes. The current audit update records manifest and artifact-network remediation, while hosted CI, independent re-audit, source-archive proof, and tooling evidence remain release gates.
+- Phase 15: IN PROGRESS. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, and the updated FINAL_AUDIT.md. Hosted validation and independent re-audit remain outstanding.
 - Organization milestone M0: COMPLETE. Evidence: public repositories `ReleaseCheck/releasecheck`, `ReleaseCheck/releasecheck-action`, and `ReleaseCheck/releasecheck-docs`; matching checkpoint commit IDs are recorded in ROADMAP.md. The core repository retains its existing history; the Action and docs repositories have bounded root commits.
 
 ## Definition of done
@@ -147,7 +148,7 @@ Commands may evolve with the implementation. Never run package managers or build
 ## Known limitations at Phase 14 audit checkpoint
 
 - No public SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are wired to the initial CLI; broader API compatibility remains deferred.
-- Manifest analysis currently accepts explicitly supplied safe bytes; registry adapters do not yet wire package.json, setup.py, or pyproject.toml contents into the analysis pipeline.
+- Manifest analysis reads bounded safe archive members in memory and wires supported package.json, setup.py, and pyproject.toml observations into CLI reports. Detailed TOML backend semantics remain out of scope.
 - `pyproject.toml` is intentionally not parsed with a custom TOML implementation in this phase; empty metadata is detected, while detailed build-backend evidence remains future work.
 - Provenance parsing is not cryptographic verification. npm and PyPI adapters do not yet fetch and wire registry provenance URLs into `ReleaseMetadata`; the parser is ready for later integration. Current-source research on npm and PyPI provenance was checked 2026-10-08 and recorded in docs/DESIGN.md.
 - npm verification is implemented as an internal path behind the CLI, and source retrieval is currently limited to GitHub.
@@ -164,7 +165,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 - Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
 
-The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. In particular: hosted core CI has now run but the Windows formatting job still fails; source-to-commit binding is incomplete; manifest analysis is not fully wired into live verification; the SSRF/network policy needs a deliberate decision; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
+The Phase 14 findings remain open unless FINAL_AUDIT.md and the repository provide new evidence. The current state is: hosted remediation CI is still required; source-to-commit binding remains a documented limitation; manifest observations are wired for supported files; artifact-download network policy is hardened but this is not a network-isolated service; provenance is parsed rather than fully cryptographically verified; no stable public SDK exists; local race/static-analysis validation is environment-limited; and there is no adoption or ecosystem proof.
 
 ## Future-agent operating rule
 
