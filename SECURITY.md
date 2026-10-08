@@ -1,6 +1,6 @@
 # Security Policy
 
-ReleaseCheck is security-sensitive infrastructure that processes untrusted package artifacts. The project is still pre-implementation; this policy describes the intended boundary for v0.1.
+ReleaseCheck is security-sensitive infrastructure that processes untrusted package artifacts. The current implementation is internal and not yet a user-facing CLI; this policy describes the enforced and intended boundary for v0.1.
 
 ## Non-execution boundary
 
@@ -9,6 +9,10 @@ ReleaseCheck must never execute package code or invoke package managers while in
 ## Untrusted input
 
 Artifacts, registry metadata, repository URLs, git references, archive names, archive contents, and attestations are untrusted input. Implementations must use HTTPS, timeouts, bounded downloads, bounded archive expansion, bounded file counts and sizes, safe temporary storage, strict path validation, and cleanup. Path traversal, absolute paths, symlinks, special entries, malformed archives, and suspicious metadata must be handled explicitly and never blindly followed or extracted.
+
+## Deterministic observations
+
+The security-analysis package reports structural facts such as lifecycle-script declarations, `setup.py` presence, symlinks, special entries, unsafe symlink targets, malformed metadata, and configured size thresholds. These are review signals, not malware detection, exploit detection, or proof of malicious intent. A lifecycle script is recorded as metadata and is never executed. Invalid metadata remains an invalid observation instead of being treated as absent.
 
 ## Reporting boundary
 

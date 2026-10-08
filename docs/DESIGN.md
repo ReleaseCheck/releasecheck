@@ -102,6 +102,21 @@ Phase 6 comparison rules are explicit:
 
 Wheels and other built distributions are not presumed byte-for-byte source representations. Reports must state when comparison is structural or partial. A difference is evidence, not automatic proof of maliciousness.
 
+## Deterministic security analysis
+
+`internal/security` consumes an already acquired inventory and explicitly supplied manifest bytes. It produces typed `SecurityObservation` values ordered by stable identifier and subject. An observation is a structural fact or metadata condition, not a verdict about intent.
+
+Current observations include:
+
+- archive and expanded-size thresholds, with configured limits recorded in the observation;
+- symlink presence and absolute/traversing link targets, without following links;
+- special filesystem entries, without materializing them;
+- npm lifecycle script declarations from `package.json`, without executing commands;
+- `setup.py` presence and empty or oversized Python metadata; and
+- malformed or oversized npm metadata as `invalid`, rather than silently treating it as absent.
+
+The analyzer deliberately does not claim malware detection, vulnerability detection, exploitability, malicious intent, or package safety. Acquisition rejects unsafe archive paths before analysis; analysis reports supported signals from accepted structure. Registry adapters do not yet provide manifest bytes to this package, so later pipeline wiring remains explicit future work. A custom TOML parser was rejected for this phase because it would add complexity without a required report contract; detailed `pyproject.toml` backend evidence remains future work.
+
 ## Provenance and attestations
 
 Consume supported npm and PyPI evidence and record present, absent, unavailable, invalid, or insufficient states. Where verified, record artifact digest, identity, workflow, source URI, or commit. Do not recreate Sigstore, Rekor, Fulcio, SLSA, npm, or PyPI infrastructure. Provenance may establish an identity/build claim while not proving benign code or source/artifact equality.

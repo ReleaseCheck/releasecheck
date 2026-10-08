@@ -13,7 +13,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | 4 npm verification path | COMPLETE | internal/npm; internal/compare baseline; offline npm fixtures; test/vet/gofmt/diff checks |
 | 5 PyPI verification path | COMPLETE | internal/pypi; sdist/wheel fixtures; hash/source tests; test/vet/gofmt/diff checks |
 | 6 Comparison engine | COMPLETE | internal/compare; hardened inventory/path/hash tests; test/vet/gofmt/diff checks |
-| 7 Security analysis | NOT STARTED | - |
+| 7 Security analysis | COMPLETE | internal/security; deterministic structural and metadata observations; adversarial tests; test/race/vet/gofmt/diff checks |
 | 8 Provenance and attestation evidence | NOT STARTED | - |
 | 9 Reporting | NOT STARTED | - |
 | 10 Fixture and test suite | NOT STARTED | - |

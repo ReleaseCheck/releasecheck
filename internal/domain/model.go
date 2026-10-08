@@ -226,6 +226,38 @@ type Evidence struct {
 	Description string        `json:"description,omitempty"`
 }
 
+// SecuritySeverity expresses the review priority of a deterministic security
+// observation. It is not a probability of maliciousness.
+type SecuritySeverity string
+
+const (
+	SecurityInfo    SecuritySeverity = "info"
+	SecurityWarning SecuritySeverity = "warning"
+)
+
+// SecurityObservation records a deterministic structural signal. It never
+// asserts that a package is malicious or that an observed script was run.
+type SecurityObservation struct {
+	ID          string           `json:"id"`
+	State       EvidenceState    `json:"state"`
+	Severity    SecuritySeverity `json:"severity"`
+	Subject     string           `json:"subject"`
+	Value       string           `json:"value,omitempty"`
+	Description string           `json:"description,omitempty"`
+}
+
+// SortSecurityObservations returns a copy ordered for stable reports.
+func SortSecurityObservations(items []SecurityObservation) []SecurityObservation {
+	result := append([]SecurityObservation(nil), items...)
+	sort.SliceStable(result, func(i, j int) bool {
+		if result[i].ID == result[j].ID {
+			return result[i].Subject < result[j].Subject
+		}
+		return result[i].ID < result[j].ID
+	})
+	return result
+}
+
 // ProvenanceStatus describes the availability and verification state of
 // registry-provided provenance or attestation evidence.
 type ProvenanceStatus string
@@ -274,16 +306,17 @@ const (
 // Report is the top-level machine-readable result. GeneratedAt is metadata
 // about report creation and should be omitted by deterministic fixture tests.
 type Report struct {
-	SchemaVersion string               `json:"schema_version"`
-	Identity      PackageIdentity      `json:"identity"`
-	Artifact      Artifact             `json:"artifact"`
-	Source        *SourceReference     `json:"source,omitempty"`
-	Git           *GitReference        `json:"git,omitempty"`
-	Comparisons   []FileComparison     `json:"comparisons,omitempty"`
-	Evidence      []Evidence           `json:"evidence,omitempty"`
-	Provenance    []ProvenanceEvidence `json:"provenance,omitempty"`
-	Verdict       Verdict              `json:"verdict"`
-	GeneratedAt   time.Time            `json:"generated_at,omitempty"`
+	SchemaVersion string                `json:"schema_version"`
+	Identity      PackageIdentity       `json:"identity"`
+	Artifact      Artifact              `json:"artifact"`
+	Source        *SourceReference      `json:"source,omitempty"`
+	Git           *GitReference         `json:"git,omitempty"`
+	Comparisons   []FileComparison      `json:"comparisons,omitempty"`
+	Security      []SecurityObservation `json:"security_observations,omitempty"`
+	Evidence      []Evidence            `json:"evidence,omitempty"`
+	Provenance    []ProvenanceEvidence  `json:"provenance,omitempty"`
+	Verdict       Verdict               `json:"verdict"`
+	GeneratedAt   time.Time             `json:"generated_at,omitempty"`
 }
 
 // ErrorKind classifies operational and evidence-processing errors.

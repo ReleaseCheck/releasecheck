@@ -11,3 +11,4 @@ All notable changes to ReleaseCheck will be documented here.
 - Added the npm packument adapter, SRI verification, GitHub source snapshot path, root-aware deterministic comparison, and offline npm fixtures.
 - Added the PyPI project/release JSON adapter, all-file retention, SHA-256 verification, sdist/wheel selection semantics, explicit source-reference handling, and offline PyPI fixtures.
 - Hardened deterministic comparison with canonical path validation, duplicate rejection, explicit type and unverifiable states, stable ordering, summaries, and symlink-target evidence.
+- Added deterministic security observations for archive structure, symlink targets, special entries, size thresholds, npm lifecycle scripts, setup.py presence, and malformed metadata without executing package content.
