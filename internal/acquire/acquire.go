@@ -429,10 +429,15 @@ func ReadArchiveFile(filename, target string, limits Limits) ([]byte, error) {
 		if err != nil {
 			return nil, domain.NewError(domain.ErrorArchive, "read ZIP archive", err)
 		}
+		matched := false
 		for _, entry := range reader.File {
 			if !match(entry.Name) || zipEntryKind(entry) != domain.FileRegular {
 				continue
 			}
+			if matched {
+				return nil, domain.NewError(domain.ErrorArchive, "read archive file", errors.New("archive target is ambiguous"))
+			}
+			matched = true
 			if entry.UncompressedSize64 > uint64(limits.MaxFileBytes) {
 				return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds metadata limit"))
 			}
@@ -465,6 +470,7 @@ func ReadArchiveFile(filename, target string, limits Limits) ([]byte, error) {
 	}
 	defer gzipReader.Close()
 	tarReader := tar.NewReader(gzipReader)
+	matched := false
 	for {
 		header, err := tarReader.Next()
 		if errors.Is(err, io.EOF) {
@@ -476,6 +482,10 @@ func ReadArchiveFile(filename, target string, limits Limits) ([]byte, error) {
 		if !match(header.Name) || (header.Typeflag != tar.TypeReg && header.Typeflag != tar.TypeRegA) {
 			continue
 		}
+		if matched {
+			return nil, domain.NewError(domain.ErrorArchive, "read archive file", errors.New("archive target is ambiguous"))
+		}
+		matched = true
 		if header.Size < 0 || header.Size > limits.MaxFileBytes {
 			return nil, domain.NewError(domain.ErrorArchive, "bound archive metadata", errors.New("archive member exceeds metadata limit"))
 		}
