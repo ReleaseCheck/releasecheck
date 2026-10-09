@@ -48,7 +48,7 @@ Impact: a valid published release could fail closed with `archive checksum is mi
 
 Correction on `audit/2026-10-09`: normalize an optional leading `*`, accept prefixed and unprefixed names, require exactly one matching 64-character hexadecimal digest, reject malformed/ambiguous/missing entries, verify the downloaded digest, and extract only the expected binary member.
 
-Validation: `bash tests/validate-action.sh` passed with prefixed binary-mode, prefixed text-mode, unprefixed, missing, malformed, and mismatch cases. No public release was created.
+Validation: `bash tests/validate-action.sh` passed with prefixed binary-mode, prefixed text-mode, unprefixed, missing, malformed, and mismatch cases. The first hosted PR run exposed a missing executable bit on `scripts/run-releasecheck.sh`; commit `1e69ad8` corrected the mode, and hosted Action checks `37930070590` and `37930076098` passed. No public release was created.
 
 Residual risk: the Action remains Ubuntu/Bash-oriented and has no live public core release to test end to end.
 
@@ -111,7 +111,8 @@ GitHub reports `NOASSERTION`/`Other` for the API license field in all three repo
 | Core focused network tests | PASS | Mixed DNS and connected-peer cases |
 | Action `bash tests/validate-action.sh` | PASS | Git Bash; six checksum/security cases |
 | Core release build rehearsal | PARTIAL | All Go target builds reached; stopped because workstation lacks `zip` |
-| Hosted core CI | PASS | Run `37855548443`; historical successful runs also recorded |
+| Hosted core CI | PASS | PR runs `37929923027` and `37929949414`; Ubuntu, Windows, macOS, and race jobs passed |
+| Hosted Action CI | PASS after correction | PR/push runs `37930070590` and `37930076098` passed after executable-bit fix |
 | `govulncheck`, `gosec`, `golangci-lint` | NOT RUN | Not installed; no result claimed |
 | Live registry tests | NOT RUN | Offline fixtures are authoritative for default tests |
 | Public Action end-to-end | BLOCKED | No public core release exists |
