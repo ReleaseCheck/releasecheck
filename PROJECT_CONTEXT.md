@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Module: `github.com/releasecheck/releasecheck`
-- Current state: Phase 16 independent re-audit required, pre-v0.1 release
+- Current state: Phase 16 independent re-audit in progress, pre-v0.1 release
 - Current release target: defensible `v0.1.0`, not yet released
 - Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
@@ -48,7 +48,7 @@ releasecheck verify pypi [flags] NAME [VERSION]
 
 ## Current milestone
 
-The project is **pre-v0.1 with Phase 15 remediation complete and Phase 16 independent re-audit required**. The current hosted core test matrix passes; source binding and provenance limits remain documented, and Phase 17 release-workflow validation is pending. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+The project is **pre-v0.1 with Phase 15 remediation complete and Phase 16 independent re-audit in progress**. The current hosted core test matrix passes; the audit has confirmed Action checksum and release-gate defects, with fixes isolated on audit branches. Source binding and provenance limits remain documented, and Phase 17 release-workflow validation is pending. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Organization and Repository Architecture
 

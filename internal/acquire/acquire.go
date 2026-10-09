@@ -120,13 +120,9 @@ func NewDownloader(options DownloadOptions) (*Downloader, error) {
 		return nil, domain.NewError(domain.ErrorInput, "validate acquisition limits", err)
 	}
 
-	client := http.DefaultClient
-	if options.HTTPClient != nil {
-		copy := *options.HTTPClient
-		client = &copy
-	} else {
-		copy := *http.DefaultClient
-		client = &copy
+	client, err := restrictedHTTPClient(options.HTTPClient, options.AllowPrivateNetworks)
+	if err != nil {
+		return nil, domain.NewError(domain.ErrorInput, "configure acquisition HTTP client", err)
 	}
 	client.Timeout = limits.HTTPTimeout
 	client.CheckRedirect = func(req *http.Request, previous []*http.Request) error {
@@ -143,6 +139,84 @@ func NewDownloader(options DownloadOptions) (*Downloader, error) {
 	}
 
 	return &Downloader{client: client, tempDir: options.TempDir, limits: limits, allowPrivateNetworks: options.AllowPrivateNetworks}, nil
+}
+
+// restrictedHTTPClient copies the caller's client and ensures that, unless a
+// controlled private-network opt-in is requested, the TCP peer is checked at
+// connection time. URL preflight checks alone cannot prevent DNS rebinding.
+func restrictedHTTPClient(source *http.Client, allowPrivate bool) (*http.Client, error) {
+	if source == nil {
+		copy := *http.DefaultClient
+		source = &copy
+	}
+	client := *source
+	if allowPrivate {
+		return &client, nil
+	}
+
+	var transport *http.Transport
+	switch configured := client.Transport.(type) {
+	case nil:
+		transport = http.DefaultTransport.(*http.Transport).Clone()
+	case *http.Transport:
+		transport = configured.Clone()
+	default:
+		return nil, errors.New("restricted network policy requires an http.Transport")
+	}
+
+	// A proxy can connect to a destination that is not visible at this client's
+	// dial boundary. The default policy therefore uses direct connections only.
+	transport.Proxy = nil
+	transport.DialContext = restrictDialContext(transport.DialContext)
+	if transport.DialTLSContext != nil {
+		transport.DialTLSContext = restrictDialContext(transport.DialTLSContext)
+	}
+	client.Transport = transport
+	return &client, nil
+}
+
+func restrictDialContext(dial func(context.Context, string, string) (net.Conn, error)) func(context.Context, string, string) (net.Conn, error) {
+	if dial == nil {
+		dial = (&net.Dialer{}).DialContext
+	}
+	return func(ctx context.Context, network, address string) (net.Conn, error) {
+		connection, err := dial(ctx, network, address)
+		if err != nil {
+			return nil, err
+		}
+		if err := validateRemoteAddress(connection.RemoteAddr()); err != nil {
+			_ = connection.Close()
+			return nil, err
+		}
+		return connection, nil
+	}
+}
+
+func validateRemoteAddress(address net.Addr) error {
+	if address == nil {
+		return errors.New("connected peer has no remote address")
+	}
+	if tcpAddress, ok := address.(*net.TCPAddr); ok {
+		if tcpAddress.IP == nil {
+			return errors.New("connected peer has no IP address")
+		}
+		if restrictedAddress(tcpAddress.IP) {
+			return fmt.Errorf("connected peer is a restricted address: %s", tcpAddress.IP)
+		}
+		return nil
+	}
+	host, _, err := net.SplitHostPort(address.String())
+	if err != nil {
+		return fmt.Errorf("validate connected peer address: %w", err)
+	}
+	ip := net.ParseIP(host)
+	if ip == nil {
+		return errors.New("connected peer address is not an IP address")
+	}
+	if restrictedAddress(ip) {
+		return fmt.Errorf("connected peer is a restricted address: %s", ip)
+	}
+	return nil
 }
 
 // DownloadedArtifact is a downloaded temporary file. Call Cleanup when the
@@ -250,6 +324,10 @@ func ValidateHTTPSURL(rawURL string) error {
 }
 
 func validateNetworkURL(ctx context.Context, parsed *url.URL, allowPrivate bool) error {
+	return validateNetworkURLWithLookup(ctx, parsed, allowPrivate, net.DefaultResolver.LookupIP)
+}
+
+func validateNetworkURLWithLookup(ctx context.Context, parsed *url.URL, allowPrivate bool, lookup func(context.Context, string, string) ([]net.IP, error)) error {
 	if allowPrivate {
 		return nil
 	}
@@ -263,7 +341,7 @@ func validateNetworkURL(ctx context.Context, parsed *url.URL, allowPrivate bool)
 		}
 		return nil
 	}
-	addresses, err := net.DefaultResolver.LookupIP(ctx, "ip", host)
+	addresses, err := lookup(ctx, "ip", host)
 	if err != nil {
 		return fmt.Errorf("resolve hostname %q: %w", host, err)
 	}

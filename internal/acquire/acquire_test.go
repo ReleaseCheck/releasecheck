@@ -10,8 +10,10 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -126,6 +128,38 @@ func TestDownloadRejectsPrivateAddressByDefault(t *testing.T) {
 		t.Fatalf("expected private-address rejection, got %v", err)
 	}
 }
+
+func TestNetworkPolicyRejectsMixedDNSAnswers(t *testing.T) {
+	parsed, err := url.Parse("https://registry.example.test/package.tgz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = validateNetworkURLWithLookup(context.Background(), parsed, false, func(context.Context, string, string) ([]net.IP, error) {
+		return []net.IP{net.ParseIP("198.51.100.10"), net.ParseIP("127.0.0.1")}, nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "restricted") {
+		t.Fatalf("mixed public/restricted DNS answers were accepted: %v", err)
+	}
+}
+
+func TestRestrictedDialRejectsPrivateConnectedPeer(t *testing.T) {
+	local, peer := net.Pipe()
+	defer peer.Close()
+	dial := restrictDialContext(func(context.Context, string, string) (net.Conn, error) {
+		return remoteAddressConn{Conn: local, remote: &net.TCPAddr{IP: net.ParseIP("127.0.0.1"), Port: 443}}, nil
+	})
+	_, err := dial(context.Background(), "tcp", "registry.example.test:443")
+	if err == nil || !strings.Contains(err.Error(), "restricted") {
+		t.Fatalf("private connected peer was accepted: %v", err)
+	}
+}
+
+type remoteAddressConn struct {
+	net.Conn
+	remote net.Addr
+}
+
+func (c remoteAddressConn) RemoteAddr() net.Addr { return c.remote }
 
 func TestDownloadRejectsInvalidMetadataAndOversizedInput(t *testing.T) {
 	invalidURLDownloader, err := NewDownloader(DownloadOptions{Limits: Limits{MaxDownloadBytes: 4}})

@@ -8,8 +8,8 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | --- | --- |
 | Product version | Pre-v0.1.0; no public release has been made |
 | Current milestone | v0.1.0 release candidate; remediation complete; independent re-audit required |
-| Current active phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
-| Next executable phase | Phase 16 - Independent re-audit (`AUDIT REQUIRED`) |
+| Current active phase | Phase 16 - Independent re-audit (`IN PROGRESS`) |
+| Next executable phase | Phase 16 - Independent re-audit (`IN PROGRESS`) |
 | Release decision | Conditional; see FINAL_AUDIT.md |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
@@ -36,7 +36,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
-| v0.1.0 candidate | 16 | AUDIT REQUIRED | Independent review of Phase 15 changes and residual limitations | Independent Codex review and release recommendation |
+| v0.1.0 candidate | 16 | IN PROGRESS | `AUDIT_REPORT.md`; fixes and evidence isolated on audit branches | Independent review, PR review, and release recommendation |
 | v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
 | v0.1.0 | 19 | NOT STARTED | Release/stabilization plan in Phase 19 section | Actual release and stabilization evidence |
@@ -656,7 +656,7 @@ Checkpoint: update FINAL_AUDIT.md, ROADMAP.md, PROJECT_CONTEXT.md, tests, and li
 
 Milestone: v0.1.0 release candidate approval
 
-Status: NOT STARTED
+Status: IN PROGRESS
 
 Objective: have an independent reviewer re-evaluate all Phase 14 findings and remediation.
 
@@ -684,7 +684,7 @@ Agent/model: strongest available Codex; Antigravity/Claude implements only reque
 
 Switch to Codex when: the remediation touches trust decisions or when the first review and implementation disagree.
 
-Checkpoint: update status only after the review is written and all blocking findings are addressed.
+Checkpoint: `AUDIT_REPORT.md` records the 2026-10-09 independent audit baseline, confirmed findings, fixes on the dedicated audit branches, test evidence, and remaining manual actions. Phase 16 remains in progress until the fixes are independently reviewed and merged through pull requests; no release may be published from this audit branch.
 
 ### Phase 17 - Hosted CI and release validation
 

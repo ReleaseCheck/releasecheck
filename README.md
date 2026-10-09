@@ -6,7 +6,7 @@ ReleaseCheck checks how a published npm or PyPI package relates to its claimed s
 
 [Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md)
 
-**Project status:** pre-v0.1.0 · Phase 15 complete · Phase 16 independent re-audit required.
+**Project status:** pre-v0.1.0 · Phase 15 complete · Phase 16 independent re-audit in progress.
 
 ## Contents
 
@@ -41,7 +41,7 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-The initial build and Phase 15 audit remediation are complete. The hosted cross-platform test matrix passes. Phase 16 independent re-audit is required before Phase 17 release-workflow validation and the v0.1 release decision. No public v0.1.0 release exists. See [FINAL_AUDIT.md](FINAL_AUDIT.md) for findings and [ROADMAP.md](ROADMAP.md) for the current phase register.
+The initial build and Phase 15 audit remediation are complete. The hosted cross-platform test matrix passes. Phase 16 independent re-audit is in progress on dedicated audit branches; Phase 17 release-workflow validation and the v0.1 release decision remain blocked until the audit fixes are reviewed and merged. No public v0.1.0 release exists. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for the current phase register.
 
 ## Repository Map
 
