@@ -23,6 +23,8 @@ Inspect `git diff`, `git diff --check`, the generated help output, and the relea
 5. The workflow builds Linux amd64/arm64, macOS amd64/arm64, and Windows amd64 archives.
 6. The workflow publishes the archives and `SHA256SUMS` to the GitHub release for that tag.
 
+The checksum manifest contains paths relative to `dist/`. Validation therefore runs from inside `dist/`; running `sha256sum --check dist/SHA256SUMS` from the repository root would resolve those manifest paths incorrectly.
+
 The workflow uses only the repository tag, checked-out source, and the Go version declared by `go.mod`. It does not execute package installation, package code, or arbitrary build hooks.
 
 ## Reproducibility boundary
