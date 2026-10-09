@@ -8,7 +8,7 @@ Scope: independent local and GitHub audit of the ReleaseCheck organization, the 
 
 ReleaseCheck is a real, tested pre-v0.1.0 Go CLI for deterministic non-executing npm and PyPI release-integrity evidence. The core repository is contributor-readable and the hosted core test matrix is green. It is not ready to publish v0.1.0 yet.
 
-The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. Both fixes are implemented and tested on dedicated local audit branches. A P1 network-boundary hardening change was also implemented and tested to check the connected peer and bypass proxy routing under the default restricted policy. These changes are not merged or pushed.
+The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR was merged, including the Action parser and release-gate changes. This follow-up PR corrects the separate checksum working-directory defect and validates the exact publish-job artifacts. A P1 network-boundary hardening change was also merged after review. No release or tag has been created.
 
 Contributor readiness is moderate: the code, fixtures, governance files, CI, and documentation exist, but the public repositories have no protected `main`, no open contributor issues, no public release, and no verified end-to-end Action run. Funding readiness is opportunity-dependent and unconfirmed; Drips is the strongest near-term fit, while Stellar/GrantFox fit is currently weak or unknown because ReleaseCheck has no Stellar-specific capability.
 
@@ -60,7 +60,7 @@ Evidence: the previous tag workflow checked out the tag, built archives, and imm
 
 Impact: a tag could publish artifacts even when the tagged commit had not passed the required validation suite or archive checks.
 
-Correction on `audit/2026-10-09`: added a read-only `validate` job before the publish job. It runs formatting, whitespace, vet, tests, race tests, CLI build, `VERSION`/tag consistency, archive count checks, and `sha256sum --check`. Only the publish job receives `contents: write`; the workflow still does not publish during this audit.
+Correction merged from the original audit branch: added a read-only `validate` job before the publish job. It runs formatting, whitespace, vet, tests, race tests, CLI build, `VERSION`/tag consistency, archive count checks, and checksum validation. This follow-up also validates the exact archives rebuilt by the publish job immediately before `gh release create`. Only the publish job receives `contents: write`; no release has been published.
 
 Validation: the workflow YAML was reviewed locally. The build script rehearsal reached all target builds but could not finish on this workstation because `zip` is not installed. Hosted validation remains required after review/merge.
 
@@ -134,7 +134,7 @@ Audit date: 2026-10-09. No funding application, approval, adoption, contributor 
 
 ## Remaining manual actions
 
-1. Review the three audit branches and open pull requests; do not push these changes directly to `main`.
+1. Review and merge follow-up PR #2 after its green hosted checks; do not push these changes directly to `main`.
 2. Require pull requests and successful core/Action CI before merging. Protect `main` and configure a release/tag policy through GitHub repository settings or organization rulesets.
 3. Add a minimal organization profile README in `ReleaseCheck/.github` and set a factual organization description/website if desired.
 4. Decide whether to enable Discussions/Wiki and issue templates based on actual maintainer capacity; do not create superficial issues.
@@ -144,11 +144,11 @@ Audit date: 2026-10-09. No funding application, approval, adoption, contributor 
 
 ## Release decision
 
-`v0.1.0` is **BLOCKED**. The core implementation is substantial and testable, but the Action checksum defect, release-gate defect, and network-boundary hardening require review and merge. There is no public release, no protected main branch, no Action end-to-end evidence, and no independent hosted release rehearsal. The product must not be described as fully release-ready or funded.
+`v0.1.0` is **BLOCKED**. The core implementation is substantial and testable, and the original audit remediation is merged. The checksum working-directory correction and final publish-job validation remain in follow-up PR #2. There is no public release, no protected main branch, no Action end-to-end evidence, and no actual tag-triggered release rehearsal. The product must not be described as fully release-ready or funded.
 
 ## Prioritized next steps
 
-1. Review and merge the three audit branches through pull requests after CI passes.
+1. Review and merge follow-up PR #2 after its hosted checks pass.
 2. Configure branch protection/rulesets and release governance.
 3. Run the hosted release-validation job without publishing, then inspect artifacts and checksums.
 4. Re-run an independent review of the merged changes and update this report/recommendation.
