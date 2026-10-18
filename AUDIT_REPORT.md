@@ -1,12 +1,14 @@
 # ReleaseCheck Independent Audit Report
 
-Audit date: 2026-10-18 (Africa/Lagos; post-release status refresh)
+Audit date: 2026-10-18 (Africa/Lagos; v0.1.2 status refresh)
+
+Current evidence supersedes older pre-release paragraphs below: v0.1.2 is public, release workflow `39166239320` passed, and Action E2E `39166480228` passed. Older references to “no public release” describe the historical audit point at which they were written.
 
 Scope: independent local and GitHub audit of the ReleaseCheck organization, the three discovered repositories, the Go implementation, the GitHub Action, release workflows, documentation, repository governance, license records, and funding readiness. This report records the release evidence and remaining stabilization work; it does not claim that the immutable v0.1.1 binary contains fixes merged afterward.
 
 ## Executive verdict
 
-ReleaseCheck is a real, tested Go CLI with a public v0.1.1 release for deterministic non-executing npm and PyPI release-integrity evidence. The v0.1.1 tag workflow `39164844615` passed cross-platform validation, archive inspection, and checksum validation and published six assets. The post-release Action E2E run `39165054145` reached the verifier but found a GNU tar PAX global-header compatibility defect; the fix is merged to `main` and requires a subsequent patch release before stabilization can be declared complete.
+ReleaseCheck is a real, tested Go CLI with a public v0.1.2 release for deterministic non-executing npm and PyPI release-integrity evidence. The v0.1.2 tag workflow `39166239320` passed cross-platform validation, archive inspection, and checksum validation and published six assets. The post-release Action E2E run `39166480228` passed against that exact immutable binary. Drips claim and funding configuration remain owner-controlled.
 
 The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR and follow-up checksum-path PR are now merged. The follow-up validates the exact publish-job artifacts, and the P1 network-boundary hardening change is merged. No release or tag has been created.
 

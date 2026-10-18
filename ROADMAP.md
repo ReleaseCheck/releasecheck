@@ -6,11 +6,11 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 
 | Item | Current truth |
 | --- | --- |
-| Product version | Public `v0.1.1` released; next patch release pending |
-| Current milestone | v0.1 post-release stabilization; tar PAX-header fix merged, Action E2E follow-up required |
-| Current active phase | Phase 19 - Release and stabilization (`IN PROGRESS`) |
-| Next executable phase | Patch release preparation after the merged tar PAX-header fix |
-| Release decision | v0.1.1 published; do not call stabilization complete until a patched release passes Action E2E |
+| Product version | Public `v0.1.2` released |
+| Current milestone | v0.1 post-release validation complete; Drips operational setup remains |
+| Current active phase | Phase 19 - Release and stabilization (`COMPLETE`) |
+| Next executable phase | Drips project claim/configuration; no GitHub issues are required |
+| Release decision | v0.1.2 published and Action E2E verified |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
 ## Canonical Phase Register
@@ -37,9 +37,9 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
 | v0.1.0 candidate | 16 | COMPLETE | `AUDIT_REPORT.md`; merged core PR #2, Action PR #1, docs PR #1; hosted checks pass | Historical; residual limitations remain documented |
-| v0.1.0 candidate | 17 | AUDIT REQUIRED | Hosted release validation run `39164844615` passed; public assets were published; Action E2E `39165054145` reached the verifier but found tar PAX-header incompatibility | Corrective patch release and passing Action E2E |
+| v0.1.0 candidate | 17 | COMPLETE | Hosted release validation run `39164844615` passed; the follow-up Action E2E validation is recorded separately | Historical release validation |
 | v0.1.0 candidate | 18 | COMPLETE | v0.1.1 prep PR #5 merged; tag pushed; release workflow published six verified assets | Historical release preparation |
-| v0.1.1 | 19 | IN PROGRESS | Public release `v0.1.1`; release workflow `39164844615`; corrective PR #6 merged; immutable v0.1.1 binary predates the tar fix | Publish patched release only after explicit authorization, then rerun Action E2E |
+| v0.1.2 | 19 | COMPLETE | Public release workflow `39166239320` passed; v0.1.2 published; Action E2E `39166480228` passed; local and remote repositories synchronized | Drips operational setup |
 | v1.0 | 20 | NOT STARTED | v1 discovery plan; scope must be evidence-driven | Real v0.1 stabilization evidence |
 | v1.0 | 21 | DEFERRED | Public SDK candidate; no stable API promise today | Phase 20 proves API need |
 | v1.0 | 22 | NOT STARTED | Stronger source identity/commit-binding candidate | v1 scope freeze |

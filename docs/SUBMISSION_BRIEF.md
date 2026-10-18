@@ -1,6 +1,6 @@
 # Submission Brief
 
-This brief is an evidence summary for maintainer review. It is not a funding application and does not claim approval, adoption, users, or contributors. Public core release `v0.1.1` exists, but post-release stabilization remains open.
+This brief is an evidence summary for maintainer review. It is not a funding application and does not claim approval, adoption, users, or contributors. Public core release `v0.1.2` exists and post-release validation passed.
 
 ## Problem
 
@@ -17,7 +17,7 @@ ReleaseCheck helps maintainers and consumers inspect how a published npm or PyPI
 
 ## Honest status
 
-Phase 17 requires audit follow-up: the v0.1.1 release workflow passed, while Action E2E run `39165054145` found a real tar PAX-header compatibility defect. The fix is merged to `main`, but v0.1.1 is immutable; a patched release and passing E2E rerun remain required. ReleaseCheck may be described as publicly released and tested, not production-proven or adoption-proven.
+The v0.1.2 release workflow passed, and Action E2E run `39166480228` passed against the exact released binary. ReleaseCheck may be described as publicly released and tested, not production-proven or adoption-proven.
 
 ## Security model
 
@@ -29,7 +29,7 @@ The core repository contains architecture, security, roadmap, fixture, release, 
 
 ## Drips Wave readiness
 
-Readiness is improved by the public cross-platform release and hosted evidence, but a final numeric score is intentionally deferred until the patched release passes the Action E2E gate. Current gaps are the open post-release E2E defect, absent external issue history, and owner-controlled program participation.
+Technical Drips readiness is now approximately **86/100**. The remaining gap is operational: the repository has not yet been claimed/configured on Drips, no verified `FUNDING.json` exists, and there is no external adoption evidence. See [DRIPS_READINESS.md](DRIPS_READINESS.md). This is an internal readiness estimate, not a Drips score or funding prediction.
 
 ## GrantFox / Stellar readiness
 
