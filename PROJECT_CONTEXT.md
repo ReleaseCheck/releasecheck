@@ -7,8 +7,8 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Module: `github.com/releasecheck/releasecheck`
-- Current state: Phase 16 complete; Phase 17 hosted release validation in progress, pre-v0.1 release
-- Current release target: defensible `v0.1.0`, not yet released
+- Current state: v0.1.1 released; post-release stabilization is in progress
+- Current release: public `v0.1.1`; next patch release is pending the merged tar PAX-header fix and a passing Action E2E run
 - Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
 
@@ -48,7 +48,7 @@ releasecheck verify pypi [flags] NAME [VERSION]
 
 ## Current milestone
 
-The project is **pre-v0.1 with Phase 16 complete and Phase 17 hosted release validation in progress**. The Action checksum and core release-gate fixes are merged on the public default branches, and the hosted core/Action checks pass. Source binding and provenance limits remain documented. Phase 17 still requires a safe hosted release-workflow rehearsal and artifact inspection; no public tag, release, or Action end-to-end run exists. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+The project has a public `v0.1.1` core release. Its tag workflow passed cross-platform validation, race tests, archive inspection, and checksum validation. The first post-release Action E2E run reached the verifier but exposed GNU tar PAX global-header handling; the corrective fix and regression test are merged to `main`. The published v0.1.1 binary remains immutable, so a follow-up patch release and a new Action E2E run are required before declaring post-release stabilization complete. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Organization and Repository Architecture
 
