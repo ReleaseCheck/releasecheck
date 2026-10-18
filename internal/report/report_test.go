@@ -38,6 +38,13 @@ func TestRenderersNormalizeDeterministically(t *testing.T) {
 	if !strings.Contains(human, "Verdict: MATCH") || !strings.Contains(human, "comparison.identical") {
 		t.Fatalf("human report missing stable summary: %s", human)
 	}
+	var rendered domain.Report
+	if err := json.Unmarshal(first, &rendered); err != nil {
+		t.Fatal(err)
+	}
+	if rendered.ReasonCode != "comparison.identical" || rendered.Explanation == "" || rendered.RecommendedAction == "" {
+		t.Fatalf("stable verdict details missing: %#v", rendered)
+	}
 
 	sarif, err := SARIF(report)
 	if err != nil {
@@ -67,6 +74,9 @@ func TestEvaluateReviewAndIncompleteExitCodes(t *testing.T) {
 	if normalized.Verdict != domain.VerdictReview || ExitCode(normalized) != domain.ExitReview {
 		t.Fatalf("review policy: %#v", normalized)
 	}
+	if normalized.ReasonCode != "evidence.requires_review" || normalized.Explanation == "" || normalized.RecommendedAction == "" {
+		t.Fatalf("review details missing: %#v", normalized)
+	}
 
 	incomplete := completeReport()
 	incomplete.Source = nil
@@ -76,6 +86,9 @@ func TestEvaluateReviewAndIncompleteExitCodes(t *testing.T) {
 	}
 	if normalized.Verdict != domain.VerdictIncomplete || ExitCode(normalized) != domain.ExitReview {
 		t.Fatalf("incomplete policy: %#v", normalized)
+	}
+	if normalized.ReasonCode != "evidence.incomplete" || len(normalized.EvidenceMissing) == 0 {
+		t.Fatalf("incomplete evidence details missing: %#v", normalized)
 	}
 }
 

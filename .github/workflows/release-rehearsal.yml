@@ -1,0 +1,39 @@
+name: Release rehearsal
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Semantic version to rehearse, without creating a tag or release
+        required: true
+        default: v0.1.0
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-rehearsal-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GOFLAGS: -buildvcs=false
+
+jobs:
+  rehearse:
+    name: Build and inspect release artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Rehearse release
+        run: bash scripts/rehearse-release.sh "${{ inputs.version }}"
+      - name: Confirm rehearsal did not create release state
+        shell: bash
+        run: |
+          test -z "$(git tag --points-at HEAD)"
+          test ! -e "$GITHUB_WORKSPACE/.release-published"

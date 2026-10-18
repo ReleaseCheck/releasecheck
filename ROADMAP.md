@@ -7,9 +7,9 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | Item | Current truth |
 | --- | --- |
 | Product version | Pre-v0.1.0; no public release has been made |
-| Current milestone | v0.1.0 release candidate; remediation complete; independent re-audit required |
-| Current active phase | Phase 16 - Independent re-audit (`IN PROGRESS`) |
-| Next executable phase | Phase 16 - Independent re-audit (`IN PROGRESS`) |
+| Current milestone | v0.1.0 release candidate; independent re-audit complete; hosted release validation open |
+| Current active phase | Phase 17 - Hosted CI and release validation (`IN PROGRESS`) |
+| Next executable phase | Phase 17 - Hosted CI and release validation (`IN PROGRESS`) |
 | Release decision | Conditional; see FINAL_AUDIT.md |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
@@ -36,8 +36,8 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Foundation | 14 | AUDIT REQUIRED | `FINAL_AUDIT.md`; fixes applied; residual findings remain | Phase 15 remediation and evidence |
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
-| v0.1.0 candidate | 16 | IN PROGRESS | `AUDIT_REPORT.md`; fixes and evidence isolated on audit branches | Independent review, PR review, and release recommendation |
-| v0.1.0 candidate | 17 | NOT STARTED | Hosted CI/release-validation plan in Phase 17 section | Public remote and Phase 16 review |
+| v0.1.0 candidate | 16 | COMPLETE | `AUDIT_REPORT.md`; merged core PR #2, Action PR #1, docs PR #1; hosted checks pass | Historical; residual limitations remain documented |
+| v0.1.0 candidate | 17 | IN PROGRESS | `scripts/rehearse-release.sh`, read-only `release-rehearsal.yml`, report reason fields, Action E2E workflow, `docs/PHASE17_GAP_LIST.md`, and `docs/SUBMISSION_BRIEF.md`; workflows not yet run against a public release | Hosted rehearsal, artifact inspection, authorized public release, and Action E2E |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
 | v0.1.0 | 19 | NOT STARTED | Release/stabilization plan in Phase 19 section | Actual release and stabilization evidence |
 | v1.0 | 20 | NOT STARTED | v1 discovery plan; scope must be evidence-driven | Real v0.1 stabilization evidence |
@@ -656,7 +656,7 @@ Checkpoint: update FINAL_AUDIT.md, ROADMAP.md, PROJECT_CONTEXT.md, tests, and li
 
 Milestone: v0.1.0 release candidate approval
 
-Status: IN PROGRESS
+Status: COMPLETE
 
 Objective: have an independent reviewer re-evaluate all Phase 14 findings and remediation.
 
@@ -684,19 +684,19 @@ Agent/model: strongest available Codex; Antigravity/Claude implements only reque
 
 Switch to Codex when: the remediation touches trust decisions or when the first review and implementation disagree.
 
-Checkpoint: `AUDIT_REPORT.md` records the 2026-10-09 independent audit baseline, confirmed findings, fixes on the dedicated audit branches, test evidence, and remaining manual actions. Phase 16 remains in progress until the fixes are independently reviewed and merged through pull requests; no release may be published from this audit branch.
+Checkpoint: `AUDIT_REPORT.md` records the independent audit, confirmed findings, merged remediation PRs, hosted test evidence, residual limitations, and remaining manual actions. Phase 16 is complete. No release may be published until Phase 17 and later release gates pass.
 
 ### Phase 17 - Hosted CI and release validation
 
 Milestone: v0.1.0 release candidate validation
 
-Status: NOT STARTED
+Status: IN PROGRESS
 
 Objective: prove the repository works in the actual hosted environment.
 
 Why: local Windows checks cannot substitute for the committed Linux, Windows, and macOS workflows.
 
-Prerequisites: intended public remote; Phase 16 recommendation to proceed.
+Prerequisites: intended public remote; Phase 16 recommendation to proceed. These prerequisites are satisfied for the public repositories; the tag-triggered release path remains unexecuted.
 
 Scope: configure remote; run matrix CI; run Ubuntu race job; run supported static analysis; validate release workflow permissions, tag matching, builds, checksums, and artifact contents.
 

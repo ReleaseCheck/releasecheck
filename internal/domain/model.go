@@ -322,18 +322,23 @@ const (
 // Report is the top-level machine-readable result. GeneratedAt is metadata
 // about report creation and should be omitted by deterministic fixture tests.
 type Report struct {
-	SchemaVersion string                `json:"schema_version"`
-	Identity      PackageIdentity       `json:"identity"`
-	Artifact      Artifact              `json:"artifact"`
-	Source        *SourceReference      `json:"source,omitempty"`
-	Git           *GitReference         `json:"git,omitempty"`
-	Comparisons   []FileComparison      `json:"comparisons,omitempty"`
-	Security      []SecurityObservation `json:"security_observations,omitempty"`
-	Evidence      []Evidence            `json:"evidence,omitempty"`
-	Provenance    []ProvenanceEvidence  `json:"provenance,omitempty"`
-	Limitations   []string              `json:"limitations,omitempty"`
-	Verdict       Verdict               `json:"verdict"`
-	GeneratedAt   time.Time             `json:"generated_at,omitempty"`
+	SchemaVersion     string                `json:"schema_version"`
+	Identity          PackageIdentity       `json:"identity"`
+	Artifact          Artifact              `json:"artifact"`
+	Source            *SourceReference      `json:"source,omitempty"`
+	Git               *GitReference         `json:"git,omitempty"`
+	Comparisons       []FileComparison      `json:"comparisons,omitempty"`
+	Security          []SecurityObservation `json:"security_observations,omitempty"`
+	Evidence          []Evidence            `json:"evidence,omitempty"`
+	Provenance        []ProvenanceEvidence  `json:"provenance,omitempty"`
+	Limitations       []string              `json:"limitations,omitempty"`
+	Verdict           Verdict               `json:"verdict"`
+	ReasonCode        string                `json:"reason_code"`
+	Explanation       string                `json:"explanation"`
+	EvidenceMissing   []string              `json:"evidence_missing,omitempty"`
+	EvidenceConflicts []string              `json:"evidence_conflicts,omitempty"`
+	RecommendedAction string                `json:"recommended_action"`
+	GeneratedAt       time.Time             `json:"generated_at,omitempty"`
 }
 
 // ErrorKind classifies operational and evidence-processing errors.

@@ -1,6 +1,6 @@
 # Release Process
 
-This document describes the v0.1 release path. The repository is currently pre-v0.1; Phase 15 remediation is complete and Phase 16 independent re-audit is in progress. Do not create or push a release tag until the roadmap release gates and audit recommendation allow it. A release is made only from a tag matching `vMAJOR.MINOR.PATCH`.
+This document describes the v0.1 release path. The repository is currently pre-v0.1; Phase 15 remediation and the independent Phase 16 re-audit are complete, while Phase 17 hosted release validation is in progress. Do not create or push a release tag until the roadmap release gates and audit recommendation allow it. A release is made only from a tag matching `vMAJOR.MINOR.PATCH`.
 
 ## Local preparation
 
@@ -26,6 +26,10 @@ Inspect `git diff`, `git diff --check`, the generated help output, and the relea
 The checksum manifest contains paths relative to `dist/`. Validation therefore runs from inside `dist/`; running `sha256sum --check dist/SHA256SUMS` from the repository root would resolve those manifest paths incorrectly.
 
 The workflow uses only the repository tag, checked-out source, and the Go version declared by `go.mod`. It does not execute package installation, package code, or arbitrary build hooks.
+
+## Non-publishing rehearsal
+
+Run the manual `Release rehearsal` workflow or execute `bash scripts/rehearse-release.sh v0.1.0` on Ubuntu. The rehearsal builds the same five archives, verifies `SHA256SUMS`, extracts and runs the Linux binary's `--version`, and writes a local rehearsal note. It has read-only repository permissions and never creates a tag or GitHub Release. A successful rehearsal is required before an owner authorizes the real tag-triggered workflow.
 
 ## Reproducibility boundary
 

@@ -32,7 +32,51 @@ func Normalize(input domain.Report) (domain.Report, error) {
 	result.Evidence = sortEvidence(input.Evidence)
 	result.Provenance = sortProvenance(input.Provenance)
 	result.Verdict = Evaluate(result)
+	applyVerdictDetails(&result)
 	return result, nil
+}
+
+func applyVerdictDetails(report *domain.Report) {
+	report.EvidenceMissing = nil
+	report.EvidenceConflicts = nil
+	switch report.Verdict {
+	case domain.VerdictMatch:
+		report.ReasonCode = "comparison.identical"
+		report.Explanation = "Available source and artifact comparison evidence is identical; this does not prove the package is safe."
+		report.RecommendedAction = "Record the evidence and continue any independent security review."
+	case domain.VerdictReview:
+		report.ReasonCode = "evidence.requires_review"
+		report.Explanation = "Deterministic differences, warnings, invalid evidence, or insufficient provenance require human review."
+		report.RecommendedAction = "Inspect the listed differences, warnings, conflicts, and provenance limitations."
+	case domain.VerdictIncomplete:
+		report.ReasonCode = "evidence.incomplete"
+		report.Explanation = "Important evidence was unavailable, so ReleaseCheck cannot make a complete comparison."
+		report.RecommendedAction = "Resolve the missing source, git, registry, or comparison evidence and run the check again."
+	}
+	if report.Source == nil {
+		report.EvidenceMissing = append(report.EvidenceMissing, "source.repository")
+	}
+	if report.Git == nil {
+		report.EvidenceMissing = append(report.EvidenceMissing, "source.git_reference")
+	}
+	if len(report.Comparisons) == 0 {
+		report.EvidenceMissing = append(report.EvidenceMissing, "comparison.file_set")
+	}
+	if len(report.Limitations) > 0 {
+		report.EvidenceMissing = append(report.EvidenceMissing, "comparison.limitations")
+	}
+	for _, item := range report.Evidence {
+		if item.State == domain.EvidenceInvalid {
+			report.EvidenceConflicts = append(report.EvidenceConflicts, item.ID)
+		}
+	}
+	for _, item := range report.Provenance {
+		if item.Status == domain.ProvenanceInvalid || item.Status == domain.ProvenanceInsufficient {
+			report.EvidenceConflicts = append(report.EvidenceConflicts, "provenance."+string(item.Status))
+		}
+	}
+	sort.Strings(report.EvidenceMissing)
+	sort.Strings(report.EvidenceConflicts)
 }
 
 // Evaluate maps deterministic evidence to a policy-neutral verdict. MATCH
@@ -128,6 +172,8 @@ func Human(input domain.Report) (string, error) {
 	fmt.Fprintln(&output, "Release Integrity")
 	fmt.Fprintf(&output, "Package: %s@%s (%s)\n", report.Identity.Name, report.Identity.Version, report.Identity.Registry)
 	fmt.Fprintf(&output, "Verdict: %s\n", report.Verdict)
+	fmt.Fprintf(&output, "Reason: %s\n", report.ReasonCode)
+	fmt.Fprintf(&output, "Explanation: %s\n", report.Explanation)
 	fmt.Fprintf(&output, "Exit code: %d\n", ExitCode(report))
 
 	fmt.Fprintln(&output, "Evidence:")
@@ -158,6 +204,13 @@ func Human(input domain.Report) (string, error) {
 		}
 		output.WriteByte('\n')
 	}
+	if len(report.EvidenceMissing) > 0 {
+		fmt.Fprintf(&output, "Missing evidence: %s\n", strings.Join(report.EvidenceMissing, ", "))
+	}
+	if len(report.EvidenceConflicts) > 0 {
+		fmt.Fprintf(&output, "Conflicting evidence: %s\n", strings.Join(report.EvidenceConflicts, ", "))
+	}
+	fmt.Fprintf(&output, "Next action: %s\n", report.RecommendedAction)
 	return output.String(), nil
 }
 

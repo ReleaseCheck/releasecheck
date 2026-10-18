@@ -4,6 +4,9 @@ All notable changes to ReleaseCheck will be documented here.
 
 ## Unreleased
 
+- Added stable report reason, explanation, missing/conflicting-evidence, and recommended-action fields with renderer tests.
+- Added a read-only non-publishing release rehearsal script/workflow and expanded contributor-ready issue specifications.
+- Refreshed the independent audit and phase register after the core checksum-path remediation, Action hardening, and documentation changes were merged; Phase 17 hosted release validation remains open.
 - Bootstrapped the repository documentation, scope, architecture, security boundary, and executable roadmap.
 - Established the Go module, governance files, CI skeleton, and initial package boundary.
 - Added the Phase 2 domain model, registry/cache contracts, typed evidence and error categories, and deterministic unit tests.

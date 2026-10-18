@@ -1,6 +1,6 @@
 # ReleaseCheck Security and Release Audit
 
-Audit date: 2026-10-08
+Audit date: 2026-10-18 (status addendum; original Phase 15 review dated 2026-10-08)
 
 Audit scope: current `main` after the Phase 15 remediation changes. This document supersedes the stale Phase 14 checkpoint wording; it is an audit update, not a claim that v0.1 is released.
 
@@ -8,7 +8,7 @@ Audit scope: current `main` after the Phase 15 remediation changes. This documen
 
 **Recommendation: CONDITIONAL. Do not declare v0.1 complete yet.**
 
-The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI runs `37852987328` and `37853277292` passed all declared jobs; an independent re-audit and release-workflow validation must still review these changes.
+The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI runs `37852987328` and `37853277292` passed all declared jobs. The independent re-audit is now recorded in `AUDIT_REPORT.md`; release-workflow validation remains open.
 
 ## Verified strengths
 
@@ -69,7 +69,7 @@ The workstation does not provide every security analysis tool. `go vet` and the 
 - No malware, vulnerability, SBOM, or arbitrary-build analysis.
 - No stable public SDK compatibility promise.
 - Local/private mirror use requires explicit controlled configuration and is not a hosted isolation boundary.
-- A reviewed release workflow and independent re-audit remain required.
+- A safe hosted release-workflow rehearsal remains required; no public tag or release has been created.
 
 ## Release gate
 

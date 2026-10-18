@@ -1,14 +1,14 @@
 # ReleaseCheck Independent Audit Report
 
-Audit date: 2026-10-09 (Africa/Lagos)
+Audit date: 2026-10-18 (Africa/Lagos; status refresh)
 
 Scope: independent local and GitHub audit of the ReleaseCheck organization, the three discovered repositories, the Go implementation, the GitHub Action, release workflows, documentation, repository governance, license records, and funding readiness. This report records the audit branches and does not declare a release.
 
 ## Executive verdict
 
-ReleaseCheck is a real, tested pre-v0.1.0 Go CLI for deterministic non-executing npm and PyPI release-integrity evidence. The core repository is contributor-readable and the hosted core test matrix is green. It is not ready to publish v0.1.0 yet.
+ReleaseCheck is a real, tested pre-v0.1.0 Go CLI for deterministic non-executing npm and PyPI release-integrity evidence. The core repository is contributor-readable, the merged remediation is present on the public default branches, and the hosted core and Action checks are green. It is not ready to publish v0.1.0 yet because the tag-triggered release path and public Action end-to-end path have not been exercised.
 
-The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR was merged, including the Action parser and release-gate changes. This follow-up PR corrects the separate checksum working-directory defect and validates the exact publish-job artifacts. A P1 network-boundary hardening change was also merged after review. No release or tag has been created.
+The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR and follow-up checksum-path PR are now merged. The follow-up validates the exact publish-job artifacts, and the P1 network-boundary hardening change is merged. No release or tag has been created.
 
 Contributor readiness is moderate: the code, fixtures, governance files, CI, and documentation exist, but the public repositories have no protected `main`, no open contributor issues, no public release, and no verified end-to-end Action run. Funding readiness is opportunity-dependent and unconfirmed; Drips is the strongest near-term fit, while Stellar/GrantFox fit is currently weak or unknown because ReleaseCheck has no Stellar-specific capability.
 
@@ -23,6 +23,22 @@ Authenticated identity: `Marvelg256` via GitHub CLI. Organization: `ReleaseCheck
 | `ReleaseCheck/releasecheck-docs` | `C:\Users\user\Projects\ReleaseCheck\releasecheck-docs` | `f00884b333070ad08e1af055535b0dce750f5e74` | same | synchronized | `audit/2026-10-09` |
 
 Baseline collection used `git fetch --prune origin`, `git status --short --branch`, `git rev-list --left-right --count HEAD...origin/main`, remote inspection, and authenticated GitHub API/CLI queries. The original `main` worktrees were clean before audit branches were created. Ignored core build/cache paths were `.gocache/`, `releasecheck.exe`, and `tmp/`; no secrets were printed or staged.
+
+## Current public-state verification
+
+On 2026-10-18, authenticated GitHub API checks confirmed that the remediation is present on the public default branches:
+
+| Repository | Current public `main` | Verified state |
+| --- | --- | --- |
+| `ReleaseCheck/releasecheck` | `49f9c11cd2d50a2ca06b582008eeaee78dd4732f` | PR #2 merged; checksum-path correction is on `main` |
+| `ReleaseCheck/releasecheck-action` | `6094827362e608d8729f9444950024813450da5f` | PR #1 merged; checksum validation hardening is on `main` |
+| `ReleaseCheck/releasecheck-docs` | `fbc38073899f82b6a07d7c2daad33df275a38980` | PR #1 merged; status documentation is on `main` |
+
+The local checkouts are intentionally on separate `audit/readiness-2026-10-18` branches for this documentation/status refresh. No local `main` branch was rewritten, no release tag was created, and no release was published. The local branches must be pushed and reviewed through normal pull requests before these status-refresh changes become part of public `main`.
+
+## Phase 17 implementation refresh
+
+The current review branch adds a read-only `scripts/rehearse-release.sh` and manual `release-rehearsal.yml` workflow, stable report reason/explanation/missing/conflicting-evidence/recommended-action fields with focused tests, a manual post-release Action E2E workflow, an expanded Action nonzero-exit regression test, and the contributor-ready issue catalog plus submission brief. The core CI matrix and race jobs pass on the implementation branch. The rehearsal workflow cannot be dispatched through GitHub until its workflow file is merged into the default branch, and the Action E2E workflow remains blocked by the absence of an authorized public core release.
 
 ## Product and implementation assessment
 
@@ -82,7 +98,7 @@ Residual risk: ReleaseCheck is still a local analysis tool, not a general networ
 
 Severity: P1 documentation/governance. The phase register previously said `AUDIT REQUIRED` while the detailed Phase 16 section said `NOT STARTED`.
 
-Correction: the register, detailed phase, README, `PROJECT_CONTEXT.md`, release documentation, Action README, and user docs now identify Phase 16 as `IN PROGRESS`. It remains incomplete until the fixes are reviewed and merged through normal pull requests.
+Correction: the register, detailed phase, README, `PROJECT_CONTEXT.md`, release documentation, Action README, and user docs now identify Phase 16 as `COMPLETE`. The fixes were reviewed and merged through normal pull requests; Phase 17 remains open for hosted release validation.
 
 ## License assessment
 
@@ -111,11 +127,11 @@ GitHub reports `NOASSERTION`/`Other` for the API license field in all three repo
 | Core focused network tests | PASS | Mixed DNS and connected-peer cases |
 | Action `bash tests/validate-action.sh` | PASS | Git Bash; six checksum/security cases |
 | Core release build rehearsal | PARTIAL | All Go target builds reached; stopped because workstation lacks `zip` |
-| Hosted core CI | PASS | PR runs `37929923027` and `37929949414`; Ubuntu, Windows, macOS, and race jobs passed |
-| Hosted Action CI | PASS after correction | PR/push runs `37930070590` and `37930076098` passed after executable-bit fix |
+| Hosted core CI | PASS | Readiness PR run `39159950925` passed Ubuntu, Windows, macOS, and race jobs; earlier remediation runs are also recorded above |
+| Hosted Action CI | PASS after correction | Readiness PR run `39159955341` passed; earlier correction runs `37930070590` and `37930076098` also passed |
 | `govulncheck`, `gosec`, `golangci-lint` | NOT RUN | Not installed; no result claimed |
 | Live registry tests | NOT RUN | Offline fixtures are authoritative for default tests |
-| Public Action end-to-end | BLOCKED | No public core release exists |
+| Public Action end-to-end | BLOCKED | No public core release exists; this is a release-state limitation, not an Action CI failure |
 | Branch protection/rulesets | PARTIAL | Core explicitly unprotected/empty rulesets; organization profile/settings require owner review |
 
 The initial Go test attempts encountered Windows cache/process-lock issues. Re-running with repository-local `GOCACHE`, `GOTMPDIR`, and serialized package execution completed successfully; this environment detail is retained rather than hidden.
@@ -134,23 +150,20 @@ Audit date: 2026-10-09. No funding application, approval, adoption, contributor 
 
 ## Remaining manual actions
 
-1. Review and merge follow-up PR #2 after its green hosted checks; do not push these changes directly to `main`.
+1. Run a safe hosted release rehearsal on Ubuntu/GitHub Actions, then inspect the generated archives and checksum manifest. Do not publish v0.1.0 until Phase 17 and later release gates pass.
 2. Require pull requests and successful core/Action CI before merging. Protect `main` and configure a release/tag policy through GitHub repository settings or organization rulesets.
 3. Add a minimal organization profile README in `ReleaseCheck/.github` and set a factual organization description/website if desired.
 4. Decide whether to enable Discussions/Wiki and issue templates based on actual maintainer capacity; do not create superficial issues.
-5. Install `zip` or run the release rehearsal on Ubuntu/GitHub Actions, then validate a non-public/test release path. Do not publish v0.1.0 until Phase 16 and Phase 17 gates pass.
-6. Decide, with verified account ownership and eligibility, whether to configure GitHub Sponsors, Open Collective, or Drips. Add no funding identifier until the account is real.
-7. Clarify the exact GrantFox program before discussing eligibility; current evidence does not establish that ReleaseCheck qualifies.
+5. Decide, with verified account ownership and eligibility, whether to configure GitHub Sponsors, Open Collective, or Drips. Add no funding identifier until the account is real.
+6. Clarify the exact GrantFox program before discussing eligibility; current evidence does not establish that ReleaseCheck qualifies.
 
 ## Release decision
 
-`v0.1.0` is **BLOCKED**. The core implementation is substantial and testable, and the original audit remediation is merged. The checksum working-directory correction and final publish-job validation remain in follow-up PR #2. There is no public release, no protected main branch, no Action end-to-end evidence, and no actual tag-triggered release rehearsal. The product must not be described as fully release-ready or funded.
+`v0.1.0` is **BLOCKED pending release validation**. The core implementation is substantial and testable, and the audit remediation is merged. There is no public release, no protected main branch, no Action end-to-end evidence, and no actual tag-triggered release rehearsal. The product must not be described as fully release-ready or funded.
 
 ## Prioritized next steps
 
-1. Review and merge follow-up PR #2 after its hosted checks pass.
+1. Run the hosted release-validation job without publishing, then inspect artifacts and checksums.
 2. Configure branch protection/rulesets and release governance.
-3. Run the hosted release-validation job without publishing, then inspect artifacts and checksums.
-4. Re-run an independent review of the merged changes and update this report/recommendation.
-5. Only then prepare the actual v0.1.0 release and a real Action end-to-end test.
-6. Pursue Drips or other funding only with real scoped issues, verified account eligibility, and no fabricated traction claims.
+3. Prepare the actual v0.1.0 release only after the release gate passes, then run a real Action end-to-end test.
+4. Pursue Drips or other funding only with real scoped issues, verified account eligibility, and no fabricated traction claims.
