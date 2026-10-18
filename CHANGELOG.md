@@ -2,6 +2,11 @@
 
 All notable changes to ReleaseCheck will be documented here.
 
+## 0.1.1 - 2026-10-18
+
+- Fixed GitHub source snapshot acquisition by using the provider-compatible media type.
+- Preserved bounded download, redirect, network, and non-execution security policies.
+
 ## Unreleased
 
 - Added stable report reason, explanation, missing/conflicting-evidence, and recommended-action fields with renderer tests.
