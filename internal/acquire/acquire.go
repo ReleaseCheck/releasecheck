@@ -245,6 +245,20 @@ func (a *DownloadedArtifact) Cleanup() error {
 // Download retrieves one HTTPS resource, checks its HTTP status and optional
 // expected SHA-256, and enforces the configured byte bound.
 func (d *Downloader) Download(ctx context.Context, rawURL, expectedSHA256 string) (DownloadedArtifact, error) {
+	return d.download(ctx, rawURL, expectedSHA256, "application/octet-stream")
+}
+
+// DownloadWithAccept retrieves one HTTPS resource with an explicit media type.
+// This is used for provider APIs whose archive endpoints reject the generic
+// binary media type; it does not change URL, redirect, size, or hash policy.
+func (d *Downloader) DownloadWithAccept(ctx context.Context, rawURL, expectedSHA256, accept string) (DownloadedArtifact, error) {
+	if strings.TrimSpace(accept) == "" {
+		return DownloadedArtifact{}, domain.NewError(domain.ErrorInput, "validate download accept", errors.New("accept value is required"))
+	}
+	return d.download(ctx, rawURL, expectedSHA256, accept)
+}
+
+func (d *Downloader) download(ctx context.Context, rawURL, expectedSHA256, accept string) (DownloadedArtifact, error) {
 	var result DownloadedArtifact
 	if err := ValidateHTTPSURL(rawURL); err != nil {
 		return result, domain.NewError(domain.ErrorInput, "validate download URL", err)
@@ -262,7 +276,7 @@ func (d *Downloader) Download(ctx context.Context, rawURL, expectedSHA256 string
 	if err != nil {
 		return result, domain.NewError(domain.ErrorInput, "create download request", err)
 	}
-	req.Header.Set("Accept", "application/octet-stream")
+	req.Header.Set("Accept", accept)
 	response, err := d.client.Do(req)
 	if err != nil {
 		return result, domain.NewError(domain.ErrorNetwork, "download artifact", err)
