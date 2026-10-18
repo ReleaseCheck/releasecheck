@@ -246,6 +246,35 @@ func TestInspectTARGzipInventoryAndBounds(t *testing.T) {
 	}
 }
 
+func TestInspectTARGzipSkipsPAXGlobalHeader(t *testing.T) {
+	var buffer bytes.Buffer
+	gzipWriter := gzip.NewWriter(&buffer)
+	tarWriter := tar.NewWriter(gzipWriter)
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "pax_global_header", Typeflag: tar.TypeXGlobalHeader, Size: 0}); err != nil {
+		t.Fatal(err)
+	}
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "package/file.txt", Mode: 0600, Size: int64(len("content"))}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := io.WriteString(tarWriter, "content"); err != nil {
+		t.Fatal(err)
+	}
+	if err := tarWriter.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	inventory, err := InspectArchive(writeTemp(t, buffer.Bytes()), DefaultLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(inventory.Entries) != 1 || inventory.Entries[0].Path != "package/file.txt" {
+		t.Fatalf("unexpected inventory after PAX header: %+v", inventory.Entries)
+	}
+}
+
 func TestInspectArchiveRejectsMalformedAndUnsupportedInput(t *testing.T) {
 	malformed := writeTemp(t, []byte("not an archive"))
 	if _, err := InspectArchive(malformed, DefaultLimits()); err == nil {
