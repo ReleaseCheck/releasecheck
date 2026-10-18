@@ -123,8 +123,8 @@ GitHub reports `NOASSERTION`/`Other` for the API license field in all three repo
 | Core focused network tests | PASS | Mixed DNS and connected-peer cases |
 | Action `bash tests/validate-action.sh` | PASS | Git Bash; six checksum/security cases |
 | Core release build rehearsal | PARTIAL | All Go target builds reached; stopped because workstation lacks `zip` |
-| Hosted core CI | PASS | PR runs `37929923027` and `37929949414`; Ubuntu, Windows, macOS, and race jobs passed |
-| Hosted Action CI | PASS after correction | PR/push runs `37930070590` and `37930076098` passed after executable-bit fix |
+| Hosted core CI | PASS | Readiness PR run `39159950925` passed Ubuntu, Windows, macOS, and race jobs; earlier remediation runs are also recorded above |
+| Hosted Action CI | PASS after correction | Readiness PR run `39159955341` passed; earlier correction runs `37930070590` and `37930076098` also passed |
 | `govulncheck`, `gosec`, `golangci-lint` | NOT RUN | Not installed; no result claimed |
 | Live registry tests | NOT RUN | Offline fixtures are authoritative for default tests |
 | Public Action end-to-end | BLOCKED | No public core release exists; this is a release-state limitation, not an Action CI failure |
