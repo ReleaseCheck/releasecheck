@@ -690,6 +690,12 @@ func inspectTarGzip(file *os.File, compressed int64, limits Limits) (ArchiveInve
 		if err != nil {
 			return ArchiveInventory{}, domain.NewError(domain.ErrorArchive, "read TAR archive", err)
 		}
+		// GNU tar may emit a global PAX header as an archive member. It is
+		// archive metadata, not a package file, and must not become part of
+		// the normalized source/artifact inventory.
+		if header.Typeflag == tar.TypeXGlobalHeader || header.Typeflag == tar.TypeXHeader {
+			continue
+		}
 		kind := domain.FileRegular
 		switch header.Typeflag {
 		case tar.TypeDir:
