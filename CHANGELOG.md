@@ -2,6 +2,11 @@
 
 All notable changes to ReleaseCheck will be documented here.
 
+## 0.1.2 - 2026-10-18
+
+- Fixed GNU tar PAX global-header handling for GitHub source snapshots.
+- Added regression coverage for source archives containing PAX metadata.
+
 ## 0.1.1 - 2026-10-18
 
 - Fixed GitHub source snapshot acquisition by using the provider-compatible media type.
