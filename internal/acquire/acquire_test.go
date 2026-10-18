@@ -76,6 +76,27 @@ func TestDownloadFollowsHTTPSRedirect(t *testing.T) {
 	}
 }
 
+func TestDownloadWithAcceptSendsProviderMediaType(t *testing.T) {
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Accept") != "application/vnd.github+json" {
+			http.Error(w, "wrong media type", http.StatusUnsupportedMediaType)
+			return
+		}
+		_, _ = io.WriteString(w, "source archive")
+	}))
+	defer server.Close()
+
+	d, err := NewDownloader(DownloadOptions{HTTPClient: server.Client(), AllowPrivateNetworks: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact, err := d.DownloadWithAccept(context.Background(), server.URL, "", "application/vnd.github+json")
+	if err != nil {
+		t.Fatalf("provider media type download failed: %v", err)
+	}
+	defer artifact.Cleanup()
+}
+
 func TestDownloadRejectsTooManyRedirects(t *testing.T) {
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("n") != "3" {

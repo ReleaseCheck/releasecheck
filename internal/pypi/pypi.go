@@ -260,7 +260,7 @@ func (c *Client) Verify(ctx context.Context, request domain.ReleaseRequest, opti
 		return result, nil
 	}
 	sourceURL := c.githubAPIURL + "/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repository) + "/tarball/" + url.PathEscape(result.Metadata.Git.Ref)
-	sourceArchive, err := c.downloader.Download(ctx, sourceURL, "")
+	sourceArchive, err := c.downloader.DownloadWithAccept(ctx, sourceURL, "", "application/vnd.github+json")
 	if err != nil {
 		_ = result.Cleanup()
 		return VerificationResult{}, domain.NewError(domain.ErrorSource, "download PyPI source snapshot", err)
