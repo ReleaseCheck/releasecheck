@@ -7,8 +7,8 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Module: `github.com/releasecheck/releasecheck`
-- Current state: v0.1.1 released; post-release stabilization is in progress
-- Current release: public `v0.1.1`; next patch release is pending the merged tar PAX-header fix and a passing Action E2E run
+- Current state: v0.1.2 released; post-release validation passed
+- Current release: public `v0.1.2`; Drips account/project setup remains owner-controlled
 - Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
 
@@ -48,7 +48,7 @@ releasecheck verify pypi [flags] NAME [VERSION]
 
 ## Current milestone
 
-The project has a public `v0.1.1` core release. Its tag workflow passed cross-platform validation, race tests, archive inspection, and checksum validation. The first post-release Action E2E run reached the verifier but exposed GNU tar PAX global-header handling; the corrective fix and regression test are merged to `main`. The published v0.1.1 binary remains immutable, so a follow-up patch release and a new Action E2E run are required before declaring post-release stabilization complete. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+The project has a public `v0.1.2` core release. Its tag workflow passed cross-platform validation, race tests, archive inspection, and checksum validation. The post-release Action E2E run `39166480228` passed against the immutable v0.1.2 binary. Drips claim, wallet ownership, `FUNDING.json`, and funding splits remain owner-controlled and are tracked in `docs/DRIPS_READINESS.md`. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Organization and Repository Architecture
 

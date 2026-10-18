@@ -1,6 +1,8 @@
 # ReleaseCheck Security and Release Audit
 
-> **Current status (2026-10-18):** Public `v0.1.1` was released successfully. Its post-release Action E2E run exposed GNU tar PAX global-header handling; the fix is merged to `main`, while the immutable v0.1.1 binary remains unchanged. A patched release and passing E2E rerun are still required for final stabilization.
+> **Current status (2026-10-18):** Public `v0.1.2` was released successfully. Its tag workflow and post-release Action E2E run passed. Remaining readiness work is owner-controlled Drips project claiming/configuration and genuine external impact evidence.
+
+Older pre-release findings in this document are retained as audit history; they do not describe the current release state.
 
 Audit date: 2026-10-18 (status addendum; original Phase 15 review dated 2026-10-08)
 

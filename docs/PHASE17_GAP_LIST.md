@@ -1,5 +1,7 @@
 # Phase 17 Gap List
 
+> Historical note: this gap list was written before v0.1.2. The public release workflow and Action E2E gates are now complete; remaining owner-controlled Drips setup is tracked in [DRIPS_READINESS.md](DRIPS_READINESS.md).
+
 Audit date: 2026-10-18. This is an implementation gap list, not a release approval.
 
 ## Confirmed defects or missing implementation
