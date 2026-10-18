@@ -37,7 +37,7 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
 | v0.1.0 candidate | 16 | COMPLETE | `AUDIT_REPORT.md`; merged core PR #2, Action PR #1, docs PR #1; hosted checks pass | Historical; residual limitations remain documented |
-| v0.1.0 candidate | 17 | IN PROGRESS | Merged release-gate workflow and checksum regression coverage; no tag/release or public Action E2E yet | Safe hosted release rehearsal and artifact inspection |
+| v0.1.0 candidate | 17 | IN PROGRESS | `scripts/rehearse-release.sh`, read-only `release-rehearsal.yml`, report reason fields, Action E2E workflow, `docs/PHASE17_GAP_LIST.md`, and `docs/SUBMISSION_BRIEF.md`; workflows not yet run against a public release | Hosted rehearsal, artifact inspection, authorized public release, and Action E2E |
 | v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
 | v0.1.0 | 19 | NOT STARTED | Release/stabilization plan in Phase 19 section | Actual release and stabilization evidence |
 | v1.0 | 20 | NOT STARTED | v1 discovery plan; scope must be evidence-driven | Real v0.1 stabilization evidence |

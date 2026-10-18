@@ -41,7 +41,7 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-The initial build, Phase 15 remediation, and the independent Phase 16 re-audit are complete. The merged remediation is present on the public core, Action, and documentation repository default branches, and the hosted core and Action checks pass. Phase 17 hosted release validation remains in progress: no public `v0.1.0` tag or release exists, the tag-triggered release workflow has not been rehearsed end to end, and the Action has not run against a public core release. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for the current phase register.
+The initial build, Phase 15 remediation, and the independent Phase 16 re-audit are complete. The merged remediation is present on the public core, Action, and documentation repository default branches, and the hosted core and Action checks pass. Phase 17 hosted release validation remains in progress: the read-only rehearsal workflow and post-release Action E2E workflow are now prepared, but no public `v0.1.0` tag or release exists and neither workflow has been authorized to run against a public release. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for the current phase register.
 
 ## Repository Map
 

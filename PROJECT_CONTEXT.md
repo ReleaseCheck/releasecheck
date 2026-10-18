@@ -37,7 +37,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 
 ## Current implementation
 
-The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and an independent final-audit report. The code is real and tested, but the public release gate is not complete.
+The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports with stable reason and next-action fields; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and independent audit reports. The code is real and tested, but the public release gate is not complete.
 
 The current CLI is:
 
