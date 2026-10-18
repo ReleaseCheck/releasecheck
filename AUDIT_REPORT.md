@@ -36,6 +36,10 @@ On 2026-10-18, authenticated GitHub API checks confirmed that the remediation is
 
 The local checkouts are intentionally on separate `audit/readiness-2026-10-18` branches for this documentation/status refresh. No local `main` branch was rewritten, no release tag was created, and no release was published. The local branches must be pushed and reviewed through normal pull requests before these status-refresh changes become part of public `main`.
 
+## Phase 17 implementation refresh
+
+The current review branch adds a read-only `scripts/rehearse-release.sh` and manual `release-rehearsal.yml` workflow, stable report reason/explanation/missing/conflicting-evidence/recommended-action fields with focused tests, a manual post-release Action E2E workflow, an expanded Action nonzero-exit regression test, and the contributor-ready issue catalog plus submission brief. The core CI matrix and race jobs pass on the implementation branch. The rehearsal workflow cannot be dispatched through GitHub until its workflow file is merged into the default branch, and the Action E2E workflow remains blocked by the absence of an authorized public core release.
+
 ## Product and implementation assessment
 
 The implementation matches the documented product boundary in the important respects:
