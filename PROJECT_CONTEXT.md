@@ -7,7 +7,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Name: ReleaseCheck
 - Planned language: Go
 - Module: `github.com/releasecheck/releasecheck`
-- Current state: Phase 16 independent re-audit in progress, pre-v0.1 release
+- Current state: Phase 16 complete; Phase 17 hosted release validation in progress, pre-v0.1 release
 - Current release target: defensible `v0.1.0`, not yet released
 - Primary ecosystems: npm and PyPI
 - Deadline: 12:00 PM WAT, October 9, 2026
@@ -48,7 +48,7 @@ releasecheck verify pypi [flags] NAME [VERSION]
 
 ## Current milestone
 
-The project is **pre-v0.1 with Phase 15 remediation complete and Phase 16 independent re-audit in progress**. The current hosted core test matrix passes; the audit has confirmed Action checksum and release-gate defects, with fixes isolated on audit branches. Source binding and provenance limits remain documented, and Phase 17 release-workflow validation is pending. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
+The project is **pre-v0.1 with Phase 16 complete and Phase 17 hosted release validation in progress**. The Action checksum and core release-gate fixes are merged on the public default branches, and the hosted core/Action checks pass. Source binding and provenance limits remain documented. Phase 17 still requires a safe hosted release-workflow rehearsal and artifact inspection; no public tag, release, or Action end-to-end run exists. Future work is organized in ROADMAP.md as v0.1 phases 15-19, v1 phases 20-29, v2 phases 30-39, and discovery-gated v3+ reserved bands.
 
 ## Organization and Repository Architecture
 
@@ -124,8 +124,9 @@ Registry-native mechanisms already provide important pieces: npm metadata, integ
 - Phase 11: COMPLETE. Evidence: cmd/releasecheck/main.go, internal/cli/cli.go, internal/cli/cli_test.go, README usage, and passing repository test/build/smoke/vet/format/diff checks plus focused CLI/fixture race checks. Aggregate race execution is currently blocked by Windows denying access to a temporary pre-existing `compare.test.exe`.
 - Phase 12: COMPLETE. Evidence: pinned cross-platform CI, race job, tag-driven release workflow, scripts/build-release.sh, VERSION, docs/RELEASE.md, and the local Phase 12 checkpoint checks.
 - Phase 13: COMPLETE. Evidence: README.md, docs/USAGE.md, docs/REPORTS.md, docs/CI.md, docs/REGISTRY_ADAPTERS.md, docs/GOOD_FIRST_ISSUES.md, updated SECURITY.md/CONTRIBUTING.md, feature-request template, and the documentation checkpoint review.
-- Phase 14: AUDIT REQUIRED as the historical audit checkpoint. Phase 15 records the remediation evidence; Phase 16 independent review remains required.
-- Phase 15: COMPLETE. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, updated FINAL_AUDIT.md, and hosted CI runs `37852987328` and `37853277292` passing Ubuntu, Windows, macOS, and race jobs. Phase 16 independent re-audit remains required.
+- Phase 14: AUDIT REQUIRED as the historical audit checkpoint. Phase 15 records the remediation evidence; Phase 16 supersedes this historical gate.
+- Phase 15: COMPLETE. Evidence: `.gitattributes`, bounded archive-member reads, live manifest observations, default-deny artifact network policy, full-commit classification, focused adversarial tests, updated FINAL_AUDIT.md, and hosted CI runs `37852987328` and `37853277292` passing Ubuntu, Windows, macOS, and race jobs.
+- Phase 16: COMPLETE. Evidence: `AUDIT_REPORT.md` records the independent review, the Action checksum fix and core release-gate fix are merged in public PRs, and hosted CI runs pass. Residual limitations and the missing public release rehearsal remain explicit.
 - Organization milestone M0: COMPLETE. Evidence: public repositories `ReleaseCheck/releasecheck`, `ReleaseCheck/releasecheck-action`, and `ReleaseCheck/releasecheck-docs`; matching checkpoint commit IDs are recorded in ROADMAP.md. The core repository retains its existing history; the Action and docs repositories have bounded root commits.
 
 ## Definition of done
@@ -165,7 +166,7 @@ Commands may evolve with the implementation. Never run package managers or build
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
 - Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
 
-Phase 15 resolved the supported manifest-analysis and artifact-download network findings and the hosted cross-platform matrix now passes. Phase 16 must independently review the changes. Source archive-to-commit proof and cryptographic provenance verification remain limitations; ReleaseCheck is not a network-isolated service, has no stable public SDK, and has no adoption or ecosystem proof.
+Phase 15 resolved the supported manifest-analysis and artifact-download network findings and the hosted cross-platform matrix now passes. Phase 16 independently reviewed the changes and is complete. Source archive-to-commit proof and cryptographic provenance verification remain limitations; ReleaseCheck is not a network-isolated service, has no stable public SDK, and has no adoption or ecosystem proof. Phase 17 remains open for hosted release rehearsal and artifact inspection.
 
 ## Future-agent operating rule
 
