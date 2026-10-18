@@ -6,7 +6,7 @@ ReleaseCheck checks how a published npm or PyPI package relates to its claimed s
 
 [Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md)
 
-**Project status:** pre-v0.1.0 · Phase 16 complete · Phase 17 hosted release validation in progress.
+**Project status:** v0.1.1 released · post-release stabilization in progress. The published Action E2E run exposed a tar PAX metadata compatibility defect; the fix is merged to `main` and is pending the next patch release.
 
 ## Contents
 
@@ -41,7 +41,7 @@ It does not install packages, run package code, run lifecycle scripts, run Pytho
 
 ## Project status
 
-The initial build, Phase 15 remediation, and the independent Phase 16 re-audit are complete. The merged remediation is present on the public core, Action, and documentation repository default branches, and the hosted core and Action checks pass. Phase 17 hosted release validation remains in progress: the read-only rehearsal workflow and post-release Action E2E workflow are now prepared, but no public `v0.1.0` tag or release exists and neither workflow has been authorized to run against a public release. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for the current phase register.
+The v0.1.1 core release is public and its tag-triggered workflow passed cross-platform validation and archive/checksum inspection. The post-release Action E2E run reached the verifier and found a compatibility defect in GNU tar PAX global-header handling; that fix is now merged to `main`, but the immutable v0.1.1 binary is unchanged. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for current stabilization evidence and remaining release work.
 
 ## Repository Map
 

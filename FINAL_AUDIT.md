@@ -1,5 +1,7 @@
 # ReleaseCheck Security and Release Audit
 
+> **Current status (2026-10-18):** Public `v0.1.1` was released successfully. Its post-release Action E2E run exposed GNU tar PAX global-header handling; the fix is merged to `main`, while the immutable v0.1.1 binary remains unchanged. A patched release and passing E2E rerun are still required for final stabilization.
+
 Audit date: 2026-10-18 (status addendum; original Phase 15 review dated 2026-10-08)
 
 Audit scope: current `main` after the Phase 15 remediation changes. This document supersedes the stale Phase 14 checkpoint wording; it is an audit update, not a claim that v0.1 is released.

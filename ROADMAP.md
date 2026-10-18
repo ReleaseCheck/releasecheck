@@ -6,11 +6,11 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 
 | Item | Current truth |
 | --- | --- |
-| Product version | Pre-v0.1.0; no public release has been made |
-| Current milestone | v0.1.0 release candidate; independent re-audit complete; hosted release validation open |
-| Current active phase | Phase 17 - Hosted CI and release validation (`IN PROGRESS`) |
-| Next executable phase | Phase 17 - Hosted CI and release validation (`IN PROGRESS`) |
-| Release decision | Conditional; see FINAL_AUDIT.md |
+| Product version | Public `v0.1.1` released; next patch release pending |
+| Current milestone | v0.1 post-release stabilization; tar PAX-header fix merged, Action E2E follow-up required |
+| Current active phase | Phase 19 - Release and stabilization (`IN PROGRESS`) |
+| Next executable phase | Patch release preparation after the merged tar PAX-header fix |
+| Release decision | v0.1.1 published; do not call stabilization complete until a patched release passes Action E2E |
 | Repository evidence | Audit checkpoint is committed; current working-tree changes must always be checked with `git status` and `git diff` |
 
 ## Canonical Phase Register
@@ -37,9 +37,9 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Organization | M0 | COMPLETE | Three public repositories created, pushed, and verified; core `1ff03f9`, Action `2fcc5ec`, docs `5bf6e08` | Maintain one-way ownership boundaries |
 | v0.1.0 candidate | 15 | COMPLETE | Remediation implemented; hosted CI runs `37852987328` and `37853277292` passed all declared jobs; residual limitations recorded | Independent re-audit |
 | v0.1.0 candidate | 16 | COMPLETE | `AUDIT_REPORT.md`; merged core PR #2, Action PR #1, docs PR #1; hosted checks pass | Historical; residual limitations remain documented |
-| v0.1.0 candidate | 17 | IN PROGRESS | `scripts/rehearse-release.sh`, read-only `release-rehearsal.yml`, report reason fields, Action E2E workflow, `docs/PHASE17_GAP_LIST.md`, and `docs/SUBMISSION_BRIEF.md`; workflows not yet run against a public release | Hosted rehearsal, artifact inspection, authorized public release, and Action E2E |
-| v0.1.0 candidate | 18 | NOT STARTED | Release-preparation plan in Phase 18 section | Hosted validation and go decision |
-| v0.1.0 | 19 | NOT STARTED | Release/stabilization plan in Phase 19 section | Actual release and stabilization evidence |
+| v0.1.0 candidate | 17 | AUDIT REQUIRED | Hosted release validation run `39164844615` passed; public assets were published; Action E2E `39165054145` reached the verifier but found tar PAX-header incompatibility | Corrective patch release and passing Action E2E |
+| v0.1.0 candidate | 18 | COMPLETE | v0.1.1 prep PR #5 merged; tag pushed; release workflow published six verified assets | Historical release preparation |
+| v0.1.1 | 19 | IN PROGRESS | Public release `v0.1.1`; release workflow `39164844615`; corrective PR #6 merged; immutable v0.1.1 binary predates the tar fix | Publish patched release only after explicit authorization, then rerun Action E2E |
 | v1.0 | 20 | NOT STARTED | v1 discovery plan; scope must be evidence-driven | Real v0.1 stabilization evidence |
 | v1.0 | 21 | DEFERRED | Public SDK candidate; no stable API promise today | Phase 20 proves API need |
 | v1.0 | 22 | NOT STARTED | Stronger source identity/commit-binding candidate | v1 scope freeze |
