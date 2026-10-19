@@ -39,6 +39,12 @@ The current release candidate scope is limited to npm and PyPI. ReleaseCheck ret
 
 It does not install packages, run package code, run lifecycle scripts, run Python build backends, execute arbitrary builds, scan for vulnerabilities, generate SBOMs, or implement Sigstore or SLSA.
 
+## Product boundary and differentiation
+
+ReleaseCheck is not a replacement for registry signatures, attestations, provenance systems, reproducibility builders, or repository-health scanners. Those tools answer important adjacent questions. ReleaseCheck focuses on a narrower question: **given one selected npm or PyPI release file, what source identity and release reference did its metadata claim, what source snapshot could be retrieved, how do the two inventories and hashes relate, and what evidence is missing?**
+
+Its contribution is the deterministic comparison and evidence report across the two ecosystems, with a non-executing security boundary. A difference is reported as evidence for review, not as proof of maliciousness. See [docs/POSITIONING.md](docs/POSITIONING.md) for the overlap matrix and deliberate non-goals.
+
 ## Project status
 
 The v0.1.2 core release is public and its tag-triggered workflow passed cross-platform validation and archive/checksum inspection. The post-release Action E2E run passed against that exact immutable binary. See [AUDIT_REPORT.md](AUDIT_REPORT.md), [FINAL_AUDIT.md](FINAL_AUDIT.md), and [ROADMAP.md](ROADMAP.md) for current evidence and remaining owner-controlled Drips setup.
