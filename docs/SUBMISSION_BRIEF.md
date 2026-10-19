@@ -29,7 +29,7 @@ The core repository contains architecture, security, roadmap, fixture, release, 
 
 ## Drips Wave readiness
 
-Technical Drips readiness is now approximately **86/100**. The remaining gap is operational: the repository has not yet been claimed/configured on Drips, no verified `FUNDING.json` exists, and there is no external adoption evidence. See [DRIPS_READINESS.md](DRIPS_READINESS.md). This is an internal readiness estimate, not a Drips score or funding prediction.
+Technical Drips readiness is now approximately **86/100**. The remaining gap is operational: the repository has not yet been claimed/configured on Drips, no verified `FUNDING.json` exists, and there is no external adoption evidence. See [DRIPS_READINESS.md](DRIPS_READINESS.md). This is an internal readiness estimate, not a Drips score or funding prediction. The product-positioning boundary and overlap analysis are documented in [POSITIONING.md](POSITIONING.md); ReleaseCheck does not claim to replace adjacent supply-chain tooling.
 
 ## GrantFox / Stellar readiness
 

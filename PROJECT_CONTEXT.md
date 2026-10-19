@@ -37,7 +37,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 
 ## Current implementation
 
-The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports with stable reason and next-action fields; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and independent audit reports. The code is real and tested, but the public release gate is not complete.
+The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports with stable reason and next-action fields; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and independent audit reports. Public v0.1.2 release and Action E2E validation are complete. The product remains deliberately narrower than provenance infrastructure, reproducibility builders, vulnerability scanners, and repository-health tools.
 
 The current CLI is:
 
@@ -89,7 +89,7 @@ The dependency relationship is one-way: the core releases versioned binaries; th
 
 ## Research conclusions
 
-Registry-native mechanisms already provide important pieces: npm metadata, integrity values, signatures, and provenance; PyPI release hashes, index metadata, and PEP 740 attestations; GitHub immutable commit archives; and SLSA/Sigstore standards. vltpkg/reproduce is the closest overlap for npm reproducibility because it can clone, check out, install dependencies, and run pack strategies. ReleaseCheck therefore must not claim novelty or superior reproducibility. Its defensible v0.1 focus is an explicit cross-ecosystem evidence chain and safe, non-executing comparison/reporting model.
+Registry-native mechanisms already provide important pieces: npm metadata, integrity values, signatures, and provenance; PyPI release hashes, index metadata, and PEP 740 attestations; GitHub immutable commit archives; and SLSA/Sigstore standards. vltpkg/reproduce is the closest overlap for npm reproducibility because it can clone, check out, install dependencies, and run pack strategies. ReleaseCheck therefore must not claim novelty or superior reproducibility. Its defensible v0.1 focus is an explicit cross-ecosystem evidence chain and safe, non-executing comparison/reporting model. The full overlap and claim boundary is recorded in docs/POSITIONING.md.
 
 ## Repository conventions
 

@@ -1,6 +1,6 @@
 # Competitive Landscape
 
-Focused research checked on 2026-10-08 (WAT). Sources link to current primary documentation or project repositories. This is a technical comparison, not a market-size or adoption claim.
+Focused research refreshed on 2026-10-19 (WAT). Sources link to current primary documentation or project repositories. This is a technical comparison, not a market-size or adoption claim.
 
 | Project/tool | Ecosystem | Primary purpose | Overlap | Important difference | ReleaseCheck relationship | Sources |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,9 @@ Focused research checked on 2026-10-08 (WAT). Sources link to current primary do
 
 ## Conclusions
 
-Registry APIs, signatures, attestations, SLSA, Sigstore, and specialized reproducibility tools already cover meaningful parts of this problem. The defensible v0.1 position is a small, cross-ecosystem, non-executing evidence chain that makes the relationship between a selected release file, claimed source identity/reference, source snapshot, inventories, hashes, observations, provenance evidence, limitations, and verdict explicit.
+Registry APIs, signatures, attestations, SLSA, Sigstore, and specialized reproducibility tools already cover meaningful parts of this problem. The defensible v0.1 position is not novelty or replacement: it is a small, cross-ecosystem, non-executing evidence chain that makes the relationship between one selected release file, its claimed source identity/reference, a retrievable source snapshot, inventories, hashes, observations, provenance evidence, limitations, and verdict explicit.
+
+The closest overlap is vltpkg/reproduce on npm. ReleaseCheck deliberately stops before package installation, dependency resolution, arbitrary builds, or a reproducibility claim. Its value is the common evidence/report contract and safe comparison path across npm and PyPI, including incomplete and conflicting evidence states.
 
 ReleaseCheck will not replace registry signature or attestation verification, reproduce arbitrary builds, score repository health, map an entire dependency graph, scan vulnerabilities, detect malware, generate SBOMs, or claim that any difference is malicious.
 
