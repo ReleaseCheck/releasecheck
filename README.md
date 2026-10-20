@@ -89,6 +89,12 @@ Go's module installer is also supported for a pinned release:
 go install github.com/ReleaseCheck/releasecheck/cmd/releasecheck@v0.1.2
 ```
 
+The pinned real-release corpus can be downloaded and verified without installation or execution:
+
+```text
+go run ./cmd/corpuscheck -output-dir .tmp/corpus
+```
+
 The Homebrew formula and Scoop manifest are release metadata prepared for future tap/bucket publication; they are not official package indexes yet.
 
 The Phase 12 release workflow publishes archives for Linux amd64/arm64, macOS amd64/arm64, and Windows amd64 when a version tag is created. See [docs/RELEASE.md](docs/RELEASE.md).

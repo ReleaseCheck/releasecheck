@@ -70,8 +70,10 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | --- | --- | --- | --- |
 | Release-state and license truth pass | COMPLETE | Current v0.1.2 state in `PROJECT_CONTEXT.md`, `README.md`, `AUDIT_REPORT.md`, `FINAL_AUDIT.md`, Action README, and docs README; Apache-2.0 remains the canonical license in all three repositories | Historical audit checkpoints remain labeled as history; no false release or license claim is retained |
 | Sigstore/SLSA/GitHub attestation interoperability | COMPLETE | `docs/ATTESTATIONS.md`, `docs/DESIGN.md`, and docs repository `docs/attestations.md` | v0.1.2 consumes/reports evidence boundaries; it does not implement trust-root verification or publish GitHub attestations |
-| Package-manager installation metadata | COMPLETE | `packaging/homebrew/releasecheck.rb`, `packaging/scoop/releasecheck.json`, pinned `go install` instructions | Official Homebrew tap and Scoop bucket publication are not claimed |
-| Real npm/PyPI compatibility corpus | COMPLETE | `fixtures/corpus/real-releases.json`, corpus README, offline schema test | Metadata and digests are pinned; package bytes are not committed or executed, and live registry checks remain opt-in |
+| Package-manager installation metadata | PARTIAL | Pinned `go install` is usable; Homebrew/Scoop manifests are prepared metadata only | Official Homebrew tap and Scoop bucket publication remain owner/repository work |
+| Real npm/PyPI compatibility corpus | COMPLETE | `fixtures/corpus/real-releases.json`, `cmd/corpuscheck`, corpus README, offline schema test; live verification confirmed three artifacts on 2026-10-20 | Package bytes are downloaded only to an ignored output directory and are never installed or executed |
+| Cross-platform GitHub Action acquisition | IN PROGRESS | Platform dispatch and Windows PowerShell verifier added in `releasecheck-action` review branch | Hosted matrix must pass before completion; Action remains limited to published release targets |
+| GitHub license classifier | IN PROGRESS | Canonical Apache-2.0 text normalized in all three repositories | GitHub must re-index the files; `NOASSERTION` is not considered fixed until the API reports Apache-2.0 |
 
 ## Current Repository Architecture
 
