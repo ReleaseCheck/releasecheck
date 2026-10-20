@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "observed_at": "2026-10-20",
+  "purpose": "Pinned metadata for reproducible, opt-in live release checks; package bytes are not committed or executed.",
+  "records": [
+    {
+      "ecosystem": "npm",
+      "package": "is-number",
+      "version": "7.0.0",
+      "metadata_url": "https://registry.npmjs.org/is-number/7.0.0",
+      "artifact_filename": "is-number-7.0.0.tgz",
+      "artifact_url": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
+      "artifact_size": 3730,
+      "artifact_sha256": "7b75c1057198cf97696909a9bee176c9c5e9bcb5b03bf3ecef2f484defadd51e",
+      "registry_integrity": "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==",
+      "source_repository": "https://github.com/jonschlinkert/is-number",
+      "git_commit": "98e8ff1da1a89f93d1397a24d7413ed15421c139",
+      "expected_state": "reviewable-source-bound"
+    },
+    {
+      "ecosystem": "pypi",
+      "package": "sampleproject",
+      "version": "4.0.0",
+      "metadata_url": "https://pypi.org/pypi/sampleproject/4.0.0/json",
+      "artifacts": [
+        {
+          "artifact_filename": "sampleproject-4.0.0.tar.gz",
+          "artifact_url": "https://files.pythonhosted.org/packages/48/8c/c18d25735962870ccb6d1cd2ac7bde40008a332211055e260cb7ec4c6bab/sampleproject-4.0.0.tar.gz",
+          "artifact_size": 5760,
+          "artifact_sha256": "0ace7980f82c5815ede4cd7bf9f6693684cec2ae47b9b7ade9add533b8627c6b",
+          "kind": "sdist"
+        },
+        {
+          "artifact_filename": "sampleproject-4.0.0-py3-none-any.whl",
+          "artifact_url": "https://files.pythonhosted.org/packages/d7/73/c16e5f3f0d37c60947e70865c255a58dc408780a6474de0523afd0ec553a/sampleproject-4.0.0-py3-none-any.whl",
+          "artifact_size": 4661,
+          "artifact_sha256": "c23e447ea90d796d1e645c35c4b2de125040add12a845825546f91c93f391b6b",
+          "kind": "wheel"
+        }
+      ],
+      "source_repository": "https://github.com/pypa/sampleproject",
+      "git_commit": null,
+      "expected_state": "source-reference-without-published-commit"
+    }
+  ]
+}

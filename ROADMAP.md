@@ -64,6 +64,15 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | v4.0 reserved | 50-59 | DEFERRED | Reserved discovery-gated planning band | v4 discovery |
 | v5.0+ reserved | Future | DEFERRED | No fixed feature promises; evidence-led discovery required | Future discovery |
 
+## Current Post-Release Workstream
+
+| Work item | Status | Evidence | Boundary |
+| --- | --- | --- | --- |
+| Release-state and license truth pass | COMPLETE | Current v0.1.2 state in `PROJECT_CONTEXT.md`, `README.md`, `AUDIT_REPORT.md`, `FINAL_AUDIT.md`, Action README, and docs README; Apache-2.0 remains the canonical license in all three repositories | Historical audit checkpoints remain labeled as history; no false release or license claim is retained |
+| Sigstore/SLSA/GitHub attestation interoperability | COMPLETE | `docs/ATTESTATIONS.md`, `docs/DESIGN.md`, and docs repository `docs/attestations.md` | v0.1.2 consumes/reports evidence boundaries; it does not implement trust-root verification or publish GitHub attestations |
+| Package-manager installation metadata | COMPLETE | `packaging/homebrew/releasecheck.rb`, `packaging/scoop/releasecheck.json`, pinned `go install` instructions | Official Homebrew tap and Scoop bucket publication are not claimed |
+| Real npm/PyPI compatibility corpus | COMPLETE | `fixtures/corpus/real-releases.json`, corpus README, offline schema test | Metadata and digests are pinned; package bytes are not committed or executed, and live registry checks remain opt-in |
+
 ## Current Repository Architecture
 
 The initial organization architecture is established as three repositories. The migration milestone was completed on 2026-10-08 after all three public repositories existed, contained the intended history/content, and local `main` matched remote `main`.
@@ -604,7 +613,9 @@ Agent/model: strongest available Codex; Antigravity/Claude implements fixes.
 
 Checkpoint: COMPLETE on 2026-10-08. Added `.gitattributes` for cross-platform formatting, bounded live manifest observations, default-deny restricted-network artifact acquisition, full 40-character commit classification, adversarial tests, and a current audit update. Hosted CI runs `37852987328` and `37853277292` passed Ubuntu, Windows, macOS, and race jobs. Independent re-audit and release-workflow validation remain required.
 
-## v0.1.0 Release Candidate - Phases 15-19
+## Historical v0.1.0 Release Candidate - Phases 15-19
+
+The detailed sections below are retained as an execution record. Their original v0.1.0 wording is historical; the current product state is the public v0.1.2 release recorded in the canonical phase register above.
 
 These phases are the executable path from the current audited repository to a defensible first public release. Phase 15 is complete; Phase 16 is the current audit gate.
 

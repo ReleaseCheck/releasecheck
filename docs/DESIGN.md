@@ -131,6 +131,16 @@ Provenance states are intentionally distinct:
 
 The current parser therefore reports structurally bound evidence as `insufficient`, not `present`. A matching attestation does not prove source/artifact equality, benignness, or absence of malicious code. npm's current documentation says provenance formats may change and directs signature/provenance verification through npm tooling; ReleaseCheck does not invoke npm or package installation. PyPI's PEP 740 model similarly leaves cryptographic trust-root verification to a verifier and permits provenance objects to change over time. Sources checked 2026-10-08: [npm provenance](https://docs.npmjs.com/generating-provenance-statements/), [npm signature verification](https://docs.npmjs.com/verifying-registry-signatures), [PyPI attestations](https://docs.pypi.org/attestations/), [PyPI Integrity API](https://docs.pypi.org/api/integrity/), and [PEP 740](https://peps.python.org/pep-0740/).
 
+### Interoperability with Sigstore, SLSA, and GitHub attestations
+
+ReleaseCheck interoperates at the evidence boundary. It may consume registry-provided or externally supplied provenance-shaped evidence, bind subjects to the selected artifact digest where possible, and report the resulting state. It does not implement Sigstore trust-root verification, Rekor/Fulcio validation, SLSA policy evaluation, or GitHub's attestation verifier.
+
+- **Sigstore:** use Cosign or another Sigstore verifier to validate signatures, certificates, bundles, and transparency-log inclusion. Pass the verified result into a ReleaseCheck workflow as external evidence; do not treat a parsed bundle as cryptographically verified.
+- **SLSA:** SLSA provenance describes how an artifact was produced and what materials/build instructions were involved. A verifier must check the signature, trusted builder, expected build type, and policy. ReleaseCheck can report those claims and still separately compare the artifact with the claimed source snapshot.
+- **GitHub artifact attestations:** `gh attestation verify` is the authoritative GitHub verification path for GitHub-produced attestations. A verified attestation can establish a relationship between a released binary and a GitHub workflow/repository, but it does not prove that an npm/PyPI package is source-equivalent or safe.
+
+The v0.1.2 release workflow does not publish GitHub artifact attestations. This is an explicit limitation, not an implied guarantee. Future attestation support must preserve separate states for absent, externally verified, structurally parsed, invalid, and insufficient evidence and requires independent security review.
+
 ## Reports, verdicts, exit codes, caching, and errors
 
 `internal/report` normalizes evidence before rendering. It copies and sorts comparisons, security observations, evidence, and provenance so input map/slice order cannot change output. JSON schema version `1.0` is rendered with stable indentation and no generated timestamp by default. A caller may explicitly request a timestamp for a human workflow, but deterministic fixtures use the default. Human output uses `OK`, `WARN`, and `INFO` markers and repeats the same evidence categories; it does not create a second verdict system.

@@ -63,11 +63,33 @@ The core repository remains the authoritative home of implementation, architectu
 
 ## Installation
 
-There is no package-manager distribution yet. Build from a checked-out release or commit with Go 1.25 or newer:
+The safest default is a pinned GitHub release binary. Verify the checksum before placing it on `PATH`:
+
+```text
+Download the archive for your platform from https://github.com/ReleaseCheck/releasecheck/releases/tag/v0.1.2
+Download SHA256SUMS from the same release
+Verify the selected archive against SHA256SUMS
+Extract releasecheck and run releasecheck --version
+```
+
+Package-manager metadata for v0.1.2 is provided for local formula/bucket maintainers:
+
+- Homebrew formula: [packaging/homebrew/releasecheck.rb](packaging/homebrew/releasecheck.rb)
+- Scoop manifest: [packaging/scoop/releasecheck.json](packaging/scoop/releasecheck.json)
+
+These files are not an assertion that ReleaseCheck is already accepted into the official Homebrew or Scoop indexes. Until a maintainer publishes a tap/bucket, install the checked release archive directly or build from a checked-out release with Go 1.25 or newer:
 
 ```text
 go build -trimpath -o releasecheck ./cmd/releasecheck
 ```
+
+Go's module installer is also supported for a pinned release:
+
+```text
+go install github.com/ReleaseCheck/releasecheck/cmd/releasecheck@v0.1.2
+```
+
+The Homebrew formula and Scoop manifest are release metadata prepared for future tap/bucket publication; they are not official package indexes yet.
 
 The Phase 12 release workflow publishes archives for Linux amd64/arm64, macOS amd64/arm64, and Windows amd64 when a version tag is created. See [docs/RELEASE.md](docs/RELEASE.md).
 
