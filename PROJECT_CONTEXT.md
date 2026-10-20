@@ -10,7 +10,7 @@ This file is the durable memory of the project. Repository state is authoritativ
 - Current state: v0.1.2 released; post-release validation passed
 - Current release: public `v0.1.2`; Drips account/project setup remains owner-controlled
 - Primary ecosystems: npm and PyPI
-- Deadline: 12:00 PM WAT, October 9, 2026
+- Original v0.1 deadline: 12:00 PM WAT, October 9, 2026; the public v0.1.2 release and post-release validation are now complete.
 
 ## Problem and product definition
 
@@ -37,7 +37,7 @@ Out of scope: crates.io, Go modules, generic vulnerability scanning, SBOM genera
 
 ## Current implementation
 
-The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports with stable reason and next-action fields; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; and independent audit reports. Public v0.1.2 release and Action E2E validation are complete. The product remains deliberately narrower than provenance infrastructure, reproducibility builders, vulnerability scanners, and repository-health tools.
+The repository currently contains a Go CLI with npm and PyPI verification paths; bounded HTTPS acquisition; SHA-256 and supported npm integrity handling; safe ZIP/TAR.GZ inventory; source and artifact file comparison; deterministic structural security observations; provenance structure parsing and artifact binding; human, JSON, and SARIF reports with stable reason and next-action fields; stable exit codes; offline fixtures; contributor documentation; CI and release workflows; independent audit reports; pinned Go/Homebrew/Scoop installation metadata; and a metadata-only real npm/PyPI compatibility corpus. Public v0.1.2 release and Action E2E validation are complete. The product remains deliberately narrower than provenance infrastructure, reproducibility builders, vulnerability scanners, and repository-health tools.
 
 The current CLI is:
 
@@ -72,6 +72,9 @@ The dependency relationship is one-way: the core releases versioned binaries; th
 - Wheels and other built distributions are not byte-for-byte source comparisons by default.
 - No package manager is invoked on untrusted input.
 - JSON schema and exit semantics are versioned before CLI polish.
+- Sigstore, SLSA, GitHub artifact attestations, npm provenance, and PyPI attestations are interoperability evidence sources, not reimplemented trust roots. v0.1.2 documents how to verify them with their ecosystem tooling and reports the remaining boundary.
+- Package-manager publication is staged conservatively: `go install` is documented for the public module, while Homebrew and Scoop metadata are prepared but no official tap or bucket is claimed.
+- Real-release compatibility records store URLs, sizes, and digests only. They are validated offline for schema/HTTPS/digest shape; package bytes are not committed, installed, or executed.
 - Phase 2 domain model: one internal data-oriented package with small `RegistryAdapter` and `Cache` interfaces; standard `context.Context`; validation only for cross-ecosystem invariants.
 - Phase 3 acquisition: `internal/acquire` is HTTPS-only, bounded, SHA-256-aware, temporary-file based, and archive-inspection-only; it never extracts or executes package content.
 - Phase 4 npm path: the adapter consumes packument `dist`, `repository`, and `gitHead` metadata, verifies npm SRI when present, supports GitHub source snapshots, and reports unsupported/missing source data as limitations.
