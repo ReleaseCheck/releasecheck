@@ -1,0 +1,15 @@
+{
+  "version": "0.1.2",
+  "description": "Deterministic release-integrity evidence for npm and PyPI packages",
+  "homepage": "https://github.com/ReleaseCheck/releasecheck",
+  "license": "Apache-2.0",
+  "url": "https://github.com/ReleaseCheck/releasecheck/releases/download/v0.1.2/releasecheck-v0.1.2-windows-amd64.zip",
+  "hash": "39406959b4ddcb152a946c59268a1b2bb35bf71d63fbce23fc70392c23fa9770",
+  "bin": "releasecheck.exe",
+  "checkver": {
+    "github": "https://github.com/ReleaseCheck/releasecheck"
+  },
+  "autoupdate": {
+    "url": "https://github.com/ReleaseCheck/releasecheck/releases/download/v$version/releasecheck-v$version-windows-amd64.zip"
+  }
+}

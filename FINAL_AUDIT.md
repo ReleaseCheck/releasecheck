@@ -6,13 +6,13 @@ Older pre-release findings in this document are retained as audit history; they 
 
 Audit date: 2026-10-18 (status addendum; original Phase 15 review dated 2026-10-08)
 
-Audit scope: current `main` after the Phase 15 remediation changes. This document supersedes the stale Phase 14 checkpoint wording; it is an audit update, not a claim that v0.1 is released.
+Audit scope: current `main` after the Phase 15 remediation changes and the v0.1.2 release evidence. This document supersedes the stale Phase 14 checkpoint wording. Older conditional release-gate language is retained as historical audit context, not current release state.
 
 ## Executive result
 
-**Recommendation: CONDITIONAL. Do not declare v0.1 complete yet.**
+**Recommendation: CONDITIONAL for v0.1.2 stabilization.** The public release and Action E2E gates passed; remaining limitations are explicitly accepted for v0.1.2 and must not be described as package-safety or cryptographic-provenance guarantees.
 
-The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI runs `37852987328` and `37853277292` passed all declared jobs. The independent re-audit is now recorded in `AUDIT_REPORT.md`; release-workflow validation remains open.
+The non-execution boundary remains credible, and the remediation adds bounded manifest analysis, default-deny restricted-network checks for artifact downloads, full-length commit recognition, and a repository line-ending policy for cross-platform formatting. Hosted CI runs `37852987328` and `37853277292` passed all declared jobs. The independent re-audit is recorded in `AUDIT_REPORT.md`; the later v0.1.2 release workflow and Action E2E evidence completed the release-validation gate.
 
 ## Verified strengths
 
@@ -73,9 +73,11 @@ The workstation does not provide every security analysis tool. `go vet` and the 
 - No malware, vulnerability, SBOM, or arbitrary-build analysis.
 - No stable public SDK compatibility promise.
 - Local/private mirror use requires explicit controlled configuration and is not a hosted isolation boundary.
-- A safe hosted release-workflow rehearsal remains required; no public tag or release has been created.
+- The release workflow does not publish Sigstore, SLSA, or GitHub artifact attestations in v0.1.2; consumers must treat the published SHA256SUMS as checksum evidence only.
 
-## Release gate
+## Historical release gate
+
+The following v0.1.0 gate is retained as an audit record. It is superseded by the v0.1.2 release workflow and Action E2E evidence recorded at the top of this document.
 
 Do not publish or describe `v0.1.0` as complete until:
 

@@ -146,7 +146,7 @@ git diff --check
 
 Commands may evolve with the implementation. Never run package managers or builds against untrusted artifacts as part of ReleaseCheck.
 
-## Known limitations at Phase 14 audit checkpoint
+## Known limitations at the v0.1.2 post-release checkpoint
 
 - No public SDK implementation exists. Comparison, security analysis, provenance parsing, and report rendering are wired to the initial CLI; broader API compatibility remains deferred.
 - Manifest analysis reads bounded safe archive members in memory and wires supported package.json, setup.py, and pyproject.toml observations into CLI reports. Detailed TOML backend semantics remain out of scope.
@@ -160,13 +160,13 @@ Commands may evolve with the implementation. Never run package managers or build
 - The module path is provisional until the hosting namespace is confirmed.
 - Remote and GitHub repository metadata are configured for the three-repository organization layout. Maintainer identity remains the authenticated organization account, not a product capability claim.
 - Research is a focused initial pass, not a complete literature or market survey.
-- GitHub-hosted validation is observed on the public repositories. The Action CI passed at its initial commit. Core remediation CI runs `37852987328` and `37853277292` passed Linux, Windows, macOS, and race jobs. A reviewed release workflow remains outstanding.
+- GitHub-hosted validation is observed on the public repositories. Core release workflow `39166239320` passed cross-platform artifact validation and publication for v0.1.2; Action E2E run `39166480228` passed against that exact release. Release signing, package-manager index publication, and cryptographic provenance verification remain outside v0.1.2.
 - Release archives are reproducible enough for v0.1 preparation under the documented build inputs; independent cross-machine bit-for-bit reproducibility has not yet been established.
 - The release workflow creates GitHub releases using the runner's preinstalled `gh` CLI. Release signing and package-registry publishing are intentionally not implemented.
 - Documentation links and examples were reviewed locally; GitHub's rendered Markdown, issue-template UI, and a first-time external contributor walkthrough still require hosted or independent review.
-- Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not declare v0.1 complete until its release recommendation is changed by evidence, not by deadline pressure.
+- Final audit limitations and findings are recorded in FINAL_AUDIT.md. Do not claim that a public release proves package safety, source equivalence, or cryptographic provenance.
 
-Phase 15 resolved the supported manifest-analysis and artifact-download network findings and the hosted cross-platform matrix now passes. Phase 16 independently reviewed the changes and is complete. Source archive-to-commit proof and cryptographic provenance verification remain limitations; ReleaseCheck is not a network-isolated service, has no stable public SDK, and has no adoption or ecosystem proof. Phase 17 remains open for hosted release rehearsal and artifact inspection.
+Phase 15 resolved the supported manifest-analysis and artifact-download network findings and the hosted cross-platform matrix now passes. Phase 16 independently reviewed the changes, Phase 17 validated the hosted release path, and v0.1.2 was published and exercised through the Action. Source archive-to-commit proof and cryptographic provenance verification remain limitations; ReleaseCheck is not a network-isolated service, has no stable public SDK, and has no adoption or ecosystem proof.
 
 ## Future-agent operating rule
 

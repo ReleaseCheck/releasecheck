@@ -6,13 +6,15 @@ Current evidence supersedes older pre-release paragraphs below: v0.1.2 is public
 
 Scope: independent local and GitHub audit of the ReleaseCheck organization, the three discovered repositories, the Go implementation, the GitHub Action, release workflows, documentation, repository governance, license records, and funding readiness. This report records the release evidence and remaining stabilization work; it does not claim that the immutable v0.1.1 binary contains fixes merged afterward.
 
+All paragraphs below that say no public release existed, that Action E2E was blocked, or that v0.1.0 remained unpublished are historical checkpoint records from before v0.1.2. They are retained for audit traceability and are superseded by the current v0.1.2 evidence above.
+
 ## Executive verdict
 
 ReleaseCheck is a real, tested Go CLI with a public v0.1.2 release for deterministic non-executing npm and PyPI release-integrity evidence. The v0.1.2 tag workflow `39166239320` passed cross-platform validation, archive inspection, and checksum validation and published six assets. The post-release Action E2E run `39166480228` passed against that exact immutable binary. Drips claim and funding configuration remain owner-controlled.
 
-The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR and follow-up checksum-path PR are now merged. The follow-up validates the exact publish-job artifacts, and the P1 network-boundary hardening change is merged. No release or tag has been created.
+The audit confirmed two important P1 defects: the Action checksum parser rejected checksum lines emitted by the core release script, and the tag-triggered release workflow published without running its own validation gate. The original audit PR and follow-up checksum-path PR are now merged. The follow-up validates the exact publish-job artifacts, and the P1 network-boundary hardening change is merged. At the original audit checkpoint no release or tag had been created; v0.1.2 is now public and its release gates passed.
 
-Contributor readiness is moderate: the code, fixtures, governance files, CI, and documentation exist, but the public repositories have no protected `main`, no open contributor issues, no public release, and no verified end-to-end Action run. Funding readiness is opportunity-dependent and unconfirmed; Drips is the strongest near-term fit, while Stellar/GrantFox fit is currently weak or unknown because ReleaseCheck has no Stellar-specific capability.
+Contributor readiness is moderate to strong for focused work: the code, fixtures, governance files, CI, public release, Action E2E evidence, and documentation exist. Branch protection and funding configuration remain owner-controlled, and no adoption or external impact is claimed. Drips fit remains opportunity-dependent; Stellar/GrantFox fit is weak or unknown because ReleaseCheck has no Stellar-specific capability.
 
 ## Organization inventory
 
@@ -36,11 +38,11 @@ On 2026-10-18, authenticated GitHub API checks confirmed that the remediation is
 | `ReleaseCheck/releasecheck-action` | `6094827362e608d8729f9444950024813450da5f` | PR #1 merged; checksum validation hardening is on `main` |
 | `ReleaseCheck/releasecheck-docs` | `fbc38073899f82b6a07d7c2daad33df275a38980` | PR #1 merged; status documentation is on `main` |
 
-The local checkouts are intentionally on separate `audit/readiness-2026-10-18` branches for this documentation/status refresh. No local `main` branch was rewritten, no release tag was created, and no release was published. The local branches must be pushed and reviewed through normal pull requests before these status-refresh changes become part of public `main`.
+The local checkouts were intentionally on separate `audit/readiness-2026-10-18` branches for the earlier documentation/status refresh. No local `main` branch was rewritten during that audit. The current public release state is recorded above; new status-refresh changes must still be pushed and reviewed through normal pull requests before becoming part of public `main`.
 
 ## Phase 17 implementation refresh
 
-The current review branch adds a read-only `scripts/rehearse-release.sh` and manual `release-rehearsal.yml` workflow, stable report reason/explanation/missing/conflicting-evidence/recommended-action fields with focused tests, a manual post-release Action E2E workflow, an expanded Action nonzero-exit regression test, and the contributor-ready issue catalog plus submission brief. The core CI matrix and race jobs pass on the implementation branch. The rehearsal workflow cannot be dispatched through GitHub until its workflow file is merged into the default branch, and the Action E2E workflow remains blocked by the absence of an authorized public core release.
+The earlier review branch added a read-only `scripts/rehearse-release.sh` and manual `release-rehearsal.yml` workflow, stable report reason/explanation/missing/conflicting-evidence/recommended-action fields with focused tests, a manual post-release Action E2E workflow, an expanded Action nonzero-exit regression test, and the contributor-ready issue catalog plus submission brief. The core CI matrix and race jobs passed, and the public v0.1.2 release plus Action E2E gate subsequently passed. The remaining rehearsal/release limitations are retained below as historical evidence and current scope boundaries.
 
 ## Product and implementation assessment
 
@@ -100,7 +102,7 @@ Residual risk: ReleaseCheck is still a local analysis tool, not a general networ
 
 Severity: P1 documentation/governance. The phase register previously said `AUDIT REQUIRED` while the detailed Phase 16 section said `NOT STARTED`.
 
-Correction: the register, detailed phase, README, `PROJECT_CONTEXT.md`, release documentation, Action README, and user docs now identify Phase 16 as `COMPLETE`. The fixes were reviewed and merged through normal pull requests; Phase 17 remains open for hosted release validation.
+Correction at that checkpoint: the register, detailed phase, README, `PROJECT_CONTEXT.md`, release documentation, Action README, and user docs identified Phase 16 as `COMPLETE`. The fixes were reviewed and merged through normal pull requests; Phase 17 later completed through hosted release validation.
 
 ## License assessment
 
@@ -115,7 +117,7 @@ GitHub reports `NOASSERTION`/`Other` for the API license field in all three repo
 - All three repositories are public with default branch `main`; all have issues/projects/wiki enabled; all had zero open issues and zero open pull requests at audit time.
 - `main` branch protection API returned `404 Branch not protected` for the core repository. Rulesets returned an empty list. Equivalent protection checks for the other repositories should be repeated by the organization owner if the API view changes; no protection was evidenced in the initial inventory.
 - Core workflow run `37855548443` on commit `4b469e5` completed successfully. Earlier successful runs `37852987328` and `37853277292` remain recorded. Historical failures/cancellation are visible in GitHub and should not be hidden.
-- No GitHub releases or tags were returned for the core repository. The Action therefore cannot complete a real public-release end-to-end run.
+- At the original inventory date no GitHub releases or tags were returned for the core repository. This is superseded by the public v0.1.2 release and passing Action E2E run recorded at the top of this report.
 - No `FUNDING.yml` or verified sponsorship profile was found in the repository trees inspected.
 
 ## Test matrix
@@ -133,7 +135,7 @@ GitHub reports `NOASSERTION`/`Other` for the API license field in all three repo
 | Hosted Action CI | PASS after correction | Readiness PR run `39159955341` passed; earlier correction runs `37930070590` and `37930076098` also passed |
 | `govulncheck`, `gosec`, `golangci-lint` | NOT RUN | Not installed; no result claimed |
 | Live registry tests | NOT RUN | Offline fixtures are authoritative for default tests |
-| Public Action end-to-end | BLOCKED | No public core release exists; this is a release-state limitation, not an Action CI failure |
+| Public Action end-to-end | PASS | v0.1.2 core release exercised by hosted Action E2E run `39166480228` |
 | Branch protection/rulesets | PARTIAL | Core explicitly unprotected/empty rulesets; organization profile/settings require owner review |
 
 The initial Go test attempts encountered Windows cache/process-lock issues. Re-running with repository-local `GOCACHE`, `GOTMPDIR`, and serialized package execution completed successfully; this environment detail is retained rather than hidden.
@@ -152,7 +154,7 @@ Audit date: 2026-10-09. No funding application, approval, adoption, contributor 
 
 ## Remaining manual actions
 
-1. Run a safe hosted release rehearsal on Ubuntu/GitHub Actions, then inspect the generated archives and checksum manifest. Do not publish v0.1.0 until Phase 17 and later release gates pass.
+1. Historical action completed: run a safe hosted release rehearsal on Ubuntu/GitHub Actions, inspect the generated archives and checksum manifest, then publish only after the release gates pass. v0.1.2 now records that evidence.
 2. Require pull requests and successful core/Action CI before merging. Protect `main` and configure a release/tag policy through GitHub repository settings or organization rulesets.
 3. Add a minimal organization profile README in `ReleaseCheck/.github` and set a factual organization description/website if desired.
 4. Decide whether to enable Discussions/Wiki and issue templates based on actual maintainer capacity; do not create superficial issues.
@@ -161,7 +163,7 @@ Audit date: 2026-10-09. No funding application, approval, adoption, contributor 
 
 ## Release decision
 
-`v0.1.0` is **BLOCKED pending release validation**. The core implementation is substantial and testable, and the audit remediation is merged. There is no public release, no protected main branch, no Action end-to-end evidence, and no actual tag-triggered release rehearsal. The product must not be described as fully release-ready or funded.
+The original v0.1.0 checkpoint was **BLOCKED pending release validation**. That historical conclusion is superseded by the public v0.1.2 release and passing Action E2E evidence. The product still must not be described as fully safe, cryptographically provenance-verified, adopted, or funded.
 
 ## Prioritized next steps
 
