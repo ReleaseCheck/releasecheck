@@ -16,5 +16,6 @@ Thumbs.db
 # Local caches and temporary files
 .releasecheck-cache/
 tmp/
+.tmp/
 .gocache/
 .gotmp/

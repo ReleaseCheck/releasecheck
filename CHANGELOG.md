@@ -16,6 +16,8 @@ All notable changes to ReleaseCheck will be documented here.
 
 - Documented Sigstore, SLSA, and GitHub artifact-attestation interoperability boundaries.
 - Added v0.1.2 package-manager metadata and a pinned real npm/PyPI corpus record.
+- Added an opt-in bounded corpus verifier that checks pinned artifact URLs, sizes, and SHA-256 digests without installing or executing packages.
+- Normalized the full Apache-2.0 license text across the organization repositories.
 - Fixed inspection of GNU tar archives containing PAX global metadata headers.
 - Added stable report reason, explanation, missing/conflicting-evidence, and recommended-action fields with renderer tests.
 - Added a read-only non-publishing release rehearsal script/workflow and expanded contributor-ready issue specifications.
