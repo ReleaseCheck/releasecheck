@@ -1,8 +1,16 @@
-# ReleaseCheck
+<p align="center">
+  <img src="docs/assets/releasecheck-banner.png" alt="ReleaseCheck: deterministic release integrity evidence" width="100%">
+</p>
 
-![CI](https://github.com/ReleaseCheck/releasecheck/actions/workflows/ci.yml/badge.svg?branch=main) ![Go 1.25](https://img.shields.io/badge/Go-1.25-00ADD8?logo=go) ![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
+<p align="center">
+  ReleaseCheck checks how a published npm or PyPI package relates to its claimed source release, then reports deterministic evidence and limitations.
+</p>
 
-ReleaseCheck checks how a published npm or PyPI package relates to its claimed source release, then reports deterministic evidence and limitations.
+<p align="center">
+  <a href="https://github.com/ReleaseCheck/releasecheck/actions/workflows/ci.yml"><img src="https://github.com/ReleaseCheck/releasecheck/actions/workflows/ci.yml/badge.svg?branch=main" alt="Core CI"></a>
+  <a href="https://go.dev/"><img src="https://img.shields.io/badge/Go-1.25-00ADD8?logo=go" alt="Go 1.25"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0 license"></a>
+</p>
 
 [Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md)
 
