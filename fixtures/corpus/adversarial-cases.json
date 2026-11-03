@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Offline adversarial verifier cases. These cases exercise evidence boundaries and do not label a package malicious.",
+  "cases": [
+    {
+      "id": "artifact-only-file",
+      "fixture": "tests/fixture_matrix_test.go",
+      "signal": "comparison.artifact_only",
+      "expected_verdict": "REVIEW",
+      "interpretation": "An artifact contains a file absent from the source inventory; this requires review but is not proof of maliciousness."
+    },
+    {
+      "id": "source-only-file",
+      "fixture": "tests/fixture_matrix_test.go",
+      "signal": "comparison.source_only",
+      "expected_verdict": "REVIEW",
+      "interpretation": "A source file is absent from the selected artifact; packaging rules or build transformation may explain it."
+    },
+    {
+      "id": "modified-file",
+      "fixture": "tests/fixture_matrix_test.go",
+      "signal": "comparison.modified",
+      "expected_verdict": "REVIEW",
+      "interpretation": "The same path has different hashes; the report records evidence without assigning intent."
+    },
+    {
+      "id": "unsafe-archive-path",
+      "fixture": "tests/fixture_matrix_test.go",
+      "signal": "archive.path_unsafe",
+      "expected_verdict": "INCOMPLETE",
+      "interpretation": "Archive inspection stops at a path traversal attempt; no extraction or execution occurs."
+    },
+    {
+      "id": "install-script-metadata",
+      "fixture": "tests/fixture_matrix_test.go",
+      "signal": "security.npm.install_script",
+      "expected_verdict": "REVIEW",
+      "interpretation": "Install-time metadata is observed without running the script."
+    },
+    {
+      "id": "provenance-subject-mismatch",
+      "fixture": "internal/provenance/provenance_test.go",
+      "signal": "provenance.invalid",
+      "expected_verdict": "REVIEW",
+      "interpretation": "The attestation subject does not bind to the selected artifact."
+    }
+  ]
+}

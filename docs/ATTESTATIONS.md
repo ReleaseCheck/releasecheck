@@ -22,6 +22,17 @@ gh attestation verify ./releasecheck -R ReleaseCheck/releasecheck
 
 For Sigstore artifacts, use the official Cosign verification flow appropriate to the artifact type and signature format. For SLSA provenance, verify the envelope/signature, trusted builder identity, expected build type, subject digest, and policy expectations. These commands are external verification steps; ReleaseCheck never executes package code or arbitrary build commands to obtain them.
 
+## Interoperability contract
+
+| Input state | Report meaning | Stronger conclusion allowed? |
+| --- | --- | --- |
+| No attestation returned | `absent` or `unavailable`, depending on the registry response | No provenance conclusion |
+| Attestation is malformed or its subject does not match the selected artifact | `invalid` | No; the mismatch is a review signal |
+| Subject and digest bind to the artifact, but signature/trust policy is outside ReleaseCheck | `insufficient` | No cryptographic trust conclusion |
+| A supported external verifier has succeeded and its result is supplied as evidence | external evidence is recorded with its boundary | Only the external verifier's documented claim, not source equivalence or package safety |
+
+ReleaseCheck v0.1.2 does not call `npm audit signatures`, `gh attestation verify`, Cosign, or a PyPI attestation verifier internally. This is deliberate: those tools own ecosystem trust roots and policy. ReleaseCheck reports the relationship between the selected registry artifact and claimed source evidence without silently substituting its own trust policy.
+
 ## Current release limitation
 
 ReleaseCheck v0.1.2 publishes signed-by-checksum GitHub release archives but does not publish GitHub artifact attestations or claim Sigstore verification. The release asset SHA-256 manifest proves only the downloaded asset's digest matches the published manifest; it is not a signature, provenance statement, or source-equivalence proof.

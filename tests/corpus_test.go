@@ -42,7 +42,7 @@ func TestRealReleaseCorpusIsPinnedAndWellFormed(t *testing.T) {
 	if err := json.Unmarshal(data, &got); err != nil {
 		t.Fatalf("corpus JSON: %v", err)
 	}
-	if got.SchemaVersion != "1.0" || got.ObservedAt == "" || len(got.Records) != 2 {
+	if got.SchemaVersion != "1.0" || got.ObservedAt == "" || len(got.Records) != 4 {
 		t.Fatalf("unexpected corpus header: %#v", got)
 	}
 	for _, item := range got.Records {
@@ -60,6 +60,38 @@ func TestRealReleaseCorpusIsPinnedAndWellFormed(t *testing.T) {
 		}
 		for _, artifact := range item.Artifacts {
 			assertDigestURL(t, artifact.ArtifactURL, artifact.ArtifactSHA256)
+		}
+	}
+}
+
+func TestAdversarialCorpusDocumentsEvidenceBoundaries(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("..", "fixtures", "corpus", "adversarial-cases.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got struct {
+		SchemaVersion string `json:"schema_version"`
+		Purpose       string `json:"purpose"`
+		Cases         []struct {
+			ID              string `json:"id"`
+			Fixture         string `json:"fixture"`
+			Signal          string `json:"signal"`
+			ExpectedVerdict string `json:"expected_verdict"`
+			Interpretation  string `json:"interpretation"`
+		} `json:"cases"`
+	}
+	if err := json.Unmarshal(data, &got); err != nil {
+		t.Fatalf("adversarial corpus JSON: %v", err)
+	}
+	if got.SchemaVersion != "1.0" || got.Purpose == "" || len(got.Cases) < 6 {
+		t.Fatalf("unexpected adversarial corpus: %#v", got)
+	}
+	for _, item := range got.Cases {
+		if item.ID == "" || item.Fixture == "" || item.Signal == "" || item.Interpretation == "" {
+			t.Fatalf("incomplete adversarial case: %#v", item)
+		}
+		if item.ExpectedVerdict != "REVIEW" && item.ExpectedVerdict != "INCOMPLETE" {
+			t.Fatalf("unexpected verdict in adversarial case: %#v", item)
 		}
 	}
 }
