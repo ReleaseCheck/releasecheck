@@ -7,7 +7,7 @@ This is an executable plan. A phase is complete only when its acceptance criteri
 | Item | Current truth |
 | --- | --- |
 | Product version | Public `v0.1.2` released |
-| Current milestone | v0.1 post-release validation complete; Drips operational setup remains |
+| Current milestone | v0.1 post-release evidence-quality follow-up complete; Drips operational setup remains |
 | Current active phase | Phase 19 - Release and stabilization (`COMPLETE`) |
 | Next executable phase | Drips project claim/configuration; no GitHub issues are required |
 | Release decision | v0.1.2 published and Action E2E verified |
@@ -71,9 +71,11 @@ This is the single status overview for the whole roadmap. The detailed sections 
 | Release-state and license truth pass | COMPLETE | Current v0.1.2 state in `PROJECT_CONTEXT.md`, `README.md`, `AUDIT_REPORT.md`, `FINAL_AUDIT.md`, Action README, and docs README; Apache-2.0 remains the canonical license in all three repositories | Historical audit checkpoints remain labeled as history; no false release or license claim is retained |
 | Sigstore/SLSA/GitHub attestation interoperability | COMPLETE | `docs/ATTESTATIONS.md`, `docs/DESIGN.md`, and docs repository `docs/attestations.md` | v0.1.2 consumes/reports evidence boundaries; it does not implement trust-root verification or publish GitHub attestations |
 | Package-manager installation metadata | PARTIAL | Pinned `go install` is usable; Homebrew/Scoop manifests are prepared metadata only | Official Homebrew tap and Scoop bucket publication remain owner/repository work |
-| Real npm/PyPI compatibility corpus | COMPLETE | `fixtures/corpus/real-releases.json`, `cmd/corpuscheck`, corpus README, offline schema test; live verification confirmed three artifacts on 2026-10-20 | Package bytes are downloaded only to an ignored output directory and are never installed or executed |
-| Cross-platform GitHub Action acquisition | IN PROGRESS | Platform dispatch and Windows PowerShell verifier added in `releasecheck-action` review branch | Hosted matrix must pass before completion; Action remains limited to published release targets |
-| GitHub license classifier | IN PROGRESS | Canonical Apache-2.0 text normalized in all three repositories | GitHub must re-index the files; `NOASSERTION` is not considered fixed until the API reports Apache-2.0 |
+| Real npm/PyPI compatibility corpus | COMPLETE | `fixtures/corpus/real-releases.json`, `fixtures/corpus/adversarial-cases.json`, `cmd/corpuscheck`, corpus README, offline schema/report tests; live verification confirmed six artifacts on 2026-11-03 | Package bytes are downloaded only to an ignored output directory and are never installed or executed |
+| Cross-platform GitHub Action acquisition | COMPLETE | Merged Action PR #5; hosted Ubuntu, Windows, and macOS matrix passed; companion audit in `docs/COMPANION_REPOSITORY_AUDIT.md` | Action remains limited to published release targets |
+| GitHub license classifier | COMPLETE | GitHub API reports Apache-2.0 for core, Action, and docs after canonical license normalization | External classifier state verified on 2026-10-20 |
+| Adversarial corpus and report-contract proof | COMPLETE | Offline adversarial matrix plus independent human/JSON/SARIF contract tests; expanded public corpus live check passed on 2026-11-03 | Cases identify review signals and evidence limits; they do not claim maliciousness |
+| Companion repository audit | COMPLETE | Action/docs responsibilities, platform support, attestation boundaries, and claim limits recorded in `docs/COMPANION_REPOSITORY_AUDIT.md` | This is a repository/documentation audit, not a cryptographic audit of external trust systems |
 
 ## Current Repository Architecture
 

@@ -12,7 +12,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0 license"></a>
 </p>
 
-[Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md)
+[Core](https://github.com/ReleaseCheck/releasecheck) · [GitHub Action](https://github.com/ReleaseCheck/releasecheck-action) · [User documentation](https://github.com/ReleaseCheck/releasecheck-docs) · [Security policy](SECURITY.md) · [Roadmap](ROADMAP.md) · [Companion repository audit](docs/COMPANION_REPOSITORY_AUDIT.md)
 
 **Project status:** v0.1.2 released · post-release validation passed. The released core binary and GitHub Action E2E path are verified together.
 

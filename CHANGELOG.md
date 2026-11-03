@@ -14,6 +14,8 @@ All notable changes to ReleaseCheck will be documented here.
 
 ## Unreleased
 
+- Added four pinned public npm/PyPI corpus records, a six-case offline adversarial matrix, and independent report-contract tests.
+- Documented explicit attestation interoperability states and audited the Action/docs companion repository boundaries.
 - Documented Sigstore, SLSA, and GitHub artifact-attestation interoperability boundaries.
 - Added v0.1.2 package-manager metadata and a pinned real npm/PyPI corpus record.
 - Added an opt-in bounded corpus verifier that checks pinned artifact URLs, sizes, and SHA-256 digests without installing or executing packages.

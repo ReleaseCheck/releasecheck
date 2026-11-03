@@ -1,12 +1,14 @@
 # ReleaseCheck Security and Release Audit
 
-> **Current status (2026-10-18):** Public `v0.1.2` was released successfully. Its tag workflow and post-release Action E2E run passed. Remaining readiness work is owner-controlled Drips project claiming/configuration and genuine external impact evidence.
+> **Current status (2026-11-03):** Public `v0.1.2` was released successfully. Its tag workflow and post-release Action E2E run passed. The evidence-quality follow-up added a pinned public corpus, offline adversarial cases, report-contract tests, explicit attestation interoperability semantics, and an independent companion-repository review. Remaining readiness work is owner-controlled Drips project claiming/configuration and genuine external impact evidence.
 
 Older pre-release findings in this document are retained as audit history; they do not describe the current release state.
 
 Audit date: 2026-10-18 (status addendum; original Phase 15 review dated 2026-10-08)
 
 Audit scope: current `main` after the Phase 15 remediation changes and the v0.1.2 release evidence. This document supersedes the stale Phase 14 checkpoint wording. Older conditional release-gate language is retained as historical audit context, not current release state.
+
+Evidence-quality follow-up date: 2026-11-03. The follow-up is additive to the v0.1.2 audit and does not upgrade ReleaseCheck into a malware detector, cryptographic provenance verifier, or source-equivalence proof system.
 
 ## Executive result
 
@@ -24,6 +26,10 @@ The non-execution boundary remains credible, and the remediation adds bounded ma
 6. Seven- or otherwise abbreviated hexadecimal references are no longer treated as immutable commits; only full 40-character Git object IDs receive immutable classification.
 7. Comparison, provenance parsing, reports, exit codes, fixtures, and deterministic ordering remain covered by offline tests.
 8. CI action references are pinned to full commit SHAs and workflows use least privilege.
+9. The expanded public corpus verifier confirmed six pinned npm/PyPI artifacts by HTTPS, size, and SHA-256 without installing, extracting, importing, or executing package contents.
+10. Offline adversarial cases cover artifact-only, source-only, modified, unsafe-path, install-metadata, and provenance-subject-mismatch evidence.
+11. Independent report-contract tests confirm that human, JSON, and SARIF outputs preserve MATCH, REVIEW, and INCOMPLETE semantics and stable exit behavior.
+12. The Action and docs repositories were independently checked for thin integration boundaries, cross-platform support, attestation wording, and stale claims.
 
 ## Finding status
 
@@ -74,6 +80,7 @@ The workstation does not provide every security analysis tool. `go vet` and the 
 - No stable public SDK compatibility promise.
 - Local/private mirror use requires explicit controlled configuration and is not a hosted isolation boundary.
 - The release workflow does not publish Sigstore, SLSA, or GitHub artifact attestations in v0.1.2; consumers must treat the published SHA256SUMS as checksum evidence only.
+- The public corpus is a reproducibility and evidence-boundary corpus, not a catalog of malicious packages. Its adversarial cases target verifier behavior and do not establish intent.
 
 ## Historical release gate
 

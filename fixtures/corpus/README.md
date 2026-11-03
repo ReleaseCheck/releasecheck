@@ -20,4 +20,6 @@ Each record includes:
 - the expected evidence state and comparison limitation;
 - the observation date and primary metadata URL.
 
-The corpus intentionally includes both a strong npm source reference and PyPI distributions where the source repository is visible but an exact release commit is not supplied. That distinction is a product behavior, not a test failure.
+The real corpus intentionally includes npm packages with and without exact source commits, plus PyPI sdists and wheels. The package selection is adversarial to the verifier's evidence model: it exercises generated distribution files, multiple release-file kinds, missing exact source references, and source-bound releases. It does not make a maliciousness claim about any package.
+
+`adversarial-cases.json` is the offline companion matrix. It names the controlled fixtures for artifact-only, source-only, modified, unsafe-path, install-metadata, and provenance-subject-mismatch evidence. These cases are deterministic and run in default CI; the public release records are opt-in because registries and source hosts are external dependencies.
